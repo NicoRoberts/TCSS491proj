@@ -10,6 +10,11 @@ class GameEngine {
         this.wheel = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+
+        this.W = false;
+        this.A = false;
+        this.S = false;
+        this.D = false;
     };
 
     init(ctx) {
@@ -21,6 +26,7 @@ class GameEngine {
     };
 
     start() {
+
         var that = this;
         (function gameLoop() {
             that.loop();
@@ -48,11 +54,42 @@ class GameEngine {
             that.click = getXandY(e);
         }, false);
 
-        this.ctx.canvas.addEventListener("wheel", function (e) {
-            //console.log(getXandY(e));
-            that.wheel = e;
-            //       console.log(e.wheelDelta);
-            e.preventDefault();
+        this.ctx.canvas.addEventListener("keydown", function (e) {
+            //console.log(e.code + " Pressed");
+            switch(e.code){
+                case "KeyW":
+                    that.W = true;
+                    break;
+                case "KeyA":
+                    that.A = true;
+                    break;
+                case "KeyS":
+                    that.S = true;
+                    break;
+                case "KeyD":
+                    that.D = true;
+                    break;
+            }
+    
+        }, false);
+
+         this.ctx.canvas.addEventListener("keyup", function (e) {
+            //console.log(e.code + " Released");
+            switch(e.code){
+                case "KeyW":
+                    that.W = false;
+                    break;
+                case "KeyA":
+                    that.A = false;
+                    break;
+                case "KeyS":
+                    that.S = false;
+                    break;
+                case "KeyD":
+                    that.D = false;
+                    break;
+            }
+    
         }, false);
 
         this.ctx.canvas.addEventListener("contextmenu", function (e) {
@@ -60,6 +97,8 @@ class GameEngine {
             that.rightclick = getXandY(e);
             e.preventDefault();
         }, false);
+
+        console.log("Listeners Created Sucessfully");
     };
 
     addEntity(entity) {
@@ -69,11 +108,13 @@ class GameEngine {
     };
 
     draw() {
+        
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
+
     };
 
     update() {
