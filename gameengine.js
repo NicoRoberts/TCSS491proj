@@ -2,7 +2,7 @@
 
 class GameEngine {
     constructor() {
-        this.entities = [];
+        this.entities = new PriorityQueue();
         this.showOutlines = false;
         this.ctx = null;
         this.click = null;
@@ -63,6 +63,8 @@ class GameEngine {
     };
 
     addEntity(entity) {
+        
+
         this.entities.push(entity);
     };
 
