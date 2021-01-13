@@ -79,7 +79,7 @@ class PriorityQueue {
                     // plan to swap with right child index
                     indexToSwap = rightChildIndex;
                 }
-            
+            }
             // if no more swap are needed, break out of loop
             if (indexToSwap === null) {
                 break;
