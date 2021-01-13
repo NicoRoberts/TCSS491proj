@@ -102,9 +102,7 @@ class GameEngine {
     };
 
     addEntity(entity) {
-        
-
-        this.entities.push(entity);
+        this.entities.enqueue(entity);
     };
 
     draw() {
