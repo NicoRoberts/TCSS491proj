@@ -1,6 +1,7 @@
 var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
+ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
