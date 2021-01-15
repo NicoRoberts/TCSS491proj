@@ -33,6 +33,7 @@ class Player{
 		this.loadAnimations();
     this.updateBB();
 	}
+
 	setupCategories() {
 	
 		for (var i = 0; i < this.STATE.COUNT; i++) {
@@ -41,7 +42,7 @@ class Player{
 				this.animations[i].push([]);
             }
 		}
-  }
+	}
 
 	loadAnimations() {
 
@@ -59,8 +60,8 @@ class Player{
 
 	updateBB() {
 		this.lastBB = this.BB;
-		this.BB = new BoundingBox(this.x, this.y, this.width, this.height); 
-	};
+		this.BB = new BoundingBox(this.x, this.y, this.width*3, this.height*3); 
+	}
 
 	update(){
 		//Update Velocity
@@ -111,7 +112,6 @@ class Player{
 			console.log("x speed: " + this.velocity.x
 				+ " y speed: " + this.velocity.y)
         }
-		
 
 		//Update Position
 		this.x += this.velocity.x;
@@ -120,8 +120,8 @@ class Player{
 		if (!diagonal) {
 			this.x = Math.floor(this.x);
 			this.y = Math.floor(this.y);
-        }
-	  }
+		}
+
 		this.updateBB();
 
 		//collision
@@ -134,7 +134,7 @@ class Player{
 					
 					//left side of the barrier
 					if (that.BB.collide(entity.BB)) {
-						that.x = entity.BB.left - this.width;
+						that.x = entity.BB.left - that.width*3;
 						if (that.velocity.x > 0) that.velocity.x = 0;
 					
 					}
@@ -166,9 +166,9 @@ class Player{
 				if (entity instanceof BottomBoundary) {
 					//bottomside of the barrier
 					if (that.BB.collide(entity.BB)) {
-						that.y = entity.BB.top - this.height;
+						that.y = entity.BB.top - that.height*3;
 						if (that.velocity.y > 0) that.velocity.y = 0;
-					
+						
 					}
 					that.updateBB();
 				}
@@ -176,10 +176,15 @@ class Player{
 			}
 
 		});
+
 	};
 
-	draw(ctx){
+	draw(ctx) {
+		if (PARAMS.DEBUG) {
+			ctx.strokeStyle = 'Red';
+			ctx.strokeRect(this.x, this.y, this.width*3, this.height*3);
+		}
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.x, this.y, 1)
 	}
 
-};
+}
