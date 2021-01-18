@@ -26,6 +26,9 @@ class SceneManager {
 		this.player = new Player(this.game, 50, 50);
 		this.game.addEntity(this.player);
 
+		this.enemy = new Enemy(this.player, this.game, 200, 200);
+		this.game.addEntity(this.enemy);
+
 		
 	};
 
