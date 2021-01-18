@@ -2,6 +2,7 @@
 
 class GameEngine {
     constructor() {
+        //this.entities = new PriorityQueue();
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
@@ -102,6 +103,7 @@ class GameEngine {
     };
 
     addEntity(entity) {
+        //this.entities.enqueue(entity);
         this.entities.push(entity);
     };
 
