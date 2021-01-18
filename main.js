@@ -14,6 +14,9 @@ ASSET_MANAGER.downloadAll(function () {
 	PARAMS.PLAYERWIDTH = 100; //This should be updated later
 	PARAMS.PLAYERHEIGHT = 100; //This should be updated later
 
+	PARAMS.ENEMYWIDTH = 50; //This should be updated later
+	PARAMS.ENEMYHEIGHT = 50; //This should be updated later
+
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 
