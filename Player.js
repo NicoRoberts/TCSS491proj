@@ -16,8 +16,8 @@ class Player{
 	constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-    this.width = 16;
-    this.height = 32;
+    	this.width = 16;
+    	this.height = 32;
 
 		this.velocity = { x: 0, y: 0 };
 
