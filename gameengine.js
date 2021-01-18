@@ -2,6 +2,7 @@
 
 class GameEngine {
     constructor() {
+        //this.entities = new PriorityQueue();
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
@@ -102,13 +103,14 @@ class GameEngine {
     };
 
     addEntity(entity) {
+        //this.entities.enqueue(entity);
         this.entities.push(entity);
     };
 
     draw() {
         
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-       // this.ctx.save();
+        // this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
