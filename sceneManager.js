@@ -24,7 +24,11 @@ class SceneManager {
 		this.game.addEntity(rBoundary);
 		
 		this.player = new Player(this.game, 50, 50);
+		this.game.player = this.player;
 		this.game.addEntity(this.player);
+
+		this.weapon = new Weapon(this.game, "./Sprites/Pistol.png");
+		this.game.addEntity(this.weapon)
 
 		this.enemy = new Enemy(this.player, this.game, 200, 200);
 		this.game.addEntity(this.enemy);
@@ -34,7 +38,7 @@ class SceneManager {
 
 	update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
-		console.log(PARAMS.DEBUG);
+		//console.log(PARAMS.DEBUG);
 	};
 	
 	draw(ctx) {
