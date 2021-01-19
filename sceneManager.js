@@ -12,24 +12,30 @@ class SceneManager {
 	loadLevel() {
 
 		let bBoundary = new BottomBoundary(this.game, 0, 832, 1888); 
-		this.game.addEntity(bBoundary);
+		//this.game.addEntity(bBoundary);
 
 		let tBoundary = new TopBoundary(this.game, 0, 0, 1888); 
-		this.game.addEntity(tBoundary);
+		//this.game.addEntity(tBoundary);
 
 		let lBoundary = new LeftBoundary(this.game, 0, 33, 800); 
-		this.game.addEntity(lBoundary);
+		//this.game.addEntity(lBoundary);
 
 		let rBoundary = new RightBoundary(this.game, 1858, 33, 800); 
-		this.game.addEntity(rBoundary);
+		//this.game.addEntity(rBoundary);
 		
 		this.player = new Player(this.game, 50, 50);
-		this.game.addEntity(this.player);
+		//this.game.addEntity(this.player);
 
 		this.enemy = new Enemy(this.player, this.game, 200, 200);
-		this.game.addEntity(this.enemy);
+		//this.game.addEntity(this.enemy);
 
-		
+		// testing to see if entities can be added in any order
+		this.game.addEntity(this.enemy);
+		this.game.addEntity(this.player);
+		this.game.addEntity(rBoundary);
+		this.game.addEntity(lBoundary);
+		this.game.addEntity(tBoundary);
+		this.game.addEntity(bBoundary);		
 	};
 
 	update() {
