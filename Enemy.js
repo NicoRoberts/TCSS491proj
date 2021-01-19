@@ -11,7 +11,7 @@ class Enemy{
 
 		this.updateBB();
 
-		//this.priority = ?;
+		this.priority = 3;
 
 	};
 
