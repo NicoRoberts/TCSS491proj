@@ -27,7 +27,7 @@ class SceneManager {
 		this.game.player = this.player;
 		this.game.addEntity(this.player);
 
-		this.weapon = new Weapon(this.game, "./Sprites/Pistol.png");
+		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol.png");
 		this.game.addEntity(this.weapon)
 
 		this.enemy = new Enemy(this.player, this.game, 200, 200);

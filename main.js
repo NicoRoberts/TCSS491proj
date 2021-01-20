@@ -2,7 +2,7 @@ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
-ASSET_MANAGER.queueDownload("./Sprites/Pistol.png");
+ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
