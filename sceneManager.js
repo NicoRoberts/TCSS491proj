@@ -6,8 +6,11 @@ class SceneManager {
 		//for camera scrolling
 		this.x = 0;
 		this.y = 0;
+		
 
 		this.loadLevel();
+
+		
 	};
 
 	clearEntities(){
@@ -45,6 +48,8 @@ class SceneManager {
 
 		this.x = this.player.x - xmid;
 		this.y = this.player.y - ymid;
+
+		
 	};
 	
 	draw(ctx) {
