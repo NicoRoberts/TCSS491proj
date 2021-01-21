@@ -1,7 +1,7 @@
 class BottomBoundary {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
-
+        
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.TILEHEIGHT / 2); 
