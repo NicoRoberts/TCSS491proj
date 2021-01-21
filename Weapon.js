@@ -26,8 +26,8 @@ class Weapon {
     }
 
     update() {
-        this.x = this.game.player.x;
-        this.y = this.game.player.y;
+        this.x = this.game.player.positionx;
+        this.y = this.game.player.positiony;
 
         let facingRight = this.game.player.direction == this.DIRECTION.RIGHT;
 
