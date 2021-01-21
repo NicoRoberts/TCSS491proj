@@ -1,7 +1,7 @@
 class BottomBoundary {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
-
+        
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.TILEHEIGHT / 2); 
@@ -16,11 +16,11 @@ class BottomBoundary {
         let tileCount = this.w / PARAMS.TILEWIDTH;       
         for (var i = 0; i < tileCount; i++) {
             //BOTTOM
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH, this.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
+            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
         }
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
         }       
     };
 };
@@ -44,14 +44,14 @@ class TopBoundary {
         
         for (var i = 0; i < tileCount; i++) {
             //BOTTOM
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH, this.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
+            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
            
        
         }
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
         }
         
     };
@@ -77,12 +77,12 @@ class LeftBoundary {
         let tileCount = (this.w / PARAMS.TILEHEIGHT);
         
         for (var i = 0; i < tileCount; i++) {
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x, this.y  + i * PARAMS.TILEHEIGHT, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
+            ctx.drawImage(this.spritesheet,0,0,32,32, this.x - this.game.camera.x, this.y  + i * PARAMS.TILEHEIGHT - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
         }
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
         }
         
     };
@@ -107,12 +107,12 @@ class RightBoundary {
         let tileCount = (this.w / PARAMS.TILEHEIGHT);
         
         for (var i = 0; i < tileCount; i++) {
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x, this.y  + i * PARAMS.TILEHEIGHT, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
+            ctx.drawImage(this.spritesheet,0,0,32,32, this.x - this.game.camera.x, this.y  + i * PARAMS.TILEHEIGHT - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
         }
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
         }
         
     };

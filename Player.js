@@ -16,8 +16,12 @@ class Player{
 	constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-		this.width = 16;
-		this.height = 32;
+    this.width = 16;
+    this.height = 32;
+
+		//POSITION VARIABLES
+		this.positionx = 0;
+		this.positiony = 0;
 
 		this.velocity = { x: 0, y: 0 };
 
@@ -122,10 +126,9 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
-		if (false) {
-			this.x = Math.floor(this.x);
-			this.y = Math.floor(this.y);
-		}
+		//position with regards to camera.
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.updateBB();
 
@@ -187,9 +190,11 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			ctx.strokeStyle = 'Red';
-			ctx.strokeRect(this.x, this.y, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
+			ctx.strokeRect(this.positionx, this.positiony, this.width*PARAMS.PIXELSCALER, this.height*PARAMS.PIXELSCALER);
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x, this.y, 1)
+		console.log(this.positionx);
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+
 	}
 
 }

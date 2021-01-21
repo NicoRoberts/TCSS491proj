@@ -6,7 +6,8 @@ class Enemy{
 		Object.assign(this, {player, game, x,y});
 
 		this.game.Enemy = this;
-
+		this.positionx = 0;
+		this.positiony = 0;
 		this.velocity = {x:0, y:0};
 
 		this.updateBB();
@@ -44,8 +45,10 @@ class Enemy{
 		//Update Velocity
         this.x += this.velocity.x
         this.y += this.velocity.y
-        
-    
+		
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
+		
 		this.updateBB();
 
 	};
@@ -54,7 +57,7 @@ class Enemy{
 		ctx.fillStyle = "Red";
 		ctx.strokeStyle = "Red";
 
-		ctx.strokeRect(this.x,this.y,100,100);
+		ctx.strokeRect(this.positionx, this.positiony, 100, 100);
 	};
 
 };

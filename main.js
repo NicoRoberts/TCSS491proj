@@ -10,19 +10,28 @@ ASSET_MANAGER.queueDownload("./images/tile.png");
 
 ASSET_MANAGER.downloadAll(function () {
 
+	//Constants
 	PARAMS.PIXELSCALER = 3;
 
-	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 becuase tile is 32x32 which is double the Bitwidth
+	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 because tile is 32x32 which is double the Bitwidth
 	PARAMS.TILEHEIGHT = PARAMS.BITWIDTH * PARAMS.SCALE * 2; 
 
-	PARAMS.PLAYERWIDTH = 100; //This should be updated later
-	PARAMS.PLAYERHEIGHT = 100; //This should be updated later
+	PARAMS.PLAYERWIDTH = 100; 
+	PARAMS.PLAYERHEIGHT = 100; 
 
-	PARAMS.ENEMYWIDTH = 50; //This should be updated later
-	PARAMS.ENEMYHEIGHT = 50; //This should be updated later
+	PARAMS.ENEMYWIDTH = 50;
+	PARAMS.ENEMYHEIGHT = 50;
 
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
+
+	PARAMS.CANVAS_WIDTH = canvas.width;
+	PARAMS.CANVAS_HEIGHT = canvas.height; 
+
+
+
+
+
 
 	gameEngine.init(ctx);
 
