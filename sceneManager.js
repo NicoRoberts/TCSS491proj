@@ -32,7 +32,11 @@ class SceneManager {
 		this.game.addEntity(rBoundary);
 		
 		this.player = new Player(this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
+		this.game.player = this.player;
 		this.game.addEntity(this.player);
+
+		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol.png");
+		this.game.addEntity(this.weapon)
 
 		this.enemy = new Enemy(this.player, this.game, 200, 200);
 		this.game.addEntity(this.enemy);
@@ -48,8 +52,6 @@ class SceneManager {
 
 		this.x = this.player.x - xmid;
 		this.y = this.player.y - ymid;
-
-		
 	};
 	
 	draw(ctx) {
