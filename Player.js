@@ -65,12 +65,17 @@ class Player{
 
 	update(){
 		//Update Velocity
+
+
+		const TIMESCALE = 140;
+		const TICKSCALE = this.game.clockTick * TIMESCALE;
+
 		var moving = false;
 		if(this.game.W){
-			this.velocity.y = -1 * this.SET_VELOCITY.Y;
+			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
 		} else if(this.game.S){
-			this.velocity.y = this.SET_VELOCITY.Y;
+			this.velocity.y = this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
 		}else {
 			this.velocity.y = 0;
@@ -79,11 +84,11 @@ class Player{
 			this.direction = this.DIRECTION.LEFT;
 			moving = true;
 
-			this.velocity.x = -1*this.SET_VELOCITY.X;
+			this.velocity.x = -1 * this.SET_VELOCITY.X * TICKSCALE;
 		} else if (this.game.D) {
 			this.direction = this.DIRECTION.RIGHT
 			moving = true;
-			this.velocity.x = this.SET_VELOCITY.X;
+			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
 		}
 		else {
 			this.velocity.x = 0;
@@ -95,8 +100,8 @@ class Player{
 
 		let diagonal = false;
 		if ((this.game.A || this.game.D) && (this.game.W || this.game.S)) {
-			this.velocity.x = (this.velocity.x / 2) * Math.sqrt(2);
-			this.velocity.y = (this.velocity.y / 2) * Math.sqrt(2);
+			this.velocity.x = (this.velocity.x / 2) * Math.sqrt(2) * TICKSCALE;
+			this.velocity.y = (this.velocity.y / 2) * Math.sqrt(2) * TICKSCALE;
 			diagonal = true;
         }
 
@@ -117,7 +122,7 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
-		if (!diagonal) {
+		if (false) {
 			this.x = Math.floor(this.x);
 			this.y = Math.floor(this.y);
 		}
