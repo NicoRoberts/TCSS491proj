@@ -19,6 +19,11 @@ class Player{
     	this.width = 16;
     	this.height = 32;
 
+		//POSITION VARIABLES
+		this.positionx = 0;
+		this.positiony = 0;
+
+
 		this.velocity = { x: 0, y: 0 };
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
@@ -117,6 +122,10 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
+		//position with regards to camera.
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
+
 		if (!diagonal) {
 			this.x = Math.floor(this.x);
 			this.y = Math.floor(this.y);
@@ -182,9 +191,10 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			ctx.strokeStyle = 'Red';
-			ctx.strokeRect(this.x - this.game.camera.x, this.y - this.game.camera.y, this.width*3, this.height*3);
+			ctx.strokeRect(this.positionx, this.positiony, this.width*3, this.height*3);
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1)
+		console.log(this.positionx);
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 	}
 
 }
