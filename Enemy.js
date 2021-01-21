@@ -54,7 +54,7 @@ class Enemy{
 		ctx.fillStyle = "Red";
 		ctx.strokeStyle = "Red";
 
-		ctx.strokeRect(this.x,this.y,100,100);
+		ctx.strokeRect(this.x - this.game.camera.x,this.y - this.game.camera.y,100,100);
 	};
 
 };

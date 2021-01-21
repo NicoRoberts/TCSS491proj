@@ -182,9 +182,9 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			ctx.strokeStyle = 'Red';
-			ctx.strokeRect(this.x, this.y, this.width*3, this.height*3);
+			ctx.strokeRect(this.x - this.game.camera.x, this.y - this.game.camera.y, this.width*3, this.height*3);
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.x, this.y, 1)
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1)
 	}
 
 }
