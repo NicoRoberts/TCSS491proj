@@ -31,14 +31,9 @@ class SceneManager {
 		let rBoundary = new RightBoundary(this.game, 1858, 33, 800); 
 		//this.game.addEntity(rBoundary);
 		
-<<<<<<< HEAD
-		this.player = new Player(this.game, 50, 50);
-		//this.game.addEntity(this.player);
-=======
 		this.player = new Player(this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
 		this.game.player = this.player;
-		this.game.addEntity(this.player);
->>>>>>> 02ed938faed6a054f7728e74ab2f00df553b3c9f
+		//this.game.addEntity(this.player);
 
 		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol.png");
 		this.game.addEntity(this.weapon)
