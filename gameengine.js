@@ -6,7 +6,7 @@ class GameEngine {
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
-        this.click = null;
+        this.click = false;
         this.mouse = null;
         this.wheel = null;
         this.surfaceWidth = null;
@@ -48,11 +48,21 @@ class GameEngine {
         this.ctx.canvas.addEventListener("mousemove", function (e) {
             //console.log(getXandY(e));
             that.mouse = getXandY(e);
+
         }, false);
 
-        this.ctx.canvas.addEventListener("click", function (e) {
-            //console.log(getXandY(e));
-            that.click = getXandY(e);
+        this.ctx.canvas.addEventListener("mousedown", function (e) {
+            //Left mouse button
+            if (e.which == 1) {
+                that.click = true;
+            }
+        }, false);
+
+        this.ctx.canvas.addEventListener("mouseup", function (e) {
+            //Left mouse button
+            if (e.which == 1) {
+                that.click = false;
+            }
         }, false);
 
         this.ctx.canvas.addEventListener("keydown", function (e) {
@@ -115,6 +125,8 @@ class GameEngine {
             this.entities[i].draw(this.ctx);
         }
 
+        this.camera.draw(this.ctx);
+
     };
 
     update() {
@@ -127,6 +139,8 @@ class GameEngine {
                 entity.update();
             }
         }
+
+        this.camera.update();
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
