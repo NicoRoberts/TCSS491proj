@@ -31,6 +31,8 @@ class Enemy{
 
 		this.updateBB();
 
+		this.priority = 3;
+
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
 

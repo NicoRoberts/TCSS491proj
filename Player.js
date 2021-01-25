@@ -35,7 +35,9 @@ class Player{
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
-    	this.updateBB();
+	this.updateBB();
+	
+		this.priority = 2;
 	}
 
 	setupCategories() {

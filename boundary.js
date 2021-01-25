@@ -6,7 +6,7 @@ class BottomBoundary {
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.TILEHEIGHT / 2); 
 
-    
+        this.priority = 1;
     };
 
     update() {
@@ -32,6 +32,8 @@ class TopBoundary {
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
         this.BB = new BoundingBox(this.x, this.y + (PARAMS.TILEWIDTH / 2), this.w, PARAMS.TILEHEIGHT / 2); 
+
+        this.priority = 1;
     
     };
 
@@ -66,6 +68,8 @@ class LeftBoundary {
         this.BB = new BoundingBox(this.x + (PARAMS.TILEWIDTH / 2), this.y, PARAMS.TILEWIDTH / 2, this.w); //this.w is passed for the height, refractor if there is time.
 
         //Tile is 32 x 32 (width x height)
+
+        this.priority = 1;
     
     };
 
@@ -96,6 +100,8 @@ class RightBoundary {
 
         this.BB = new BoundingBox(this.x, this.y, PARAMS.TILEWIDTH / 2, this.w); //this.w is passed for the height, refractor if there is time.
         //Tile is 32 x 32 (width x height)
+
+        this.priority = 1;
     
     };
 
