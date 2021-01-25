@@ -16,8 +16,8 @@ class Player{
 	constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-    this.width = 16;
-    this.height = 32;
+    	this.width = 16;
+    	this.height = 32;
 
 		//POSITION VARIABLES
 		this.positionx = 0;
@@ -27,7 +27,7 @@ class Player{
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
-    this.game.Player = this;
+    	this.game.Player = this;
     
 		this.direction = this.DIRECTION.RIGHT;
 		this.state = this.STATE.IDLE
