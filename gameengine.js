@@ -2,7 +2,6 @@
 
 class GameEngine {
     constructor() {
-        //this.entities = new PriorityQueue();
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
@@ -55,6 +54,9 @@ class GameEngine {
             //Left mouse button
             if (e.which == 1) {
                 that.click = true;
+                let angle = that.player.direction == that.player.DIRECTION.RIGHT ? that.weapon.angle : that.weapon.angle - Math.PI;
+                that.addEntity(new Bullet(that, that.weapon.source.x + that.weapon.angleOffset.x + that.camera.x,
+                    that.weapon.source.y + + that.weapon.angleOffset.y + that.camera.y, angle));
             }
         }, false);
 
@@ -135,7 +137,9 @@ class GameEngine {
     };
 
     update() {
+
         var entitiesCount = this.entities.length;
+        //console.log(entitiesCount);
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];

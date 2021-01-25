@@ -29,6 +29,8 @@ window.requestAnimFrame = (function () {
 const PARAMS = {
     DEBUG: true,
     SCALE: 1,
+    PIXELSCALER: 3,
+    TIMESCALE: 140,
     BITWIDTH: 16
 };
 

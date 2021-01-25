@@ -23,11 +23,22 @@ class Weapon {
         this.armOffset = { x: this.translate.x - PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER };
         this.canvasOffset = { x: -14 * PARAMS.PIXELSCALER, y: -6 * PARAMS.PIXELSCALER };
 
+        this.bullets = [];
+
         this.priority = 3;
+
+        this.game.weapon = this;
         
     }
 
     update() {
+
+        
+        //console.log(this.bullets.length);
+
+
+
+
         this.x = this.game.player.positionx;
         this.y = this.game.player.positiony;
 
@@ -39,11 +50,19 @@ class Weapon {
         this.canvasOffset = facingRight
             ? { x: -14 * PARAMS.PIXELSCALER, y: -7 * PARAMS.PIXELSCALER }
             : { x: -3 * PARAMS.PIXELSCALER, y: -7 * PARAMS.PIXELSCALER };
-        
+
+
+        let lineScaler = this.game.player.direction == this.DIRECTION.RIGHT ? 0.9 : -0.9;
+
+        this.angleOffset = {
+            x: lineScaler * this.width * PARAMS.PIXELSCALER * Math.cos(this.angle),
+            y: lineScaler * this.width * PARAMS.PIXELSCALER * Math.sin(this.angle)
+        };
+
         if (this.game.mouse != null) {
 
 
-            this.source = { x: this.x + this.translate.x + this.canvasOffset.x + PARAMS.PIXELSCALER / 2, y: this.y + this.translate.y + this.canvasOffset.y + + PARAMS.PIXELSCALER / 2 };
+            this.source = { x: this.x + this.translate.x + this.canvasOffset.x + PARAMS.PIXELSCALER / 2, y: this.y + this.translate.y + this.canvasOffset.y + PARAMS.PIXELSCALER / 2 };
             this.destination = { x: this.game.mouse.x, y: this.game.mouse.y };
             this.angle = Math.atan((this.destination.y - this.source.y) / (this.destination.x - this.source.x))
 
@@ -52,6 +71,8 @@ class Weapon {
             this.angle = this.game.player.direction == this.DIRECTION.LEFT? this.angle - Math.PI: this.angle; 
             
         }
+
+        
     }
 
     draw(ctx) {
@@ -101,16 +122,10 @@ class Weapon {
 
             if (PARAMS.DEBUG) {
 
-                let lineScaler = this.game.player.direction == this.DIRECTION.RIGHT ? 0.9 : -0.9;
-
-                let angleOffset = {
-                    x: lineScaler * this.width * PARAMS.PIXELSCALER * Math.cos(this.angle),
-                    y: lineScaler * this.width * PARAMS.PIXELSCALER * Math.sin(this.angle)
-                };
 
                 ctx.strokeStyle = this.game.click ? "Blue" : "Red";
                 ctx.beginPath();
-                ctx.moveTo(this.source.x + angleOffset.x, this.source.y + angleOffset.y);
+                ctx.moveTo(this.source.x + this.angleOffset.x, this.source.y + this.angleOffset.y);
                 ctx.lineTo(this.destination.x, this.destination.y);
                 ctx.stroke();
             }

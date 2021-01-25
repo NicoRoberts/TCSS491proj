@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:1, Y:1};
+	SET_VELOCITY = 1;
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -31,7 +31,7 @@ class Enemy{
 
 		this.updateBB();
 
-		this.priority = 3;
+		this.priority = 1;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -40,6 +40,7 @@ class Enemy{
 		this.setupCategories();
 		this.loadAnimations();
 
+		this.hit = false;
     	this.updateBB(); //COLLISION IS NOT IMPLEMENTED
 	};
 
@@ -68,39 +69,39 @@ class Enemy{
 			= new Animator(this.spritesheet, 23, 23, this.width, this.height, 5, 0.15, 24, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
-		}
+	}
 
-	//COLLISION IS NOT IMPLEMENTED
 	updateBB() {
-		//this.lastBB = this.BB;
-		//this.BB = new BoundingBox(this.x, this.y, 100, 100); //100 100 Should be changed later.
+		this.lastBB = this.BB;
+		this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
 	};
 
 	update() {
 
-        //Update Position
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
+		var that = this;
         //Get difference from player and enemy
         var dx = this.player.x - this.x;
 		var dy = this.player.y - this.y;
 		
 		
 		var moving = false; //flag for skeleton movement
-        if (dx > 0) {
-			this.x += this.SET_VELOCITY.X;
+		if (dx > 0) {
+			this.x += this.SET_VELOCITY * TICKSCALE;
 			this.direction = this.DIRECTION.RIGHT;
 			moving = true;
         } else {
-			this.x -= this.SET_VELOCITY.X;
+			this.x -= this.SET_VELOCITY * TICKSCALE;
 			this.direction = this.DIRECTION.LEFT;
 			moving = true;
 		}
 		
         if(dy > 0) {
-			this.y += this.SET_VELOCITY.Y;
+			this.y += this.SET_VELOCITY * TICKSCALE;
 			moving = true;
         } else {
-			this.y -= this.SET_VELOCITY.Y;
+			this.y -= this.SET_VELOCITY * TICKSCALE;
 			moving = true;
         } 
 
@@ -117,6 +118,16 @@ class Enemy{
 		
 		this.updateBB();
 
+		if (this.hit) {
+			that.hitColor = true;
+			window.setTimeout(function () {
+				that.hitColor = false;
+			}, 5000 / 60);
+			this.hit = false;
+			console.log("hit");
+        }
+
+
 		//COLLISION LOGIC HERE
 
 	};
@@ -125,7 +136,7 @@ class Enemy{
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
-			ctx.strokeStyle = 'Red';
+			ctx.strokeStyle = this.hitColor ? 'Yellow' : 'Red';
 			ctx.strokeRect(this.positionx, this.positiony, this.width, this.height);
 		}
 

@@ -35,7 +35,7 @@ class Player{
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
-	this.updateBB();
+		this.updateBB();
 	
 		this.priority = 2;
 	}
@@ -72,9 +72,7 @@ class Player{
 	update(){
 		//Update Velocity
 
-
-		const TIMESCALE = 140;
-		const TICKSCALE = this.game.clockTick * TIMESCALE;
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		var moving = false;
 		if(this.game.W){
