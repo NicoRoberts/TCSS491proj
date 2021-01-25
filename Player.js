@@ -100,12 +100,12 @@ class Player{
 
 		this.state = (moving) ? this.STATE.WALKING : this.STATE.IDLE;
 
-		//fix velocity for diagnal movement
+		//fix velocity for diagonal movement
 
 		let diagonal = false;
 		if ((this.game.A || this.game.D) && (this.game.W || this.game.S)) {
-			this.velocity.x = (this.velocity.x / 2) * Math.sqrt(2) * TICKSCALE;
-			this.velocity.y = (this.velocity.y / 2) * Math.sqrt(2) * TICKSCALE;
+			this.velocity.x = (this.velocity.x / 2) * Math.sqrt(2);
+			this.velocity.y = (this.velocity.y / 2) * Math.sqrt(2);
 			diagonal = true;
         }
 
@@ -192,7 +192,6 @@ class Player{
 			ctx.strokeStyle = 'Red';
 			ctx.strokeRect(this.positionx, this.positiony, this.width*PARAMS.PIXELSCALER, this.height*PARAMS.PIXELSCALER);
 		}
-		console.log(this.positionx);
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
 	}
