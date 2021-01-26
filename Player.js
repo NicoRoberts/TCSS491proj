@@ -207,8 +207,8 @@ class Player{
 		var hpScale = 5;
 		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
 
-		// ctx.fillStyle = 'Red';
-		// ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
+		ctx.fillStyle = 'Red';
+		ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 
