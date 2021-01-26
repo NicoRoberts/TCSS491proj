@@ -35,9 +35,12 @@ class Player{
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
-	this.updateBB();
+		this.updateBB();
 	
 		this.priority = 2;
+
+		this.hp = 100;
+		this.hpMax = 100;
 	}
 
 	setupCategories() {
@@ -196,6 +199,10 @@ class Player{
 		}
 		console.log(this.positionx);
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+
+		// health bar
+		ctx.strokeStyle = 'Black';
+		ctx.fillRect(10, 10, this.hpMax, 10);
 
 	}
 
