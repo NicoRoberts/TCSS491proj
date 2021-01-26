@@ -29,8 +29,6 @@ class Enemy{
 
 		this.game.Enemy = this;
 
-		this.updateBB();
-
 		this.priority = 3;
 
 		this.direction = this.DIRECTION.LEFT;
@@ -40,7 +38,12 @@ class Enemy{
 		this.setupCategories();
 		this.loadAnimations();
 
-    	this.updateBB(); //COLLISION IS NOT IMPLEMENTED
+		this.updateBB(); //COLLISION IS NOT IMPLEMENTED
+		
+		// stats
+		this.hpCurrent = 100;
+		this.hpMax = 100;
+		
 	};
 
 	setupCategories() {

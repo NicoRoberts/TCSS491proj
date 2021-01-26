@@ -35,10 +35,12 @@ class Player{
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
+		
 		this.updateBB();
 	
 		this.priority = 2;
 
+		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
 	}
