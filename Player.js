@@ -202,8 +202,8 @@ class Player{
 
 		// health bar
 		ctx.strokeStyle = 'Black';
-		var scale = 2.5;
-		ctx.fillRect(25, 25, this.hpMax * scale, 10 * scale);
+		var hpScale = 5;
+		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
 
 		//ctx.strokeStyle = 'Red';
 		//ctx.fillRect(25, 25, this.hpMax * scale, 10 * scale);
