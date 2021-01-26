@@ -38,6 +38,10 @@ class Player{
 		this.updateBB();
 	
 		this.priority = 2;
+
+		// stats
+		this.hpCurrent = 100;
+		this.hpMax = 100;
 	}
 
 	setupCategories() {
@@ -193,6 +197,14 @@ class Player{
 			ctx.strokeRect(this.positionx, this.positiony, this.width*PARAMS.PIXELSCALER, this.height*PARAMS.PIXELSCALER);
 		}
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+
+		// health bar
+		ctx.fillStyle = 'Black';
+		var hpScale = 5;
+		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
+
+		ctx.fillStyle = 'Red';
+		ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 

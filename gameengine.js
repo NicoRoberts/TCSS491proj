@@ -3,6 +3,7 @@
 class GameEngine {
     constructor() {
         this.entities = [];
+        this.sorted = false;
         this.showOutlines = false;
         this.ctx = null;
         this.click = false;
@@ -117,6 +118,7 @@ class GameEngine {
     addEntity(entity) {
         //this.entities.enqueue(entity);
         this.entities.push(entity);
+        this.sorted = false;
     };
 
     draw() {
@@ -124,9 +126,12 @@ class GameEngine {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         // this.ctx.save();
 
-        this.entities.sort((a, b) => {
-            return a.priority - b.priority;
-        });
+        if (!this.sorted) {
+            this.entities.sort((a, b) => {
+                return a.priority - b.priority;
+            });
+            this.sorted = true;
+        }
 
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
