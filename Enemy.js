@@ -46,6 +46,9 @@ class Enemy{
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
+
+		
+		this.bulletDamage = 25;
 	};
 
 	setupCategories() {
@@ -127,9 +130,15 @@ class Enemy{
 			window.setTimeout(function () {
 				that.hitColor = false;
 			}, 5000 / 60);
+			this.hpCurrent -= this.bulletDamage;
 			this.hit = false;
 			console.log("hit");
-        }
+		}
+		
+		// death
+		if (this.hpCurrent <= 0) {
+			this.removeFromWorld = true;
+		}
 
 
 		//COLLISION LOGIC HERE
