@@ -201,12 +201,11 @@ class Player{
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.strokeStyle = "Black";
-		ctx.fillStyle = 'Black';
+		ctx.strokeStyle = 'Black';
 		var hpScale = 5;
 		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
 
-		ctx.fillStyle = 'Red';
+		ctx.strokeStyle = 'Red';
 		ctx.fillRect(25, 25, this.hpCurrent * scale, 5 * hpScale);
 
 	}
