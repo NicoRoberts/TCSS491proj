@@ -39,7 +39,7 @@ class Player{
 	
 		this.priority = 2;
 
-		this.hp = 100;
+		this.hpCurrent = 100;
 		this.hpMax = 100;
 	}
 
@@ -202,11 +202,11 @@ class Player{
 
 		// health bar
 		ctx.strokeStyle = 'Black';
-		var scale = 5;
+		var scale = 2.5;
 		ctx.fillRect(25, 25, this.hpMax * scale, 10 * scale);
 
 		//ctx.strokeStyle = 'Red';
-		//ctx.fillRect(50, 50, this.hpMax * scale, 10 * scale);
+		//ctx.fillRect(25, 25, this.hpMax * scale, 10 * scale);
 
 	}
 
