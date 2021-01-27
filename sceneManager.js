@@ -38,12 +38,15 @@ class SceneManager {
 		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol.png");
 		//this.game.addEntity(this.weapon);
 
-		this.enemy = new Enemy(this.player, this.game, 200, 200);
+		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
+
+		this.enemy2 = new Enemy(this.player, this.game, 1200, 200);
 		//this.game.addEntity(this.enemy);
 
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.weapon)
-		this.game.addEntity(this.enemy);
+		this.game.addEntity(this.enemy1);
+		this.game.addEntity(this.enemy2);
 		this.game.addEntity(this.player);
 		this.game.addEntity(rBoundary);
 		this.game.addEntity(lBoundary);
@@ -62,9 +65,6 @@ class SceneManager {
 	};
 	
 	draw(ctx) {
-		ctx.font = 80 + 'px "VT323"';
-		ctx.fillStyle = "White";
-		ctx.fillText("Cast to the Shadows", 650, 80);
 		if (PARAMS.DEBUG) {
             
 
