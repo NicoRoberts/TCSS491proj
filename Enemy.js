@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:1, Y:1};
+	SET_VELOCITY = {X:0.2, Y:0.2};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -16,8 +16,9 @@ class Enemy{
 	constructor(player,game,x,y){
 		Object.assign(this, {player, game, x,y});
 
-		this.width = 74;
-		this.height = 92;
+		this.width = 75;
+		this.height = 93;
+		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		
 		//position variables
 		this.positionx = 0;
@@ -56,50 +57,80 @@ class Enemy{
 	loadAnimations() {
 		//Skeleton is idling and facing right
 		this.animations[this.STATE.IDLE][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 518,23, this.width, this.height, 1, 0.15, 0, false, false);
+			= new Animator(this.spritesheet, 503,8, this.width, this.height, 1, 1, 0, false, true);
 		//Skeleton is idling and facing left
 		this.animations[this.STATE.IDLE][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 23, 23, this.width, this.height, 1, 0.15, 0, false, false);
+			= new Animator(this.spritesheet, 8, 8, this.width, this.height, 1, 1, 0, false, true);
 		//Skeleton is walking and facing right
 		this.animations[this.STATE.WALKING][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 518, 23, this.width, this.height, 5, 0.15, 24, false, true);
+			= new Animator(this.spritesheet, 599, 8, this.width, this.height, 4, 0.15, 21, false, true);
 		//Skeleton is walking and facing left	
 		this.animations[this.STATE.WALKING][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 23, 23, this.width, this.height, 5, 0.15, 24, false, true);
+			= new Animator(this.spritesheet, 104, 8, this.width, this.height, 4, 0.15, 21, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 		}
 
 	//COLLISION IS NOT IMPLEMENTED
+
 	updateBB() {
-		//this.lastBB = this.BB;
-		//this.BB = new BoundingBox(this.x, this.y, 100, 100); //100 100 Should be changed later.
+		this.lastBB = this.BB;
+		this.BB = new BoundingBox(this.x, this.y, this.width, this.height); //100 100 Should be changed later.
 	};
 
 	update() {
 
-        //Update Position
-
-        //Get difference from player and enemy
-        var dx = this.player.x - this.x;
-		var dy = this.player.y - this.y;
+      
+		var dx;
+		var dy = Math.floor((this.player.y - this.y + this.heightDifference));
 		
+		var midpoint = Math.floor((this.x + (this.width / 2)));
+
+		console.log(Math.abs(midpoint - this.player.x));
+		console.log(Math.abs(midpoint - (this.player.x + this.player.width)));
+
+		if ((Math.abs(midpoint - this.player.x)) <= (Math.abs(midpoint - (this.player.x + this.player.width)))) { // is the skeleton closer to the left or the right of the player
+			dx = Math.floor((this.player.x - (this.x + this.width)));
+		} else {
+			dx = Math.floor((this.player.x + this.player.width) - (this.x - 32));
+		}
 		
 		var moving = false; //flag for skeleton movement
+		//var reached = false;
+
+		if (dx == 0 && dy == 0) {
+			//reached = true;
+			moving = false;
+			this.velocity.x = 0;
+			this.velocity.y = 0;
+			if(this.x < this.player.x && (this.direction == this.DIRECTION.LEFT)) {
+				this.direction = this.DIRECTION.RIGHT;
+			}
+		}
+		
         if (dx > 0) {
+			
 			this.x += this.SET_VELOCITY.X;
-			this.direction = this.DIRECTION.RIGHT;
+
+			if(this.x + this.width < this.player.x) {
+				this.direction = this.DIRECTION.RIGHT
+			}
+
 			moving = true;
-        } else {
+		} else if (dx < 0) {
 			this.x -= this.SET_VELOCITY.X;
-			this.direction = this.DIRECTION.LEFT;
+
+			if(this.x + this.width > this.player.x) {
+				this.direction = this.DIRECTION.LEFT
+			}
+
 			moving = true;
 		}
 		
-        if(dy > 0) {
+        if (dy > 0) {
 			this.y += this.SET_VELOCITY.Y;
 			moving = true;
-        } else {
+        } else if (dy < 0) {
 			this.y -= this.SET_VELOCITY.Y;
 			moving = true;
         } 
@@ -117,7 +148,38 @@ class Enemy{
 		
 		this.updateBB();
 
-		//COLLISION LOGIC HERE
+		//ENEMY COLLISION LOGIC
+		// var that = this;
+        // this.game.entities.forEach(function (entity) {
+		// 	if (entity.BB && that.BB.collide(entity.BB)) {
+		// 		if (entity instanceof Player) {
+		// 			if (that.lastBB.bottom <= entity.BB.top) { //enemy above player
+		// 				that.y = entity.BB.top - that.height;
+		// 				if (that.velocity.y > 0) that.velocity.y = 0;
+
+		// 			}
+		// 			if (that.lastBB.top <= entity.BB.bottom) { //enemy below player
+		// 				that.y = entity.BB.bottom;
+		// 				if (that.velocity.y < 0) that.velocity.y = 0;
+
+		// 			} 
+		// 			if (that.lastBB.left <= entity.BB.right) { //enemy to the right of player
+		// 				that.x = entity.BB.right;
+		// 				if (that.velocity.x < 0) that.velocity.x = 0;
+
+		// 			} 
+		// 			if (that.lastBB.right >= entity.BB.left) { //enemy to the left of player
+		// 				that.x = entity.BB.left - that.width;
+		// 				if (that.velocity.x > 0) that.velocity.x = 0;
+		// 			}	
+		// 		}
+						
+				
+		// 	}
+				
+		// });
+		
+		
 
 	};
 

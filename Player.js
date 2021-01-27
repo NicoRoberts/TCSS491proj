@@ -35,7 +35,7 @@ class Player{
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
-	this.updateBB();
+		this.updateBB();
 	
 		this.priority = 2;
 	}
@@ -182,6 +182,8 @@ class Player{
 					}
 					that.updateBB();
 				}
+
+				
 					
 			}
 
@@ -194,7 +196,6 @@ class Player{
 			ctx.strokeStyle = 'Red';
 			ctx.strokeRect(this.positionx, this.positiony, this.width*PARAMS.PIXELSCALER, this.height*PARAMS.PIXELSCALER);
 		}
-		console.log(this.positionx);
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
 	}
