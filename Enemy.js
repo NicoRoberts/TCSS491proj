@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:0.2, Y:0.2};
+	SET_VELOCITY = {X:1, Y:1};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -30,6 +30,7 @@ class Enemy{
 		this.positiony = 0;
 
 		this.attackCooldown = 0;
+
 		this.velocity = {x:0, y:0};
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/SkeletonSheet.png");
@@ -162,23 +163,23 @@ class Enemy{
 
 		//set state: walking, idling, or attacking
 		var idleState = true;
+		this.attackCooldown += this.game.clockTick;
+
+		
 
 		if (moving) {
 			this.state = this.STATE.WALKING;
-		} else {
+		} else if (!moving && this.attackCooldown <= 2) {
 			this.state = this.STATE.IDLE;
-			this.state = this.STATE.ATTACK;
-			//this.attackCooldown = 0;
-			//idleState = true;
-			//this.attackCooldown += this.game.clockTick;
-			//idleState = false;
-			// if((this.attackCooldown % 3) <= 1 && !idleState) {
-				
-			// 	this.state = this.STATE.ATTACK;
-			// 	//this.attackCooldown = 0;
-			// 	idleState = true;
+		}
 
-			// }	
+		if (!moving) {
+			if (this.attackCooldown > 2) {
+				this.state = this.STATE.ATTACK;
+			}
+			if (this.attackCooldown >= 2.45) {
+				this.attackCooldown = 0;
+			}
 		}
     
 

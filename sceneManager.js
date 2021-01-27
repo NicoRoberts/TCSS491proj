@@ -62,6 +62,9 @@ class SceneManager {
 	};
 	
 	draw(ctx) {
+		ctx.font = 80 + 'px "VT323"';
+		ctx.fillStyle = "White";
+		ctx.fillText("Cast to the Shadows", 650, 80);
 		if (PARAMS.DEBUG) {
             
 
