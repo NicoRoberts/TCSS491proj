@@ -10,20 +10,26 @@ class Enemy{
 	STATE = {
 		IDLE: 0,
 		WALKING: 1,
-		COUNT: 2,
+		ATTACK: 2,
+		COUNT: 3,
     };
 
-	constructor(player,game,x,y){
+	constructor(player,game,x,y) {
 		Object.assign(this, {player, game, x,y});
 
 		this.width = 75;
 		this.height = 93;
+
+		this.attackWidth = 86;
+		this.attackHeight = 95;
+
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
-		
+		this.rightOffset = 33; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
 		this.positionx = 0;
 		this.positiony = 0;
 
+		this.attackCooldown = 0;
 		this.velocity = {x:0, y:0};
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/SkeletonSheet.png");
@@ -57,16 +63,22 @@ class Enemy{
 	loadAnimations() {
 		//Skeleton is idling and facing right
 		this.animations[this.STATE.IDLE][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 503,8, this.width, this.height, 1, 1, 0, false, true);
+			= new Animator(this.spritesheet, 503,8, this.width, this.height, 1, 3, 0, false, true);
 		//Skeleton is idling and facing left
 		this.animations[this.STATE.IDLE][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 8, 8, this.width, this.height, 1, 1, 0, false, true);
+			= new Animator(this.spritesheet, 8, 8, this.width, this.height, 1, 3, 0, false, true);
 		//Skeleton is walking and facing right
 		this.animations[this.STATE.WALKING][this.DIRECTION.RIGHT]
 			= new Animator(this.spritesheet, 599, 8, this.width, this.height, 4, 0.15, 21, false, true);
 		//Skeleton is walking and facing left	
 		this.animations[this.STATE.WALKING][this.DIRECTION.LEFT]
 			= new Animator(this.spritesheet, 104, 8, this.width, this.height, 4, 0.15, 21, false, true);
+		//Skeleton is attacking and facing left	
+		this.animations[this.STATE.ATTACK][this.DIRECTION.LEFT]
+			= new Animator(this.spritesheet, 968, 5, this.attackWidth, this.attackHeight, 3, 0.15, 7, false, true);
+		//Skeleton is attacking and facing right	
+		this.animations[this.STATE.ATTACK][this.DIRECTION.RIGHT]
+			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.15, 13, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 		}
@@ -86,25 +98,37 @@ class Enemy{
 		
 		var midpoint = Math.floor((this.x + (this.width / 2)));
 
-		console.log(Math.abs(midpoint - this.player.x));
-		console.log(Math.abs(midpoint - (this.player.x + this.player.width)));
+		// console.log(Math.abs(midpoint - this.player.x));
+		// console.log(Math.abs(midpoint - (this.player.x + this.player.width)));
+		
 
 		if ((Math.abs(midpoint - this.player.x)) <= (Math.abs(midpoint - (this.player.x + this.player.width)))) { // is the skeleton closer to the left or the right of the player
-			dx = Math.floor((this.player.x - (this.x + this.width)));
+			dx = Math.floor((this.player.x - (this.x + this.width))); //left of character
 		} else {
-			dx = Math.floor((this.player.x + this.player.width) - (this.x - 32));
+			dx = Math.floor((this.player.x + this.player.width) - (this.x - this.rightOffset)); //right of character
 		}
 		
+		// console.log("dx:")
+		// console.log(dx)
+		// console.log("this.x + this.width: ")
+		// console.log(this.x + this.width)
+		// console.log("this.player.x") //maybe use dx instead of this.player.x
+		// console.log(this.player.x)
 		var moving = false; //flag for skeleton movement
-		//var reached = false;
 
-		if (dx == 0 && dy == 0) {
-			//reached = true;
-			moving = false;
+
+		if (dx == 0) {
+			if (dy == 0) {
+				moving = false; 
+			}
 			this.velocity.x = 0;
 			this.velocity.y = 0;
+
+			//responsible for skeleton direction flip if on the same X coordinate
 			if(this.x < this.player.x && (this.direction == this.DIRECTION.LEFT)) {
 				this.direction = this.DIRECTION.RIGHT;
+			} else if (this.x > (this.player.x + this.player.width) && (this.direction == this.DIRECTION.RIGHT)) {
+				this.direction = this.DIRECTION.LEFT;
 			}
 		}
 		
@@ -112,14 +136,15 @@ class Enemy{
 			
 			this.x += this.SET_VELOCITY.X;
 
-			if(this.x + this.width < this.player.x) {
+			if(this.x + this.width <= this.player.x && (this.direction ==this.DIRECTION.LEFT)) {
 				this.direction = this.DIRECTION.RIGHT
 			}
 
 			moving = true;
 		} else if (dx < 0) {
 			this.x -= this.SET_VELOCITY.X;
-
+			
+			
 			if(this.x + this.width > this.player.x) {
 				this.direction = this.DIRECTION.LEFT
 			}
@@ -135,7 +160,26 @@ class Enemy{
 			moving = true;
         } 
 
-		this.state = (moving) ? this.STATE.WALKING : this.STATE.IDLE;
+		//set state: walking, idling, or attacking
+		var idleState = true;
+
+		if (moving) {
+			this.state = this.STATE.WALKING;
+		} else {
+			this.state = this.STATE.IDLE;
+			this.state = this.STATE.ATTACK;
+			//this.attackCooldown = 0;
+			//idleState = true;
+			//this.attackCooldown += this.game.clockTick;
+			//idleState = false;
+			// if((this.attackCooldown % 3) <= 1 && !idleState) {
+				
+			// 	this.state = this.STATE.ATTACK;
+			// 	//this.attackCooldown = 0;
+			// 	idleState = true;
+
+			// }	
+		}
     
 
 		//Update Position
