@@ -37,7 +37,7 @@ class Player{
 		this.loadAnimations();
 		this.updateBB();
 	
-		this.priority = 2;
+		this.priority = 3;
 
 		// stats
 		this.hpCurrent = 100;
@@ -228,10 +228,10 @@ class Player{
 		// health bar
 		ctx.fillStyle = 'Black';
 		var hpScale = 5;
-		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
+		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
 
 		ctx.fillStyle = 'Red';
-		ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
+		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 

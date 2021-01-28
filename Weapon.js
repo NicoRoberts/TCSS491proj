@@ -25,7 +25,7 @@ class Weapon {
 
         this.bullets = [];
 
-        this.priority = 3;
+        this.priority = 4;
 
         this.game.weapon = this;
         
