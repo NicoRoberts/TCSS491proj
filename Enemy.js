@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:1.65, Y:1.65};
+	SET_VELOCITY = {X:0.5, Y:0.5};
 
 	DIRECTION = {
 		RIGHT: 0,
