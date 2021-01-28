@@ -3,6 +3,7 @@ var gameEngine = new GameEngine();
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol.png");
+ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 
 // Black #3 Download Assets
@@ -13,7 +14,6 @@ ASSET_MANAGER.queueDownload("./images/tile.png");
 ASSET_MANAGER.downloadAll(function () {
 
 	//Constants
-	PARAMS.PIXELSCALER = 3;
 
 	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 because tile is 32x32 which is double the Bitwidth
 	PARAMS.TILEHEIGHT = PARAMS.BITWIDTH * PARAMS.SCALE * 2; 
@@ -38,7 +38,8 @@ ASSET_MANAGER.downloadAll(function () {
 
 	gameEngine.init(ctx);
 
-	gameEngine.addEntity(new SceneManager(gameEngine));
+	this.scene = new SceneManager(gameEngine);
+	gameEngine.addEntity(scene);
 
 	gameEngine.start();
 });

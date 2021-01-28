@@ -2,8 +2,8 @@
 
 class GameEngine {
     constructor() {
-        //this.entities = new PriorityQueue();
         this.entities = [];
+        this.sorted = false;
         this.showOutlines = false;
         this.ctx = null;
         this.click = false;
@@ -55,6 +55,9 @@ class GameEngine {
             //Left mouse button
             if (e.which == 1) {
                 that.click = true;
+                let angle = that.player.direction == that.player.DIRECTION.RIGHT ? that.weapon.angle : that.weapon.angle - Math.PI;
+                that.addEntity(new Bullet(that, that.weapon.source.x + that.weapon.angleOffset.x + that.camera.x,
+                    that.weapon.source.y + + that.weapon.angleOffset.y + that.camera.y, angle));
             }
         }, false);
 
@@ -115,6 +118,7 @@ class GameEngine {
     addEntity(entity) {
         //this.entities.enqueue(entity);
         this.entities.push(entity);
+        this.sorted = false;
     };
 
     draw() {
@@ -122,9 +126,12 @@ class GameEngine {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         // this.ctx.save();
 
-        this.entities.sort((a, b) => {
-            return a.priority - b.priority;
-        });
+        if (!this.sorted) {
+            this.entities.sort((a, b) => {
+                return a.priority - b.priority;
+            });
+            this.sorted = true;
+        }
 
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
@@ -135,7 +142,9 @@ class GameEngine {
     };
 
     update() {
+
         var entitiesCount = this.entities.length;
+        //console.log(entitiesCount);
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];

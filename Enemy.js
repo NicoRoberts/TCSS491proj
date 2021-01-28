@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:1.0, Y:1.0};
+	SET_VELOCITY = {X:1.65, Y:1.65};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -24,7 +24,7 @@ class Enemy{
 		this.attackHeight = 95;
 
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
-		this.rightOffset = 32; //A value to offset the skeleton when the skeleton is to the right of the player.
+		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
 		this.positionx = 0;
 		this.positiony = 0;
@@ -40,8 +40,7 @@ class Enemy{
 		this.game.Enemy = this;
 
 		this.updateBB();
-
-		this.priority = 3;
+		this.priority = 1;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -50,7 +49,14 @@ class Enemy{
 		this.setupCategories();
 		this.loadAnimations();
 
-    	this.updateBB(); //COLLISION IS NOT IMPLEMENTED
+
+		this.hit = false;
+		this.updateBB(); //COLLISION IS NOT IMPLEMENTED
+		
+		// stats
+		this.hpCurrent = 100;
+		this.hpMax = 100;
+
 	};
 
 	setupCategories() {
@@ -84,7 +90,7 @@ class Enemy{
 			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.15, 13, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
-		}
+	}
 
 	//COLLISION IS NOT IMPLEMENTED
 
@@ -105,8 +111,8 @@ class Enemy{
 	};
 
 	update() {
-
-      
+		var that = this;
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 		var dx;
 		var dy = Math.floor((this.player.y - this.y + this.heightDifference));
 		
@@ -139,7 +145,7 @@ class Enemy{
 		
         if (dx > 0) {
 			
-			this.x += this.SET_VELOCITY.X;
+			this.x += this.SET_VELOCITY.X * TICKSCALE;
 
 			if(this.x + this.width <= this.player.x && (this.direction ==this.DIRECTION.LEFT)) {
 				this.direction = this.DIRECTION.RIGHT
@@ -147,7 +153,7 @@ class Enemy{
 
 			moving = true;
 		} else if (dx < 0) {
-			this.x -= this.SET_VELOCITY.X;
+			this.x -= this.SET_VELOCITY.X * TICKSCALE;
 			
 			
 			if(this.x + this.width > this.player.x) {
@@ -158,10 +164,10 @@ class Enemy{
 		}
 		
         if (dy > 0) {
-			this.y += this.SET_VELOCITY.Y;
+			this.y += this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
         } else if (dy < 0) {
-			this.y -= this.SET_VELOCITY.Y;
+			this.y -= this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
         } 
 
@@ -195,10 +201,25 @@ class Enemy{
 		this.positiony = this.y - this.game.camera.y;
 		
 
+		if (this.hit) {
+			that.hitColor = true;
+			window.setTimeout(function () {
+				that.hitColor = false;
+			}, 5000 / 60);
+			this.hit = false;
+			console.log("hit");
+		}
+		
+		// death
+		if (this.hpCurrent <= 0) {
+			this.removeFromWorld = true;
+		}
+
+		
 		//Collision logic
 		this.updateBB();
 
-		var that = this;
+		
 		this.game.entities.forEach(function (entity) {
 			if (entity.BB && that.BB.collide(entity.BB)) {
 
@@ -212,10 +233,6 @@ class Enemy{
 					} 
 					that.updateBB();
 				}
-
-
-
-
 				if (entity instanceof RightBoundary) {	
 					//left side of the barrier
 					if (that.BB.collide(entity.BB)) {
@@ -259,7 +276,7 @@ class Enemy{
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
-			ctx.strokeStyle = 'Red';
+			ctx.strokeStyle = this.hitColor ? 'Yellow' : 'Red';
 			ctx.strokeRect(this.positionx, this.positiony, this.width, this.height);
 
 			ctx.strokeStyle = 'Blue';
