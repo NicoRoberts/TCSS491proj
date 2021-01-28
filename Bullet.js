@@ -13,6 +13,8 @@ class Bullet {
         this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Bullet.png");
 
         this.addedVelocity = { x: this.game.player.velocity.x, y: this.game.player.velocity.y}
+
+        this.damage = 20;
     }
     update() {
 
@@ -35,7 +37,7 @@ class Bullet {
                     && that.y > entity.BB.y && that.y < entity.BB.y + entity.BB.height) {
                     entity.hit = true;
                     that.removeFromWorld = true;
-
+                    entity.hpCurrent -= that.damage; // bullet damage
                 }
             }
         },false);
