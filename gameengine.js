@@ -12,6 +12,8 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 
+        this.enemiesCount = 0;
+
         this.W = false;
         this.A = false;
         this.S = false;
@@ -145,14 +147,20 @@ class GameEngine {
 
         var entitiesCount = this.entities.length;
         //console.log(entitiesCount);
+        this.enemiesCount = 0;
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
+            if (entity instanceof Enemy) {
+                this.enemiesCount++;
+            }
             if (!entity.removeFromWorld) {
                 entity.update();
             }
         }
+
+      
 
         this.camera.update();
 
@@ -161,7 +169,12 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
+
+        if (this.enemiesCount < 2) {
+            this.addEntity(new Enemy(this.player, this, 200, 200));
+        }
     };
+
 
     loop() {
         this.clockTick = this.timer.tick();
