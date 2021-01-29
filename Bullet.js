@@ -35,7 +35,7 @@ class Bullet {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Enemy) {
-                if (that.hitbox.intersecting(entity.hitbox)) {
+                if (that.hitbox.intersects(entity.hitbox)) {
                     entity.hit = true;
                     that.removeFromWorld = true;
                     entity.hpCurrent -= that.damage; // bullet damage

@@ -21,7 +21,7 @@ class HitBox {
             this.right = this.left + this.width;
             this.bottom = this.top + this.height;
 
-            if (this.intersecting(other)) {
+            if (this.intersects(other)) {
 
                 this.entity.velocity.x = 0;
             }
@@ -32,13 +32,13 @@ class HitBox {
             this.right = this.left + this.width;
             this.bottom = this.top + this.height;
 
-            if (this.intersecting(other)) {
+            if (this.intersects(other)) {
                 this.entity.velocity.y = 0;
             }
         }
 
     }  
-    intersecting(other) {
+    intersects(other) {
         return !(this.right <= other.left || this.left >= other.right ||
             this.bottom <= other.top || this.top >= other.bottom);
     }       
