@@ -38,7 +38,9 @@ class HitBox {
         }
 
     }  
+
     intersects(other) {
+        //not (not intersecting)
         return !(this.right <= other.left || this.left >= other.right ||
             this.bottom <= other.top || this.top >= other.bottom);
     }       
