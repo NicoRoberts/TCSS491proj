@@ -1,11 +1,11 @@
-class HitBox{
+class HitBoxOld {
 
     constructor(entity, width, height, ignore = false, offsetx = 0, offsety = 0) {
-        Object.assign(this, { entity, width, height, ignore, offsetx, offsety });
+        Object.assign(this, {entity,width, height, ignore, offsetx, offsety});
 
         this.x = this.entity.positionx + this.offsetx;
         this.y = this.entity.positiony + this.ffsety;
-
+        
         this.left = this.x;
         this.top = this.y;
         this.right = this.left + this.width;
@@ -37,13 +37,13 @@ class HitBox{
             }
         }
 
-    }
+    }  
 
     intersects(other) {
         //not (not intersecting)
         return !(this.right <= other.left || this.left >= other.right ||
             this.bottom <= other.top || this.top >= other.bottom);
-    }
+    }       
 
     update() {
         this.x = this.entity.positionx + this.offsetx;;
