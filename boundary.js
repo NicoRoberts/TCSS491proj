@@ -1,79 +1,55 @@
-class BottomBoundary {
+class Boundary {
+
+}
+
+class HBoundary {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
         
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
-        this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.TILEHEIGHT / 2); 
-
+        this.velocity = { x: 0, y: 0 };
+        this.hitbox = new HitBox(this, this.w, PARAMS.TILEHEIGHT);
         this.priority = 1;
     };
 
     update() {
+     
+        this.positionx = this.x-this.game.camera.x;
+        this.positiony = this.y - this.game.camera.y;
+        this.hitbox.update();
     };
 
     draw(ctx) {
         let tileCount = this.w / PARAMS.TILEWIDTH;       
         for (var i = 0; i < tileCount; i++) {
             //BOTTOM
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
+            ctx.drawImage(this.spritesheet, 0, 0, 32, 32, this.positionx + i * PARAMS.TILEWIDTH, this.positiony, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);  
         }
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
+            this.hitbox.draw(ctx);
         }       
     };
 };
 
-class TopBoundary {
+
+class VBoundary {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
-        this.BB = new BoundingBox(this.x, this.y + (PARAMS.TILEWIDTH / 2), this.w, PARAMS.TILEHEIGHT / 2); 
-
+        this.velocity = { x: 0, y: 0 };
+        this.hitbox = new HitBox(this, PARAMS.TILEHEIGHT, this.w);
         this.priority = 1;
     
     };
 
     update() {
-    };
-
-
-    draw(ctx) {
-        let tileCount = this.w / PARAMS.TILEWIDTH;
         
-        for (var i = 0; i < tileCount; i++) {
-            //BOTTOM
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x + i * PARAMS.TILEWIDTH - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
-           
-       
-        }
-
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
-        }
-        
-    };
-};
-
-class LeftBoundary {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w });
-
-        this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
-        
-        this.BB = new BoundingBox(this.x + (PARAMS.TILEWIDTH / 2), this.y, PARAMS.TILEWIDTH / 2, this.w); //this.w is passed for the height, refractor if there is time.
-
-        //Tile is 32 x 32 (width x height)
-
-        this.priority = 1;
-    
-    };
-
-    update() {
+        this.positionx = this.x - this.game.camera.x;
+        this.positiony = this.y - this.game.camera.y;
+        this.hitbox.update();
     };
 
 
@@ -85,40 +61,7 @@ class LeftBoundary {
         }
 
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
-        }
-        
-    };
-};
-
-class RightBoundary {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w });
-
-        this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
-
-        this.BB = new BoundingBox(this.x, this.y, PARAMS.TILEWIDTH / 2, this.w); //this.w is passed for the height, refractor if there is time.
-        //Tile is 32 x 32 (width x height)
-
-        this.priority = 1;
-    
-    };
-
-    update() {
-    };
-
-
-    draw(ctx) {
-        let tileCount = (this.w / PARAMS.TILEHEIGHT);
-        
-        for (var i = 0; i < tileCount; i++) {
-            ctx.drawImage(this.spritesheet,0,0,32,32, this.x - this.game.camera.x, this.y  + i * PARAMS.TILEHEIGHT - this.game.camera.y, PARAMS.TILEWIDTH, PARAMS.TILEHEIGHT);
-        }
-
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
+            this.hitbox.draw(ctx);
         }
         
     };

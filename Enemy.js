@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:0.5, Y:0.5};
+	SET_VELOCITY = {X:0.75, Y:0.75};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -39,7 +39,8 @@ class Enemy{
 
 		this.game.Enemy = this;
 
-		this.updateBB();
+		this.hitbox = new HitBox(this, this.width, this.height);
+
 		this.priority = 1;
 
 		this.direction = this.DIRECTION.LEFT;
@@ -51,7 +52,6 @@ class Enemy{
 
 
 		this.hit = false;
-		this.updateBB(); //COLLISION IS NOT IMPLEMENTED
 		
 		// stats
 		this.hpCurrent = 100;
@@ -92,24 +92,6 @@ class Enemy{
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	}
 
-	//COLLISION IS NOT IMPLEMENTED
-
-	updateBB() {
-		this.lastBB = this.BB;
-		this.lastTopBB = this.TopBB;
-		this.lastBottomBB = this.BottomBB;
-		this.lastLeftBB = this.LeftBB;
-		this.lastRightBB = this.RightBB;
-
-        
-		this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
-		this.TopBB = new BoundingBox(this.x, this.y, this.width, (PARAMS.TILEWIDTH / 4));
-        this.BottomBB = new BoundingBox(this.x, this.y + this.height - (PARAMS.TILEWIDTH / 4), this.width, (PARAMS.TILEWIDTH / 4)); 
-		this.LeftBB = new BoundingBox(this.x, (this.y) + (PARAMS.TILEWIDTH / 4), PARAMS.TILEWIDTH / 4, (this.height) - (PARAMS.TILEWIDTH / 4) * 2);
-		this.RightBB = new BoundingBox((this.x + this.width - (PARAMS.TILEWIDTH / 4)), (this.y) + (PARAMS.TILEWIDTH / 4), PARAMS.TILEWIDTH / 4, (this.height) - (PARAMS.TILEWIDTH / 4) * 2);
-		
-	};
-
 	update() {
 		var that = this;
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
@@ -145,7 +127,7 @@ class Enemy{
 		
         if (dx > 0) {
 			
-			this.x += this.SET_VELOCITY.X * TICKSCALE;
+			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
 
 			if(this.x + this.width <= this.player.x && (this.direction ==this.DIRECTION.LEFT)) {
 				this.direction = this.DIRECTION.RIGHT
@@ -153,7 +135,7 @@ class Enemy{
 
 			moving = true;
 		} else if (dx < 0) {
-			this.x -= this.SET_VELOCITY.X * TICKSCALE;
+			this.velocity.x = -1*this.SET_VELOCITY.X * TICKSCALE;
 			
 			
 			if(this.x + this.width > this.player.x) {
@@ -164,10 +146,10 @@ class Enemy{
 		}
 		
         if (dy > 0) {
-			this.y += this.SET_VELOCITY.Y * TICKSCALE;
+			this.velocity.y = this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
         } else if (dy < 0) {
-			this.y -= this.SET_VELOCITY.Y * TICKSCALE;
+			this.velocity.y = -1*this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
         } 
 
@@ -191,6 +173,16 @@ class Enemy{
 			}
 		}
     
+		//collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+
+			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
+
+				that.hitbox.collide(entity.hitbox)
+			}
+
+		});
 
 		//Update Position
         this.x += this.velocity.x
@@ -199,6 +191,8 @@ class Enemy{
 		//position with regards to camera
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
+
+		this.hitbox.update();
 		
 
 		if (this.hit) {
@@ -215,76 +209,14 @@ class Enemy{
 			this.removeFromWorld = true;
 		}
 
-		
-		//Collision logic
-		this.updateBB();
 
-		
-		this.game.entities.forEach(function (entity) {
-			if (entity.BB && that.BB.collide(entity.BB)) {
-
-				if (entity instanceof Player) {
-					if (that.BB.collide(entity.BottomBB)) { //enemy walking up into the player
-						that.y = entity.BB.bottom;
-						if (that.velocity.y < 0) that.velocity.y = 0;
-					} else if (that.BB.collide(entity.TopBB)) { //enemy walking down into the player
-						that.y = entity.BB.top - that.height;
-						if (that.velocity.y > 0) that.velocity.y = 0;
-					} 
-					that.updateBB();
-				}
-				if (entity instanceof RightBoundary) {	
-					//left side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.x = entity.BB.left - that.width;
-						if (that.velocity.x > 0) that.velocity.x = 0;					
-					}
-					that.updateBB();
-				}
-				if (entity instanceof LeftBoundary) {
-					//right side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.x = entity.BB.right;
-						if (that.velocity.x < 0) that.velocity.x = 0;
-					
-					}
-					that.updateBB();
-				}
-				if (entity instanceof TopBoundary) {
-
-					//top side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.y = entity.BB.bottom;
-						if (that.velocity.y < 0) that.velocity.y = 0;
-					}
-					that.updateBB();
-				}
-				if (entity instanceof BottomBoundary) {
-					//bottomside of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.y = entity.BB.top - that.height;
-						if (that.velocity.y > 0) that.velocity.y = 0;
-						
-					}
-					that.updateBB();
-				}		
-			}
-		});
 	};
 
 	draw(ctx) {
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
-			ctx.strokeStyle = this.hitColor ? 'Yellow' : 'Red';
-			ctx.strokeRect(this.positionx, this.positiony, this.width, this.height);
-
-			ctx.strokeStyle = 'Blue';
-			
-			ctx.strokeRect(this.TopBB.x - this.game.camera.x, this.TopBB.y - this.game.camera.y, this.TopBB.width, this.TopBB.height);
-			ctx.strokeRect(this.BottomBB.x - this.game.camera.x, this.BottomBB.y - this.game.camera.y, this.BottomBB.width, this.BottomBB.height);
-			ctx.strokeRect(this.LeftBB.x - this.game.camera.x, this.LeftBB.y - this.game.camera.y, this.LeftBB.width, this.LeftBB.height);
-			ctx.strokeRect(this.RightBB.x - this.game.camera.x, this.RightBB.y - this.game.camera.y, this.RightBB.width, this.RightBB.height);
+			this.hitbox.draw(ctx);
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);

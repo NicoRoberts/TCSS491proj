@@ -14,6 +14,8 @@ class Bullet {
 
         this.addedVelocity = { x: this.game.player.velocity.x, y: this.game.player.velocity.y}
 
+        this.hitbox = new HitBox(this, this.RADIUS * 2, this.RADIUS * 2, false, -1*this.RADIUS, -1*this.RADIUS);
+
         this.damage = 20;
     }
     update() {
@@ -33,14 +35,15 @@ class Bullet {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Enemy) {
-                if (that.x > entity.BB.x && that.x < entity.BB.x + entity.BB.width
-                    && that.y > entity.BB.y && that.y < entity.BB.y + entity.BB.height) {
+                if (that.hitbox.intersecting(entity.hitbox)) {
                     entity.hit = true;
                     that.removeFromWorld = true;
                     entity.hpCurrent -= that.damage; // bullet damage
                 }
             }
-        },false);
+        }, false);
+
+        this.hitbox.update();
 
     }
     draw(ctx) {
@@ -48,10 +51,8 @@ class Bullet {
         ctx.drawImage(this.spritesheet, this.positionx - this.RADIUS, this.positiony - this.RADIUS, PARAMS.PIXELSCALER * 2, PARAMS.PIXELSCALER * 2);
 
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "Red";
-            ctx.beginPath();
-            ctx.arc(this.positionx, this.positiony, this.RADIUS, 0, 2 * Math.PI);
-            ctx.stroke();
+
+            this.hitbox.draw(ctx);
         }
 
         

@@ -1,4 +1,11 @@
 class BoundingBox {
+
+    SIDE = {
+        RIGHT: 0,
+        LEFT: 1,
+        TOP: 2,
+        BOTTOM: 3
+    };
     constructor(x, y, width, height) {
         Object.assign(this, { x, y, width, height });
 
