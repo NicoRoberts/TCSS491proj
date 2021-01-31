@@ -11,8 +11,8 @@ class Weapon {
 
         this.spritesheet = ASSET_MANAGER.getAsset(this.spritePath);
 
-        this.width = 16;
-        this.height = 7;
+        this.width = 15;
+        this.height = 8;
 
         this.direction = this.DIRECTION.RIGHT;
 
@@ -23,8 +23,6 @@ class Weapon {
         this.armOffset = { x: this.translate.x - PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER };
         this.canvasOffset = { x: -14 * PARAMS.PIXELSCALER, y: -6 * PARAMS.PIXELSCALER };
 
-        this.bullets = [];
-
         this.priority = 3;
 
         this.game.weapon = this;
@@ -33,26 +31,20 @@ class Weapon {
 
     update() {
 
-        
-        //console.log(this.bullets.length);
-
-
-
-
         this.x = this.game.player.positionx;
         this.y = this.game.player.positiony;
 
         let facingRight = this.game.player.direction == this.DIRECTION.RIGHT;
 
         this.armOffset = facingRight
-            ? { x: this.translate.x - PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER }
-            : { x: this.translate.x - 14 * PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER };
+            ? { x: this.translate.x - 2*PARAMS.PIXELSCALER, y: this.translate.y - 2 * PARAMS.PIXELSCALER }
+            : { x: this.translate.x - 12 * PARAMS.PIXELSCALER, y: this.translate.y - 2 * PARAMS.PIXELSCALER };
         this.canvasOffset = facingRight
-            ? { x: -14 * PARAMS.PIXELSCALER, y: -7 * PARAMS.PIXELSCALER }
-            : { x: -3 * PARAMS.PIXELSCALER, y: -7 * PARAMS.PIXELSCALER };
+            ? { x: -12 * PARAMS.PIXELSCALER, y: -5 * PARAMS.PIXELSCALER }
+            : { x: -3* PARAMS.PIXELSCALER, y: -5 * PARAMS.PIXELSCALER };
 
 
-        let lineScaler = this.game.player.direction == this.DIRECTION.RIGHT ? 0.9 : -0.9;
+        let lineScaler = this.game.player.direction == this.DIRECTION.RIGHT ? .8 : -.8;
 
         this.angleOffset = {
             x: lineScaler * this.width * PARAMS.PIXELSCALER * Math.cos(this.angle),

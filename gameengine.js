@@ -114,7 +114,7 @@ class GameEngine {
             e.preventDefault();
         }, false);
 
-        console.log("Listeners Created Sucessfully");
+        console.log("Listeners Created Successfully");
     };
 
     addEntity(entity) {
