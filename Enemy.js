@@ -33,6 +33,7 @@ class Enemy{
 		this.visualRadius = 300;
 		this.circlex = 0;
 		this.circley = 0;
+		this.detect = 0;
 
 		this.first = true; //flag to omit buggy first attack
 
@@ -97,7 +98,13 @@ class Enemy{
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	}
 
-	
+	visionCollide(other) {
+		var dx = this.circlex - other.circlex;
+    	var dy = this.circley - other.circley;
+    	var distance = Math.sqrt(dx * dx + dy * dy);
+        return (distance < this.visualRadius + other.visualRadius);
+	};
+
 
 	update() {
 		var that = this;
@@ -189,10 +196,16 @@ class Enemy{
 				that.hitbox.collide(entity.hitbox)
 			}
 
-			// //circle detection
-			// if (entity != that && that.visionCollide(that.visualRadius)) {
-
-			// }
+			//circle detection
+			
+			if (entity != that && that.visionCollide(entity)) {
+				that.detect = 1;
+				console.log("true");
+			} else {
+				that.detect = 0;
+				console.log("false");
+			}
+			
 
 		});
 
@@ -237,7 +250,8 @@ class Enemy{
 
 			ctx.beginPath();
             ctx.strokeStyle = 'Red';
-            ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			
             ctx.stroke();
             ctx.closePath();
 

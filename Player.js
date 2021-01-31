@@ -151,9 +151,11 @@ class Player{
 
 			ctx.beginPath();
             ctx.strokeStyle = 'White';
-            ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
             ctx.stroke();
-            ctx.closePath();
+			ctx.closePath();
+			
+			
 		}
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
