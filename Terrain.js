@@ -16,6 +16,9 @@ class Terrain{
 		this.priority = 2;
 
     }
+   
+
+    
     update() {}
     
     draw(ctx) {
