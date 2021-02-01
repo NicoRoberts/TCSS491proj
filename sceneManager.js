@@ -40,7 +40,7 @@ class SceneManager {
 
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
 
-		this.enemy2 = new Enemy(this.player, this.game, 1200, 200);
+		this.enemy2 = new Enemy(this.player, this.game, 1600, 200);
 		//this.game.addEntity(this.enemy);
 
 		// testing to see if entities can be added in any order

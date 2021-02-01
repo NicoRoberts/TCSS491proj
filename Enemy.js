@@ -1,6 +1,6 @@
 class Enemy{
 
-	SET_VELOCITY = {X:0.75, Y:0.75};
+	SET_VELOCITY = {X:0.1, Y:0.1};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -16,6 +16,7 @@ class Enemy{
 
 	constructor(player,game,x,y) {
 		Object.assign(this, {player, game, x,y});
+		
 
 		this.width = 75;
 		this.height = 93;
@@ -28,6 +29,11 @@ class Enemy{
 		//position variables
 		this.positionx = 0;
 		this.positiony = 0;
+
+		this.visualRadius = 300;
+		this.circlex = 0;
+		this.circley = 0;
+		this.detect = 0;
 
 		this.first = true; //flag to omit buggy first attack
 
@@ -91,6 +97,14 @@ class Enemy{
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	}
+
+	visionCollide(other) {
+		var dx = this.circlex - other.circlex;
+    	var dy = this.circley - other.circley;
+    	var distance = Math.sqrt(dx * dx + dy * dy);
+        return (distance < this.visualRadius + other.visualRadius);
+	};
+
 
 	update() {
 		var that = this;
@@ -182,12 +196,27 @@ class Enemy{
 				that.hitbox.collide(entity.hitbox)
 			}
 
+			//circle detection
+			
+			if (entity != that && that.visionCollide(entity)) {
+				that.detect = 1;
+				console.log("true");
+			} else {
+				that.detect = 0;
+				console.log("false");
+			}
+			
+
 		});
 
 		//Update Position
         this.x += this.velocity.x
         this.y += this.velocity.y
 		
+		//update circlex, circley
+		this.circlex = this.x + (this.width / 2);
+		this.circley = this.y + (this.height / 2);
+
 		//position with regards to camera
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -216,7 +245,17 @@ class Enemy{
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
+			
 			this.hitbox.draw(ctx);
+
+			ctx.beginPath();
+            ctx.strokeStyle = 'Red';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			
+            ctx.stroke();
+            ctx.closePath();
+
+
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
