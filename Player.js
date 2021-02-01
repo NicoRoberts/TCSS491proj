@@ -25,17 +25,23 @@ class Player{
 
 		this.velocity = { x: 0, y: 0 };
 
+		//detection/attack radius
+		this.visualRadius = 100;
+		this.circlex = 0;
+		this.circley = 0;
+
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
-    	this.game.Player = this;
-    
+		this.game.Player = this;
+		
 		this.direction = this.DIRECTION.RIGHT;
 		this.state = this.STATE.IDLE
 
 		this.animations = [];
 		this.setupCategories();
 		this.loadAnimations();
-		this.updateBB();
+
+		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
 	
 		this.priority = 2;
 
@@ -68,21 +74,13 @@ class Player{
 
     }
 
-	updateBB() {
-		this.lastBB = this.BB;
-		this.lastTopBB = this.TopBB;
-		this.lastBottomBB = this.BottomBB;
-
-		this.BB = new BoundingBox(this.x, this.y, this.width*3, this.height*3);
-		this.TopBB = new BoundingBox(this.x + 5, this.y, (this.width*3) - 10, PARAMS.TILEWIDTH / 4);
-		this.BottomBB = new BoundingBox(this.x + 5, (this.y + this.height*3) - (PARAMS.TILEWIDTH / 4), (this.width*3) - 10, PARAMS.TILEWIDTH / 4); 
-	}
-
 	update(){
-		//Update Velocity
+		
 
+		
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
+		//Update Velocity
 		var moving = false;
 		if(this.game.W){
 			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
@@ -118,111 +116,46 @@ class Player{
 			diagonal = true;
         }
 
-		if (diagonal) {
-		//	console.log("x speed: " + this.velocity.x
-		//		+ " y speed: " + this.velocity.y
-		//		+ " diagonal speed: " + Math.sqrt(this.velocity.y * this.velocity.y
-		//			+ this.velocity.x * this.velocity.x));
+		
+		//collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
 
-			this.state = (moving) ? this.STATE.WALKING : this.STATE.IDLE;
-		}
-		else {
-			//console.log("x speed: " + this.velocity.x
-			//	+ " y speed: " + this.velocity.y)
-        }
+			if (entity != that && entity.hitbox) {
+
+				that.hitbox.collide(entity.hitbox)
+			}
+
+		});
 
 		//Update Position
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
+		this.circlex = this.x + 24;
+		this.circley = this.y + 40;
+
+		//Update circlex, circley;
+
 		//position with regards to camera.
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
-		this.updateBB();
-
-		//collision
-		var that = this;
-		this.game.entities.forEach(function (entity) {
-			if (entity.BB && that.BB.collide(entity.BB)) {
-
-				if (entity instanceof Enemy) {
-					if (that.BB.collide(entity.LeftBB)) { //player walking to the right into an enemy
-						that.x = entity.BB.left - that.width * PARAMS.PIXELSCALER;
-						if (that.velocity.x > 0) that.velocity.x = 0;
-					} else if (that.BB.collide(entity.RightBB)) { //player walking to the left into an enemy
-						that.x = entity.BB.right;
-						if (that.velocity.x < 0) that.velocity.x = 0;
-					} else if (that.BottomBB.collide(entity.TopBB)) { //player walking down on top of an enemy
-						that.y = entity.BB.top - that.height * PARAMS.PIXELSCALER;
-						if (that.velocity.y > 0) that.velocity.y = 0;
-					} else if (that.TopBB.collide(entity.BottomBB)) { //player walking up to the bottom of the esnemy
-						that.y = entity.BB.bottom;
-						if (that.velocity.y < 0) that.velocity.y = 0;
-					}
-					that.updateBB();
-				}
-				
-				if (entity instanceof RightBoundary) {
-					//left side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.x = entity.BB.left - that.width * PARAMS.PIXELSCALER;
-						if (that.velocity.x > 0) that.velocity.x = 0;
-					
-					}
-					that.updateBB();
-				}
-
-				if (entity instanceof LeftBoundary) {
-
-					//right side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.x = entity.BB.right;
-						if (that.velocity.x < 0) that.velocity.x = 0;
-					
-					}
-					that.updateBB();
-				}
-
-				if (entity instanceof TopBoundary) {
-
-					//top side of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.y = entity.BB.bottom;
-						if (that.velocity.y < 0) that.velocity.y = 0;
-					
-					}
-					that.updateBB();
-				}
-
-				if (entity instanceof BottomBoundary) {
-					//bottomside of the barrier
-					if (that.BB.collide(entity.BB)) {
-						that.y = entity.BB.top - that.height * PARAMS.PIXELSCALER;
-						if (that.velocity.y > 0) that.velocity.y = 0;
-						
-					}
-					that.updateBB();
-				}
-
-				
-					
-			}
-
-		});
-
+		this.hitbox.update();
+		
 	};
 
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
-			ctx.strokeStyle = 'Red';
-			ctx.strokeRect(this.positionx, this.positiony, this.width*PARAMS.PIXELSCALER, this.height*PARAMS.PIXELSCALER);
+			this.hitbox.draw(ctx);
 
-			ctx.strokeStyle = 'Blue';
+			ctx.beginPath();
+            ctx.strokeStyle = 'White';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+            ctx.stroke();
+			ctx.closePath();
 			
-			ctx.strokeRect(this.TopBB.x - this.game.camera.x, this.TopBB.y - this.game.camera.y, this.TopBB.width, this.TopBB.height);
-			ctx.strokeRect(this.BottomBB.x - this.game.camera.x, this.BottomBB.y - this.game.camera.y, this.BottomBB.width, this.BottomBB.height);
-
+			
 		}
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
