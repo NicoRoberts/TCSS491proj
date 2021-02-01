@@ -54,6 +54,10 @@ class SceneManager {
 		this.game.addEntity(bBoundary);		
 	};
 
+	// loadGameOver() {
+	//	
+	// };
+
 	update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
 		

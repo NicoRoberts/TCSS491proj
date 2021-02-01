@@ -32,6 +32,8 @@ class Enemy{
 		this.first = true; //flag to omit buggy first attack
 
 		this.attackCooldown = 0;
+		this.damageInterval = 0;
+		this.damage = 25;
 
 		this.velocity = {x:0, y:0};
 
@@ -173,21 +175,38 @@ class Enemy{
 
 		//set state: walking, idling, or attacking
 		this.attackCooldown += this.game.clockTick;
+		this.damageInterval += this.game.clockTick;
+
 		if (moving) {
 			this.state = this.STATE.WALKING;
-		} else if (!moving && this.attackCooldown <= 2) {
+			this.damageInterval = 0;
+			this.attackCooldown = 0; // this makes enemies stall before they attack (idk if we want this, but it makes animations better)
+		} else if (!moving && this.attackCooldown <= (2 - 1)) { // added -1 to all timers below
 			this.state = this.STATE.IDLE;
+			
 		}
 
 		if (!moving) {
-			if (this.attackCooldown > 2 && !this.first) {
+			if (this.attackCooldown > (2 - 1) && !this.first) {
 				this.state = this.STATE.ATTACK;
+				this.damageInterval = 2.45 - 1;
 
 			} else {
 				this.first = false;
 			}
-			if (this.attackCooldown >= 2.45) {
+			if (this.attackCooldown >= 2.45 - 1) {
 				this.attackCooldown = 0;
+			}
+
+			// shitty way to implement enemy damage right now
+			if (this.damageInterval >= 2.60 - 1) {
+				this.game.entities.forEach(function (entity) {
+					if (entity instanceof Player) {
+						entity.hpCurrent -= that.damage;
+					}
+
+				});
+				this.damageInterval = 0;
 			}
 		}
     

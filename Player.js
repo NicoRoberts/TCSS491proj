@@ -226,11 +226,14 @@ class Player{
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.fillStyle = 'Black';
+		ctx.fillStyle = 'Red';
 		var hpScale = 5;
 		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
 
-		ctx.fillStyle = 'Red';
+		ctx.fillStyle = 'Green';
+		if (this.hpCurrent < 0) {
+			this.hpCurrent = 0;
+		}
 		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
