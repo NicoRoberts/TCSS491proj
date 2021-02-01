@@ -19,28 +19,28 @@ class SceneManager {
 
 	loadLevel() {
 
-		let bBoundary = new BottomBoundary(this.game, 0, 832, 1888); 
-		//this.game.addEntity(bBoundary);
+		let bBoundary = new HBoundary(this.game, 0, 832, 1888); 
+		//this.game.addEntsity(bBoundary);
 
-		let tBoundary = new TopBoundary(this.game, 0, 0, 1888); 
+		let tBoundary = new HBoundary(this.game, 0, 0, 1888); 
 		//this.game.addEntity(tBoundary);
 
-		let lBoundary = new LeftBoundary(this.game, 0, 33, 800); 
+		let lBoundary = new VBoundary(this.game, 0, 33, 800); 
 		//this.game.addEntity(lBoundary);
 
-		let rBoundary = new RightBoundary(this.game, 1858, 33, 800); 
+		let rBoundary = new VBoundary(this.game, 1858, 33, 800); 
 		//this.game.addEntity(rBoundary);
 		
 		this.player = new Player(this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
 		this.game.player = this.player;
 		//this.game.addEntity(this.player);
 
-		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol.png");
+		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol2.png");
 		//this.game.addEntity(this.weapon);
 
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
 
-		this.enemy2 = new Enemy(this.player, this.game, 1200, 200);
+		this.enemy2 = new Enemy(this.player, this.game, 1600, 200);
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
