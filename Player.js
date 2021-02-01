@@ -43,7 +43,7 @@ class Player{
 
 		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
 	
-		this.priority = 2;
+		this.priority = 3;
 
 		// stats
 		this.hpCurrent = 100;
@@ -160,12 +160,15 @@ class Player{
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.fillStyle = 'Black';
-		var hpScale = 5;
-		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
-
 		ctx.fillStyle = 'Red';
-		ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
+		var hpScale = 5;
+		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
+
+		ctx.fillStyle = 'Green';
+		if (this.hpCurrent < 0) {
+			this.hpCurrent = 0;
+		}
+		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 

@@ -23,7 +23,7 @@ class Weapon {
         this.armOffset = { x: this.translate.x - PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER };
         this.canvasOffset = { x: -14 * PARAMS.PIXELSCALER, y: -6 * PARAMS.PIXELSCALER };
 
-        this.priority = 3;
+        this.priority = 4;
 
         this.game.weapon = this;
         

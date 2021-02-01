@@ -58,6 +58,10 @@ class SceneManager {
 		this.game.addEntity(this.rocks);	
 	};
 
+	// loadGameOver() {
+	//	
+	// };
+
 	update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
 		
