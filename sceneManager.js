@@ -44,7 +44,7 @@ class SceneManager {
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
-		this.rocks = new Terrain(this.game, 300, 300)
+		this.rocks = new Terrain(this.game, 300, 300);
 
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.weapon)
