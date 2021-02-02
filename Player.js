@@ -139,7 +139,7 @@ class Player{
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony, 1)
 
 		// health bar
 		ctx.fillStyle = 'Black';
