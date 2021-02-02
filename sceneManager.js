@@ -43,6 +43,9 @@ class SceneManager {
 		this.enemy2 = new Enemy(this.player, this.game, 1600, 200);
 		//this.game.addEntity(this.enemy);
 
+		//testing rock generation
+		this.rocks = new Terrain(this.game, 300, 300);
+
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.weapon)
 		this.game.addEntity(this.enemy1);
@@ -51,7 +54,8 @@ class SceneManager {
 		this.game.addEntity(rBoundary);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
-		this.game.addEntity(bBoundary);		
+		this.game.addEntity(bBoundary);	
+		this.game.addEntity(this.rocks);	
 	};
 
 	// loadGameOver() {
