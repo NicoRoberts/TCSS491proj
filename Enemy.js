@@ -16,6 +16,7 @@ class Enemy{
 
 	constructor(player,game,x,y) {
 		Object.assign(this, {player, game, x,y});
+		
 
 		this.width = 75;
 		this.height = 93;
@@ -29,9 +30,16 @@ class Enemy{
 		this.positionx = 0;
 		this.positiony = 0;
 
+		this.visualRadius = 300;
+		this.circlex = 0;
+		this.circley = 0;
+		this.detect = 0;
+
 		this.first = true; //flag to omit buggy first attack
 
 		this.attackCooldown = 0;
+		this.damageInterval = 0;
+		this.damage = 25;
 
 		this.velocity = {x:0, y:0};
 
@@ -91,6 +99,14 @@ class Enemy{
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	}
+
+	visionCollide(other) {
+		var dx = this.circlex - other.circlex;
+    	var dy = this.circley - other.circley;
+    	var distance = Math.sqrt(dx * dx + dy * dy);
+        return (distance < this.visualRadius + other.visualRadius);
+	};
+
 
 	update() {
 		var that = this;
@@ -155,21 +171,38 @@ class Enemy{
 
 		//set state: walking, idling, or attacking
 		this.attackCooldown += this.game.clockTick;
+		this.damageInterval += this.game.clockTick;
+
 		if (moving) {
 			this.state = this.STATE.WALKING;
-		} else if (!moving && this.attackCooldown <= 2) {
+			this.damageInterval = 0;
+			this.attackCooldown = 0; // this makes enemies stall before they attack (idk if we want this, but it makes animations better)
+		} else if (!moving && this.attackCooldown <= (2 - 1)) { // added -1 to all timers below
 			this.state = this.STATE.IDLE;
+			
 		}
 
 		if (!moving) {
-			if (this.attackCooldown > 2 && !this.first) {
+			if (this.attackCooldown > (2 - 1) && !this.first) {
 				this.state = this.STATE.ATTACK;
+				this.damageInterval = 2.45 - 1;
 
 			} else {
 				this.first = false;
 			}
-			if (this.attackCooldown >= 2.45) {
+			if (this.attackCooldown >= 2.45 - 1) {
 				this.attackCooldown = 0;
+			}
+
+			// shitty way to implement enemy damage right now
+			if (this.damageInterval >= 2.60 - 1) {
+				this.game.entities.forEach(function (entity) {
+					if (entity instanceof Player) {
+						entity.hpCurrent -= that.damage;
+					}
+
+				});
+				this.damageInterval = 0;
 			}
 		}
     
@@ -182,12 +215,27 @@ class Enemy{
 				that.hitbox.collide(entity.hitbox)
 			}
 
+			//circle detection
+			
+			if (entity != that && that.visionCollide(entity)) {
+				that.detect = 1;
+				console.log("true");
+			} else {
+				that.detect = 0;
+				console.log("false");
+			}
+			
+
 		});
 
 		//Update Position
         this.x += this.velocity.x
         this.y += this.velocity.y
 		
+		//update circlex, circley
+		this.circlex = this.x + (this.width / 2);
+		this.circley = this.y + (this.height / 2);
+
 		//position with regards to camera
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -216,7 +264,17 @@ class Enemy{
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
+			
 			this.hitbox.draw(ctx);
+
+			ctx.beginPath();
+            ctx.strokeStyle = 'Red';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			
+            ctx.stroke();
+            ctx.closePath();
+
+
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);

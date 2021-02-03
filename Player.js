@@ -25,6 +25,11 @@ class Player{
 
 		this.velocity = { x: 0, y: 0 };
 
+		//detection/attack radius
+		this.visualRadius = 100;
+		this.circlex = 0;
+		this.circley = 0;
+
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
 		this.game.Player = this;
@@ -38,7 +43,7 @@ class Player{
 
 		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
 	
-		this.priority = 2;
+		this.priority = 3;
 
 		// stats
 		this.hpCurrent = 100;
@@ -127,6 +132,11 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
+		this.circlex = this.x + 24;
+		this.circley = this.y + 40;
+
+		//Update circlex, circley;
+
 		//position with regards to camera.
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -138,16 +148,27 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
+
+			ctx.beginPath();
+            ctx.strokeStyle = 'White';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+            ctx.stroke();
+			ctx.closePath();
+			
+			
 		}
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.fillStyle = 'Black';
-		var hpScale = 5;
-		ctx.fillRect(25, 25, this.hpMax * hpScale, 5 * hpScale);
-
 		ctx.fillStyle = 'Red';
-		ctx.fillRect(25, 25, this.hpCurrent * hpScale, 5 * hpScale);
+		var hpScale = 5;
+		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
+
+		ctx.fillStyle = 'Green';
+		if (this.hpCurrent < 0) {
+			this.hpCurrent = 0;
+		}
+		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 
