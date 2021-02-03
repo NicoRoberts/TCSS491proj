@@ -46,6 +46,8 @@ class SceneManager {
 		//testing rock generation
 		this.rocks = new Terrain(this.game, 300, 300);
 
+		this.hud = new HUD(this.game, this.player);
+
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.weapon)
 		this.game.addEntity(this.enemy1);
@@ -55,7 +57,8 @@ class SceneManager {
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);	
-		this.game.addEntity(this.rocks);	
+		this.game.addEntity(this.rocks);
+		this.game.addEntity(this.hud);
 	};
 
 	// loadGameOver() {

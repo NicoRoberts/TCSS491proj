@@ -6,6 +6,7 @@ ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
 ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
+ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
