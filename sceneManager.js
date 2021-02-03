@@ -46,9 +46,12 @@ class SceneManager {
 		//testing rock generation
 		this.rocks = new Terrain(this.game, 300, 300);
 
+		this.shard = new Shards(this.game, 1600, 500);
+
 		this.hud = new HUD(this.game, this.player);
 
 		// testing to see if entities can be added in any order
+		this.game.addEntity(this.shard);
 		this.game.addEntity(this.weapon)
 		this.game.addEntity(this.enemy1);
 		this.game.addEntity(this.enemy2);

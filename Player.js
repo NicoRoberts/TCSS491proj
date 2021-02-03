@@ -48,6 +48,7 @@ class Player{
 		// stats
 		this.hpCurrent = 150;
 		this.hpMax = 150;
+		this.shardObtained = false;
 	}
 
 	setupCategories() {
@@ -121,7 +122,13 @@ class Player{
 		var that = this;
 		this.game.entities.forEach(function (entity) {
 
-			if (entity != that && entity.hitbox) {
+			if (entity instanceof Shards && that.hitbox.intersects(entity.hitbox)) {
+				entity.removeFromWorld = true;
+				that.shardObtained = true;
+				that.hpCurrent = that.hpMax;  // picking up shards replenishes health
+			}
+
+			else if (entity != that && entity.hitbox) {
 
 				that.hitbox.collide(entity.hitbox)
 			}
@@ -157,18 +164,7 @@ class Player{
 			
 			
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
-
-		// health bar
-		// ctx.fillStyle = 'Red';
-		// var hpScale = 5;
-		// ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
-
-		// ctx.fillStyle = 'Green';
-		// if (this.hpCurrent < 0) {
-		// 	this.hpCurrent = 0;
-		// }
-		// ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
 
 	}
 
