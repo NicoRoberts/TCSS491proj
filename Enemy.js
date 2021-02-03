@@ -161,13 +161,16 @@ class Enemy{
 			moving = true;
 		}
 		
-        if (dy > 0) {
+		if (dy > 0) {
 			this.velocity.y = this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
-        } else if (dy < 0) {
-			this.velocity.y = -1*this.SET_VELOCITY.Y * TICKSCALE;
+		} else if (dy < 0) {
+			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
-        } 
+		} else {
+			this.velocity.y = 0
+			moving = true;
+        }
 
 		//set state: walking, idling, or attacking
 		this.attackCooldown += this.game.clockTick;
@@ -219,10 +222,10 @@ class Enemy{
 			
 			if (entity != that && that.visionCollide(entity)) {
 				that.detect = 1;
-				console.log("true");
+				//console.log("true");
 			} else {
 				that.detect = 0;
-				console.log("false");
+				//console.log("false");
 			}
 			
 
