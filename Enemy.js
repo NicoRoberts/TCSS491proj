@@ -61,6 +61,8 @@ class Enemy{
 
 		this.hit = false;
 		
+		this.healthbar = new Healthbar(this);
+
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
@@ -281,6 +283,7 @@ class Enemy{
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+		this.healthbar.draw(ctx);
 	};
 
 };
