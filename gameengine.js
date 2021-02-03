@@ -14,6 +14,9 @@ class GameEngine {
 
         this.enemiesCount = 0;
 
+        this.weapon = null;
+        this.weapons = [null, null];
+
         this.W = false;
         this.A = false;
         this.S = false;
@@ -57,9 +60,7 @@ class GameEngine {
             //Left mouse button
             if (e.which == 1) {
                 that.click = true;
-                let angle = that.player.direction == that.player.DIRECTION.RIGHT ? that.weapon.angle : that.weapon.angle - Math.PI;
-                that.addEntity(new Bullet(that, that.weapon.source.x + that.weapon.angleOffset.x + that.camera.x,
-                    that.weapon.source.y + + that.weapon.angleOffset.y + that.camera.y, angle));
+                that.weapon.fire();
             }
         }, false);
 
@@ -84,6 +85,15 @@ class GameEngine {
                     break;
                 case "KeyD":
                     that.D = true;
+                    break;
+                case "KeyR":
+                    that.weapon.reload();
+                    break;
+                case "Digit1":
+                    that.weapon = that.weapons[0];
+                    break;
+                case "Digit2":
+                    that.weapon = that.weapons[1];
                     break;
             }
     

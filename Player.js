@@ -123,8 +123,19 @@ class Player{
 
 			if (entity != that && entity.hitbox) {
 
+				
+				if (entity instanceof AmmoPack) {
+					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+						that.game.weapon.fill();
+						entity.removeFromWorld = true;
+                    }
+				}
+
 				that.hitbox.collide(entity.hitbox)
+
+				
 			}
+			
 
 		});
 

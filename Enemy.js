@@ -171,7 +171,6 @@ class Enemy{
 			moving = true;
 		} else {
 			this.velocity.y = 0
-			moving = true;
         }
 
 		//set state: walking, idling, or attacking

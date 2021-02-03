@@ -1,6 +1,6 @@
 class Bullet {
 
-    SPEED = 5;
+    SPEED = 7;
 
     RADIUS = 3;
 

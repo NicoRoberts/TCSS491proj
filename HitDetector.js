@@ -14,28 +14,33 @@ class HitBox{
 
     collide(other) {
 
-        if (!this.ignore) {
-            //Horizontal Test
-            this.left = this.x + this.entity.velocity.x;
-            this.top = this.y;
-            this.right = this.left + this.width;
-            this.bottom = this.top + this.height;
+        var intersects = false;
 
-            if (this.intersects(other)) {
-
+        //horizontal test
+        this.left = this.x + this.entity.velocity.x;
+        this.top = this.y;
+        this.right = this.left + this.width;
+        this.bottom = this.top + this.height;
+        if (this.intersects(other)) {
+            if (!this.ignore && !other.ignore) {
                 this.entity.velocity.x = 0;
             }
+            intersects = true;
+        }
 
-            //Vertical Test
-            this.left = this.x;
-            this.top = this.y + this.entity.velocity.y;
-            this.right = this.left + this.width;
-            this.bottom = this.top + this.height;
-
-            if (this.intersects(other)) {
+        //vertical test
+        this.left = this.x;
+        this.top = this.y + this.entity.velocity.y;
+        this.right = this.left + this.width;
+        this.bottom = this.top + this.height;   
+        if (this.intersects(other)) {
+            if (!this.ignore && !other.ignore) {
                 this.entity.velocity.y = 0;
             }
+            intersects = true;
         }
+
+        return intersects;
 
     }
 
