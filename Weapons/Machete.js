@@ -48,6 +48,7 @@ class Machete {
     fire() {
         let swingSpeed = Math.PI / 24;
         swingSpeed = this.game.player.direction == this.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
+        let swingDistance = Math.PI*2;
         let startingDirection = this.game.player.direction;
         let startingAngle = this.angle;
 
@@ -66,7 +67,7 @@ class Machete {
                 that.angle += swingSpeed;
                 if (swingSpeed > 0) {
                     //console.log(that.angle*180/Math.PI);
-                    if (that.angle >= startingAngle + 2 * Math.PI) {
+                    if (that.angle >= startingAngle + swingDistance) {
                         that.swinging = false;
                         that.angle = startingAngle;
                         window.clearInterval(interval_id);
@@ -74,7 +75,7 @@ class Machete {
                     }
                 }
                 else {
-                    if (that.angle <= startingAngle - 2 * Math.PI) {
+                    if (that.angle <= startingAngle - swingDistance) {
                         that.swinging = false;
                         that.angle = startingAngle;
                         window.clearInterval(interval_id);
@@ -82,7 +83,7 @@ class Machete {
                     }
                 }
 
-            }, 1)
+            }, 5)
         }
     }
 
@@ -169,7 +170,10 @@ class Machete {
                     this.height * PARAMS.PIXELSCALER * 2, this.height * PARAMS.PIXELSCALER * 2);
 
                 if (PARAMS.DEBUG) {
-
+                    //ctx.fillStyle = "White";
+                    //var fontsize = 25;
+                    //ctx.font = fontsize + 'px "VT323"'
+                    //ctx.fillText("Angle: " + Math.round(this.angle * 180 / (Math.PI)), this.x + 75, this.y - 50);
 
                     ctx.strokeStyle = this.game.click ? "Blue" : "Red";
                     ctx.beginPath();
