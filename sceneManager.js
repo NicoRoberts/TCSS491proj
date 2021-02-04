@@ -35,6 +35,7 @@ class SceneManager {
 		this.game.player = this.player;
 		//this.game.addEntity(this.player);
 
+		this.machete = new Machete(this.game);
 		this.pistol = new Pistol(this.game);
 		this.shotgun = new Shotgun(this.game);
 		//this.game.addEntity(this.weapon);
@@ -50,8 +51,10 @@ class SceneManager {
 		this.hud = new HUD(this.game, this.player);
 
 		// testing to see if entities can be added in any order
+		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
+
 
 		this.game.addEntity(this.enemy1);
 		this.game.addEntity(this.enemy2);

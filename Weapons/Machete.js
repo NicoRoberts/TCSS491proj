@@ -1,4 +1,4 @@
-class Pistol {
+class Machete {
 
     DIRECTION = {
         RIGHT: 0,
@@ -9,28 +9,24 @@ class Pistol {
     constructor(game) {
         Object.assign(this, { game });
 
-        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Hand_Pistol2.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Machete.png");
 
-        this.width = 15;
-        this.height = 8;
+        this.width = 12;
+        this.height = 20;
 
         this.direction = this.DIRECTION.RIGHT;
-
         this.x = this.game.player.x;
         this.y = this.game.player.y;
 
-        this.translate = { x: this.width * PARAMS.PIXELSCALER, y: this.width * PARAMS.PIXELSCALER };
+        this.translate = { x: this.height * PARAMS.PIXELSCALER, y: this.height * PARAMS.PIXELSCALER};
         this.armOffset = { x: this.translate.x - PARAMS.PIXELSCALER, y: this.translate.y - 5 * PARAMS.PIXELSCALER };
         this.canvasOffset = { x: -14 * PARAMS.PIXELSCALER, y: -6 * PARAMS.PIXELSCALER };
 
         this.priority = 4;
+        
+        this.game.weapons[0] = this;
 
-        this.game.weapon = this;
-        this.game.weapons[1] = this;
-
-        this.reloading = false;
-        this.reloadTime = 0.5;
-        this.timeLeft = 0;
+        this.swinging = false;
 
         this.maxAmmo = 18;
         this.maxReserves = 96;
@@ -45,44 +41,48 @@ class Pistol {
     }
 
     reload() {
-
-        if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading) {
-            this.reloading = true;
-            let that = this;
-            this.timeLeft = this.reloadTime * 1000;
-            let interval_id = window.setInterval(function () {
-                that.timeLeft -= 10
-                if (that.timeLeft <= 0) {
-                    var difference = that.maxAmmo - that.ammoCount;
-
-                    that.reservesCount -= difference;
-
-                    //Stops ammo reserves from dropping below 0 on reload
-                    if (that.reservesCount < 0) {
-                        difference += that.reservesCount;
-                        that.reservesCount = 0;
-                    }
-                    that.ammoCount += difference;
-
-                    //window.clearInterval(interval_id)
-                    that.timeLeft = 0;
-                    that.reloading = false;
-                    window.clearInterval(interval_id);
-                }
-
-            }, 10);
-
-
-
-        }
+        //Shouldn't do anything
+        reloading = false;
     }
 
     fire() {
-        if (this.ammoCount > 0 && !this.reloading) {
-            this.ammoCount--;
-            let angle = this.game.player.direction == this.game.player.DIRECTION.RIGHT ? this.angle : this.angle - Math.PI;
-            this.game.addEntity(new Bullet(this.game, this.source.x + this.angleOffset.x + this.game.camera.x,
-                this.source.y + this.angleOffset.y + this.game.camera.y, angle));
+        let swingSpeed = Math.PI / 24;
+        swingSpeed = this.game.player.direction == this.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
+        let startingDirection = this.game.player.direction;
+        let startingAngle = this.angle;
+
+       
+
+        if (!this.swinging) {
+            this.slice = new Slice(this.game, this.source.x + this.angleOffset.x,
+                this.source.y + this.angleOffset.y, this.angle);
+            this.swinging = true;
+            this.game.addEntity(this.slice);
+
+            //console.log((startingAngle+2*Math.PI) * 180 / Math.PI);
+
+            let that = this;
+            let interval_id = window.setInterval(function () {
+                that.angle += swingSpeed;
+                if (swingSpeed > 0) {
+                    //console.log(that.angle*180/Math.PI);
+                    if (that.angle >= startingAngle + 2 * Math.PI) {
+                        that.swinging = false;
+                        that.angle = startingAngle;
+                        window.clearInterval(interval_id);
+                        that.slice.removeFromWorld = true;
+                    }
+                }
+                else {
+                    if (that.angle <= startingAngle - 2 * Math.PI) {
+                        that.swinging = false;
+                        that.angle = startingAngle;
+                        window.clearInterval(interval_id);
+                        that.slice.removeFromWorld = true;
+                    }
+                }
+
+            }, 1)
         }
     }
 
@@ -94,11 +94,11 @@ class Pistol {
         let facingRight = this.game.player.direction == this.DIRECTION.RIGHT;
 
         this.armOffset = facingRight
-            ? { x: this.translate.x - 2 * PARAMS.PIXELSCALER, y: this.translate.y - 2 * PARAMS.PIXELSCALER }
-            : { x: this.translate.x - 12 * PARAMS.PIXELSCALER, y: this.translate.y - 2 * PARAMS.PIXELSCALER };
+            ? { x: this.translate.x - 2 * PARAMS.PIXELSCALER, y: this.translate.y - 13* PARAMS.PIXELSCALER }
+            : { x: this.translate.x - 9 * PARAMS.PIXELSCALER, y: this.translate.y - 13 * PARAMS.PIXELSCALER };
         this.canvasOffset = facingRight
-            ? { x: -12 * PARAMS.PIXELSCALER, y: -5 * PARAMS.PIXELSCALER }
-            : { x: -3 * PARAMS.PIXELSCALER, y: -5 * PARAMS.PIXELSCALER };
+            ? { x: -17* PARAMS.PIXELSCALER, y: -10 * PARAMS.PIXELSCALER }
+            : { x: -8 * PARAMS.PIXELSCALER, y: -10 * PARAMS.PIXELSCALER };
 
 
         let lineScaler = this.game.player.direction == this.DIRECTION.RIGHT ? .8 : -.8;
@@ -108,7 +108,7 @@ class Pistol {
             y: lineScaler * this.width * PARAMS.PIXELSCALER * Math.sin(this.angle)
         };
 
-        if (this.game.mouse != null) {
+        if (this.game.mouse != null && !this.swinging) {
 
 
             this.source = { x: this.x + this.translate.x + this.canvasOffset.x + PARAMS.PIXELSCALER / 2, y: this.y + this.translate.y + this.canvasOffset.y + PARAMS.PIXELSCALER / 2 };
@@ -133,8 +133,8 @@ class Pistol {
                 var rotationCanvas = document.createElement('canvas');
 
                 //Multiply by 2 to fit the whole image
-                rotationCanvas.width = this.width * PARAMS.PIXELSCALER * 2;
-                rotationCanvas.height = this.width * PARAMS.PIXELSCALER * 2;
+                rotationCanvas.width = this.height * PARAMS.PIXELSCALER * 2;
+                rotationCanvas.height = this.height * PARAMS.PIXELSCALER * 2;
                 var rotationCtx = rotationCanvas.getContext('2d');
                 rotationCtx.save();
 
@@ -157,25 +157,16 @@ class Pistol {
                     rotationCtx.fillStyle = "Green";
                     rotationCtx.fillRect(this.translate.x, this.translate.y, PARAMS.PIXELSCALER, PARAMS.PIXELSCALER);
 
-                    //rotationCtx.strokeStyle = 'Orange';
-                    //rotationCtx.strokeRect(0, 0,
-                    //    this.width * PARAMS.PIXELSCALER * 2,
-                    //    this.width * PARAMS.PIXELSCALER * 2);
+                        //rotationCtx.strokeStyle = 'Orange';
+                        //rotationCtx.strokeRect(0, 0,
+                        //this.height * PARAMS.PIXELSCALER * 2,
+                        //this.height * PARAMS.PIXELSCALER * 2);
                 }
 
                 rotationCtx.restore();
 
                 ctx.drawImage(rotationCanvas, this.x + this.canvasOffset.x, this.y + this.canvasOffset.y,
-                    this.width * PARAMS.PIXELSCALER * 2, this.width * PARAMS.PIXELSCALER * 2);
-
-                //draw reload timer
-                if (this.timeLeft > 0) {
-
-                    ctx.fillStyle = "Blue"
-                    var ratio = this.timeLeft / (this.reloadTime * 1000)
-                    ctx.fillRect(this.game.player.positionx, this.game.player.positiony - 7.5, this.game.player.width * PARAMS.PIXELSCALER * ratio, 5);
-
-                }
+                    this.height * PARAMS.PIXELSCALER * 2, this.height * PARAMS.PIXELSCALER * 2);
 
                 if (PARAMS.DEBUG) {
 

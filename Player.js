@@ -82,6 +82,7 @@ class Player{
 
 		//Update Velocity
 		var moving = false;
+		
 		if(this.game.W){
 			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
@@ -92,12 +93,16 @@ class Player{
 			this.velocity.y = 0;
 		}
 		if (this.game.A) {
-			this.direction = this.DIRECTION.LEFT;
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.LEFT;
+			}
 			moving = true;
 
 			this.velocity.x = -1 * this.SET_VELOCITY.X * TICKSCALE;
 		} else if (this.game.D) {
-			this.direction = this.DIRECTION.RIGHT
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.RIGHT;
+			}
 			moving = true;
 			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
 		}

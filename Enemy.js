@@ -278,7 +278,7 @@ class Enemy{
             ctx.stroke();
             ctx.closePath();
 
-
+			ctx.strokeStyle = 'Purple';
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);

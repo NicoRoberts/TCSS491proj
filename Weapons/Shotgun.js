@@ -25,7 +25,7 @@ class Shotgun {
 
         this.priority = 4;
 
-        this.game.weapons[1] = this;
+        this.game.weapons[2] = this;
 
         this.reloading = false;
         this.reloadTime = 1;

@@ -99,6 +99,11 @@ class GameEngine {
                         that.weapon = that.weapons[1];
                     }  
                     break;
+                case "Digit3":
+                    if (!that.weapon.reloading) {
+                        that.weapon = that.weapons[2];
+                    }
+                    break;
             }
     
         }, false);
