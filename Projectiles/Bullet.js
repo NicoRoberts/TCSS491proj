@@ -20,6 +20,7 @@ class Bullet {
         this.velocity = { x: this.game.player.velocity.x, y: this.game.player.velocity.y }
 
         this.hitbox = new HitBox(this, this.RADIUS * 2, this.RADIUS * 2, false, -1*this.RADIUS, -1*this.RADIUS);
+        this.hitdealt = false;
 
         this.damage = 20;
 
@@ -41,13 +42,15 @@ class Bullet {
 
         var that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity instanceof Enemy) {
-                console.log(that.hitbox.collide(entity.hitbox));
-                if (that.hitbox.collide(entity.hitbox)) {
-                    console.log("HIT");
-                    entity.hit = true;
-                    that.removeFromWorld = true;
-                    entity.hpCurrent -= that.damage; // bullet damage
+            if (!that.hitdealt) {
+                if (entity instanceof Enemy) {
+                    console.log(that.hitbox.collide(entity.hitbox));
+                    if (that.hitbox.collide(entity.hitbox)) {
+                        that.hitdealt = true;
+                        entity.hit = true;
+                        that.removeFromWorld = true;
+                        entity.hpCurrent -= that.damage; // bullet damage
+                    }
                 }
             }
         }, false);
