@@ -1,4 +1,4 @@
-class Enemy{
+class Enemy {
 
 	SET_VELOCITY = {X:0.1, Y:0.1};
 
@@ -31,9 +31,9 @@ class Enemy{
 		this.positiony = 0;
 
 		this.visualRadius = 300;
-		this.circlex = 0;
-		this.circley = 0;
-		this.detect = 0;
+		this.circlex = this.x + (this.width / 2);
+		this.circley = this.y + (this.height / 2);
+		this.detect = false;
 
 		this.first = true; //flag to omit buggy first attack
 
@@ -59,6 +59,9 @@ class Enemy{
 		this.loadAnimations();
 
 
+		//enemy movement
+		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
+
 		this.hit = false;
 		
 		// stats
@@ -75,7 +78,7 @@ class Enemy{
 				this.animations[i].push([]);
             }
 		}
-	}
+	};
 
 	loadAnimations() {
 		//Skeleton is idling and facing right
@@ -98,9 +101,11 @@ class Enemy{
 			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.15, 13, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
-	}
+	};
 
 	visionCollide(other) {
+		console.log(this.circlex + "      " + other.circlex);
+		console.log(this.circley + "      " + other.circley);
 		var dx = this.circlex - other.circlex;
     	var dy = this.circley - other.circley;
     	var distance = Math.sqrt(dx * dx + dy * dy);
@@ -110,104 +115,14 @@ class Enemy{
 
 	update() {
 		var that = this;
-		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
-		var dx;
-		var dy = Math.floor((this.player.y - this.y + this.heightDifference));
 		
-		var midpoint = Math.floor((this.x + (this.width / 2)));
-
-		if ((Math.abs(midpoint - this.player.x)) <= (Math.abs(midpoint - (this.player.x + this.player.width)))) { // is the skeleton closer to the left or the right of the player
-			dx = Math.floor((this.player.x - (this.x + this.width))); //left of character
-		} else {
-			dx = Math.floor((this.player.x + this.player.width) - (this.x - this.rightOffset)); //right of character
+		if (that.detect) { //chase the player
+			that.movement.chaseMovement();	
+		} else { //idle movement
+			that.movement.idleMovement();
 		}
 		
-		
-		var moving = false; //flag for skeleton movement
-
-
-		if (dx == 0) {
-			if (dy == 0) {
-				moving = false; 
-			}
-			this.velocity.x = 0;
-			this.velocity.y = 0;
-
-			//responsible for skeleton direction flip if on the same X coordinate
-			if(this.x < this.player.x && (this.direction == this.DIRECTION.LEFT)) {
-				this.direction = this.DIRECTION.RIGHT;
-			} else if (this.x > (this.player.x + this.player.width) && (this.direction == this.DIRECTION.RIGHT)) {
-				this.direction = this.DIRECTION.LEFT;
-			}
-		}
-		
-        if (dx > 0) {
-			
-			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
-
-			if(this.x + this.width <= this.player.x && (this.direction ==this.DIRECTION.LEFT)) {
-				this.direction = this.DIRECTION.RIGHT
-			}
-
-			moving = true;
-		} else if (dx < 0) {
-			this.velocity.x = -1*this.SET_VELOCITY.X * TICKSCALE;
-			
-			
-			if(this.x + this.width > this.player.x) {
-				this.direction = this.DIRECTION.LEFT
-			}
-
-			moving = true;
-		}
-		
-        if (dy > 0) {
-			this.velocity.y = this.SET_VELOCITY.Y * TICKSCALE;
-			moving = true;
-        } else if (dy < 0) {
-			this.velocity.y = -1*this.SET_VELOCITY.Y * TICKSCALE;
-			moving = true;
-        } 
-
-		//set state: walking, idling, or attacking
-		this.attackCooldown += this.game.clockTick;
-		this.damageInterval += this.game.clockTick;
-
-		if (moving) {
-			this.state = this.STATE.WALKING;
-			this.damageInterval = 0;
-			this.attackCooldown = 0; // this makes enemies stall before they attack (idk if we want this, but it makes animations better)
-		} else if (!moving && this.attackCooldown <= (2 - 1)) { // added -1 to all timers below
-			this.state = this.STATE.IDLE;
-			
-		}
-
-		if (!moving) {
-			if (this.attackCooldown > (2 - 1) && !this.first) {
-				this.state = this.STATE.ATTACK;
-				this.damageInterval = 2.45 - 1;
-
-			} else {
-				this.first = false;
-			}
-			if (this.attackCooldown >= 2.45 - 1) {
-				this.attackCooldown = 0;
-			}
-
-			// shitty way to implement enemy damage right now
-			if (this.damageInterval >= 2.60 - 1) {
-				this.game.entities.forEach(function (entity) {
-					if (entity instanceof Player) {
-						entity.hpCurrent -= that.damage;
-					}
-
-				});
-				this.damageInterval = 0;
-			}
-		}
-    
 		//collision
-		var that = this;
 		this.game.entities.forEach(function (entity) {
 
 			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
@@ -216,17 +131,20 @@ class Enemy{
 			}
 
 			//circle detection
+			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
+				that.detect = true;
+			}
 			
-			if (entity != that && that.visionCollide(entity)) {
-				that.detect = 1;
-				console.log("true");
-			} else {
-				that.detect = 0;
-				console.log("false");
+			if (entity instanceof Terrain) {
+				that.hitbox.collide(entity.hitbox);
 			}
 			
 
 		});
+
+	
+		
+		
 
 		//Update Position
         this.x += this.velocity.x
@@ -242,6 +160,9 @@ class Enemy{
 
 		this.hitbox.update();
 		
+
+		
+
 
 		if (this.hit) {
 			that.hitColor = true;

@@ -26,9 +26,9 @@ class Player{
 		this.velocity = { x: 0, y: 0 };
 
 		//detection/attack radius
-		this.visualRadius = 100;
-		this.circlex = 0;
-		this.circley = 0;
+		this.visualRadius = 50;
+		this.circlex = this.x + 24;
+		this.circley = this.y + 40;
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
@@ -117,6 +117,7 @@ class Player{
         }
 
 		
+
 		//collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
@@ -142,6 +143,8 @@ class Player{
 		this.positiony = this.y - this.game.camera.y;
 
 		this.hitbox.update();
+
+		
 		
 	};
 
