@@ -90,10 +90,14 @@ class GameEngine {
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    that.weapon = that.weapons[0];
+                    if (!that.weapon.reloading){
+                        that.weapon = that.weapons[0];
+                    }              
                     break;
                 case "Digit2":
-                    that.weapon = that.weapons[1];
+                    if (!that.weapon.reloading) {
+                        that.weapon = that.weapons[1];
+                    }  
                     break;
             }
     

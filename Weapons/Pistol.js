@@ -28,6 +28,10 @@ class Pistol {
         this.game.weapon = this;
         this.game.weapons[0] = this;
 
+        this.reloading = false;
+        this.reloadTime = 0.5;
+        this.timeLeft = 0;
+
         this.maxAmmo = 18;
         this.maxReserves = 96;
         this.ammoCount = this.maxAmmo;
@@ -41,24 +45,40 @@ class Pistol {
     }
 
     reload() {
-        if (this.reservesCount > 0) {
-            var difference = this.maxAmmo - this.ammoCount;
 
-            this.reservesCount -= difference;
+        if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading) {
+            this.reloading = true;
+            let that = this;
+            this.timeLeft = this.reloadTime*1000;
+            let interval_id = window.setInterval(function () {
+                that.timeLeft -= 10
+                if (that.timeLeft <= 0) {
+                    var difference = that.maxAmmo - that.ammoCount;
 
-            //Stops ammo reserves from dropping below 0 on reload
-            if (this.reservesCount < 0) {
-                difference += this.reservesCount;
-                this.reservesCount = 0;
-            }
-            this.ammoCount += difference;
-                    
+                    that.reservesCount -= difference;
+
+                    //Stops ammo reserves from dropping below 0 on reload
+                    if (that.reservesCount < 0) {
+                        difference += that.reservesCount;
+                        that.reservesCount = 0;
+                    }
+                    that.ammoCount += difference;
+
+                    //window.clearInterval(interval_id)
+                    that.timeLeft = 0;
+                    that.reloading = false;
+                    window.clearInterval(interval_id);
+                }
+                
+            }, 10);
+
+
+
         }
-        
     }
 
     fire() {
-        if (this.ammoCount > 0) {
+        if (this.ammoCount > 0 && !this.reloading) {
             this.ammoCount--;
             let angle = this.game.player.direction == this.game.player.DIRECTION.RIGHT ? this.angle : this.angle - Math.PI;
             this.game.addEntity(new Bullet(this.game, this.source.x + this.angleOffset.x + this.game.camera.x,
@@ -148,6 +168,14 @@ class Pistol {
                 ctx.drawImage(rotationCanvas, this.x + this.canvasOffset.x, this.y + this.canvasOffset.y,
                     this.width * PARAMS.PIXELSCALER * 2, this.width * PARAMS.PIXELSCALER * 2);
 
+                //draw reload timer
+                if (this.timeLeft > 0) {
+
+                    ctx.fillStyle = "Blue"
+                    var ratio = this.timeLeft/(this.reloadTime*1000)
+                    ctx.fillRect(this.game.player.positionx, this.game.player.positiony - 7.5, this.game.player.width * PARAMS.PIXELSCALER * ratio, 5);
+
+                }
 
                 if (PARAMS.DEBUG) {
 

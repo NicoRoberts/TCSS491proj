@@ -253,7 +253,7 @@ class Enemy{
 				that.hitColor = false;
 			}, 5000 / 60);
 			this.hit = false;
-			console.log("hit");
+			//console.log("hit");
 		}
 		
 		// death
