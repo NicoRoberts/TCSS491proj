@@ -34,6 +34,7 @@ class Enemy {
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
+		this.attack = false;
 
 		this.first = true; //flag to omit buggy first attack
 
@@ -41,7 +42,7 @@ class Enemy {
 		this.damageInterval = 0;
 		this.damage = 25;
 
-		this.velocity = {x:0, y:0};
+		this.velocity = {x:2, y:2};
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/SkeletonSheet.png");
 
@@ -61,8 +62,12 @@ class Enemy {
 
 		//enemy movement
 		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
-
+		this.swinging = false;
+		this.attack = false;
+		this.timeLeft = 0;
 		this.hit = false;
+		this.attackTime = 0.45;
+		this.restTime = 3;
 		
 		// stats
 		this.hpCurrent = 100;
@@ -104,8 +109,7 @@ class Enemy {
 	};
 
 	visionCollide(other) {
-		console.log(this.circlex + "      " + other.circlex);
-		console.log(this.circley + "      " + other.circley);
+		
 		var dx = this.circlex - other.circlex;
     	var dy = this.circley - other.circley;
     	var distance = Math.sqrt(dx * dx + dy * dy);
@@ -115,15 +119,75 @@ class Enemy {
 
 	update() {
 		var that = this;
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
+
 		
-		if (that.detect) { //chase the player
+		if (that.detect && !that.attack) { //chase the player
 			that.movement.chaseMovement();	
-		} else { //idle movement
+		} else if (!that.detect) { //idle movement
 			that.movement.idleMovement();
 		}
-		
 		//collision
 		this.game.entities.forEach(function (entity) {
+
+			if (entity instanceof Player && that.hitbox.playerBooleanCollide(entity.hitbox)) {
+				console.log()
+				that.attack = true;
+				that.velocity.x = 0;
+				that.velocity.y = 0;
+
+				///////////////////////////////////
+				let swingSpeed = Math.PI / 24;
+        		swingSpeed = that.direction == that.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
+				let swingDistance = Math.PI * 2;
+				
+        		let startingDirection = that.direction;
+       			let startingAngle = that.angle;
+
+				//that.state = that.STATE.IDLE;
+
+        		if (!that.swinging) {
+					that.enemyAttack = new EnemyAttack(that.game, that.x,
+						that.y, that.angle);
+					that.swinging = true;
+					
+					that.timeLeft = that.attackTime * 1000;
+					that.timeLeft2 = that.restTime * 1000;
+					
+					let interval_id = window.setInterval(function () {
+						that.timeLeft -= 10;
+						that.state = that.STATE.ATTACK;
+
+						
+						if (that.timeLeft <= 0) {
+							that.game.addEntity(that.enemyAttack);
+							that.timeLeft = 0;
+							
+							//that.state = that.STATE.IDLE;
+							window.clearInterval(interval_id);
+
+							let interval_id2 = window.setInterval(function () {
+								that.timeLeft2 -= 10;
+								that.state = that.STATE.IDLE;
+								if (that.timeLeft2 <= 0) {
+									that.timeLeft2 = 0;
+									that.swinging = false;
+									window.clearInterval(interval_id2);
+								}
+		
+							}, 10);
+	
+						}
+
+		
+					}, 10);
+
+					
+				}
+
+			} else if (entity instanceof Player && !that.hitbox.playerBooleanCollide(entity.hitbox)) {
+				that.attack = false;
+			}
 
 			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
 
@@ -138,17 +202,15 @@ class Enemy {
 			if (entity instanceof Terrain) {
 				that.hitbox.collide(entity.hitbox);
 			}
-			
+
 
 		});
 
-	
-		
 		
 
 		//Update Position
-        this.x += this.velocity.x
-        this.y += this.velocity.y
+        this.x += this.velocity.x * TICKSCALE;
+		this.y += this.velocity.y * TICKSCALE;
 		
 		//update circlex, circley
 		this.circlex = this.x + (this.width / 2);
@@ -181,6 +243,7 @@ class Enemy {
 
 	};
 
+	
 	draw(ctx) {
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";

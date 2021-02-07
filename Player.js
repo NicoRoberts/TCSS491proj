@@ -26,9 +26,9 @@ class Player{
 		this.velocity = { x: 0, y: 0 };
 
 		//detection/attack radius
-		this.visualRadius = 50;
-		this.circlex = this.x + 24;
-		this.circley = this.y + 40;
+		this.visualRadius = 55;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
@@ -48,6 +48,8 @@ class Player{
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
+		this.hit = false;
+
 	}
 
 	setupCategories() {
@@ -133,8 +135,8 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
-		this.circlex = this.x + 24;
-		this.circley = this.y + 40;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		//Update circlex, circley;
 

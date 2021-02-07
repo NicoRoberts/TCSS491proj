@@ -23,6 +23,12 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
 
+function distance(a, b) {
+    var dx = a.x - b.x;
+    var dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+};
+
 // creates an alias for requestAnimationFrame for backwards compatibility
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
