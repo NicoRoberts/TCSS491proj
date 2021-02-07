@@ -45,20 +45,28 @@ class HitBox{
 
     }
 
+    playerBooleanCollide(oth) {
+        var offset = 2;
+        if ((Math.ceil(this.right) + offset) >= (Math.floor(oth.left) - offset) && (Math.floor(this.left) - offset) <= (Math.ceil(oth.right) + offset)
+         && (Math.floor(this.top) - offset) < (Math.ceil(oth.bottom) + offset) && (Math.ceil(this.bottom) + offset) > (Math.floor(oth.top) - offset)) return true;
+        return false;
+            
+    }
+
     intersects(other) {
         //not (not intersecting)
         return !(this.right <= other.left || this.left >= other.right || this.bottom <= other.top || this.top >= other.bottom);
     }
 
     update() {
-        this.x = this.entity.positionx + this.offsetx;;
+        this.x = this.entity.positionx + this.offsetx;
         this.y = this.entity.positiony + this.offsety;
 
         this.left = this.x;
         this.top = this.y;
         this.right = this.left + this.width;
         this.bottom = this.top + this.height;
-    }
+    }       
 
     draw(ctx) {
         ctx.strokeStyle = this.ignore ? 'Orange' : 'Red';

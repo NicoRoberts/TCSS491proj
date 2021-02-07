@@ -26,9 +26,9 @@ class Player{
 		this.velocity = { x: 0, y: 0 };
 
 		//detection/attack radius
-		this.visualRadius = 100;
-		this.circlex = 0;
-		this.circley = 0;
+		this.visualRadius = 55;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
@@ -46,8 +46,9 @@ class Player{
 		this.priority = 3;
 
 		// stats
-		this.hpCurrent = 150;
-		this.hpMax = 150;
+		this.hpCurrent = 100;
+		this.hpMax = 100;
+		this.hit = false;
 	}
 
 	setupCategories() {
@@ -122,6 +123,7 @@ class Player{
         }
 
 		
+
 		//collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
@@ -148,8 +150,8 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
-		this.circlex = this.x + 24;
-		this.circley = this.y + 40;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		//Update circlex, circley;
 
@@ -158,6 +160,8 @@ class Player{
 		this.positiony = this.y - this.game.camera.y;
 
 		this.hitbox.update();
+
+		
 		
 	};
 

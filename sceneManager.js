@@ -31,7 +31,7 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 1858, 33, 800); 
 		//this.game.addEntity(rBoundary);
 		
-		this.player = new Player(this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
+		this.player = new Player(this.game, 100, 700);
 		this.game.player = this.player;
 		//this.game.addEntity(this.player);
 
@@ -42,7 +42,7 @@ class SceneManager {
 
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
 
-		this.enemy2 = new Enemy(this.player, this.game, 1600, 200);
+		this.enemy2 = new Enemy(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
