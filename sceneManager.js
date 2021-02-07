@@ -35,7 +35,9 @@ class SceneManager {
 		this.game.player = this.player;
 		//this.game.addEntity(this.player);
 
-		this.weapon = new Weapon(this.game, "./Sprites/Hand_Pistol2.png");
+		this.machete = new Machete(this.game);
+		this.pistol = new Pistol(this.game);
+		this.shotgun = new Shotgun(this.game);
 		//this.game.addEntity(this.weapon);
 
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
@@ -46,8 +48,14 @@ class SceneManager {
 		//testing rock generation
 		this.rocks = new Terrain(this.game, 300, 300);
 
+		this.hud = new HUD(this.game, this.player);
+
 		// testing to see if entities can be added in any order
-		this.game.addEntity(this.weapon)
+		this.game.addEntity(this.machete);
+		this.game.addEntity(this.pistol)
+		this.game.addEntity(this.shotgun);
+
+
 		this.game.addEntity(this.enemy1);
 		this.game.addEntity(this.enemy2);
 		this.game.addEntity(this.player);
@@ -55,7 +63,9 @@ class SceneManager {
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);	
-		this.game.addEntity(this.rocks);	
+		this.game.addEntity(this.rocks);
+		this.game.addEntity(this.hud);
+		this.game.addEntity(new AmmoPack(this.game, 800, 500));
 	};
 
 	// loadGameOver() {
