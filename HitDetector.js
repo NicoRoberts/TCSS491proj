@@ -4,7 +4,7 @@ class HitBox{
         Object.assign(this, { entity, width, height, ignore, offsetx, offsety });
 
         this.x = this.entity.positionx + this.offsetx;
-        this.y = this.entity.positiony + this.ffsety;
+        this.y = this.entity.positiony + this.offsety;
 
         this.left = this.x;
         this.top = this.y;
@@ -92,8 +92,7 @@ class HitBox{
 
     intersects(other) {
         //not (not intersecting)
-        return !(this.right <= other.left || this.left >= other.right ||
-            this.bottom <= other.top || this.top >= other.bottom);
+        return !(this.right <= other.left || this.left >= other.right || this.bottom <= other.top || this.top >= other.bottom);
     }
 
     update() {
@@ -111,5 +110,8 @@ class HitBox{
         
     
         ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+       
+        
     }
 };

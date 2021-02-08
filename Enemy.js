@@ -1,6 +1,6 @@
 class Enemy {
 
-	SET_VELOCITY = {X:0.1, Y:0.1};
+	SET_VELOCITY = {X:0.25, Y:0.25};
 
 	DIRECTION = {
 		RIGHT: 0,
@@ -73,6 +73,8 @@ class Enemy {
 		this.maxSpeed = 2;
 		this.acceleration = 60;
 		
+		this.healthbar = new Healthbar(this);
+
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
@@ -187,15 +189,9 @@ class Enemy {
 									that.swinging = false;
 									window.clearInterval(interval_id2);
 								}
-		
 							}, 10);
-	
 						}
-
-		
 					}, 10);
-
-					
 				}
 
 			} else if (entity instanceof Player && !that.attackCollide(entity)) {
@@ -208,6 +204,7 @@ class Enemy {
 			}
 
 			//circle detection
+
 			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
 				that.detect = true;
 			}
@@ -257,7 +254,7 @@ class Enemy {
 				that.hitColor = false;
 			}, 5000 / 60);
 			this.hit = false;
-			console.log("hit");
+			//console.log("hit");
 		}
 		
 		// death
@@ -290,10 +287,11 @@ class Enemy {
             ctx.stroke();
             ctx.closePath();
 
-
+			ctx.strokeStyle = 'Purple';
 		}
 
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+		this.healthbar.draw(ctx);
 	};
 
 };

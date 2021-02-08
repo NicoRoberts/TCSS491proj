@@ -49,7 +49,6 @@ class Player{
 		this.hpCurrent = 100;
 		this.hpMax = 100;
 		this.hit = false;
-
 	}
 
 	setupCategories() {
@@ -84,6 +83,7 @@ class Player{
 
 		//Update Velocity
 		var moving = false;
+		
 		if(this.game.W){
 			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
@@ -94,12 +94,16 @@ class Player{
 			this.velocity.y = 0;
 		}
 		if (this.game.A) {
-			this.direction = this.DIRECTION.LEFT;
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.LEFT;
+			}
 			moving = true;
 
 			this.velocity.x = -1 * this.SET_VELOCITY.X * TICKSCALE;
 		} else if (this.game.D) {
-			this.direction = this.DIRECTION.RIGHT
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.RIGHT;
+			}
 			moving = true;
 			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
 		}
@@ -126,8 +130,19 @@ class Player{
 
 			if (entity != that && entity.hitbox) {
 
+				
+				if (entity instanceof AmmoPack) {
+					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+						that.game.weapon.fill();
+						entity.removeFromWorld = true;
+                    }
+				}
+
 				that.hitbox.collide(entity.hitbox)
+
+				
 			}
+			
 
 		});
 
@@ -162,18 +177,18 @@ class Player{
 			
 			
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.fillStyle = 'Red';
-		var hpScale = 5;
-		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
+		// ctx.fillStyle = 'Red';
+		// var hpScale = 5;
+		// ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
 
-		ctx.fillStyle = 'Green';
-		if (this.hpCurrent < 0) {
-			this.hpCurrent = 0;
-		}
-		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
+		// ctx.fillStyle = 'Green';
+		// if (this.hpCurrent < 0) {
+		// 	this.hpCurrent = 0;
+		// }
+		// ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 
