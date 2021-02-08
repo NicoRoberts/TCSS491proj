@@ -42,14 +42,13 @@ class Machete {
 
     reload() {
         //Shouldn't do anything
-        reloading = false;
+        this.reloading = false;
     }
 
     fire() {
         let swingSpeed = Math.PI / 24;
         swingSpeed = this.game.player.direction == this.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
         let swingDistance = Math.PI*2;
-        let startingDirection = this.game.player.direction;
         let startingAngle = this.angle;
 
        

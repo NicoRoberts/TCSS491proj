@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Sprites"
+    "\\Drops",
+    "\\Projectiles",
+    "\\Weapons"
   ],
-  "SelectedNode": "\\HUD.js",
+  "SelectedNode": "\\Weapons\\Machete.js",
   "PreviewInSolutionExplorer": false
 }
