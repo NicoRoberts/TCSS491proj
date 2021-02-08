@@ -13,8 +13,6 @@ class Bullet {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
 
-        console.log("x: " + this.positionx + " y: " +this.positiony);
-
         this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Bullet.png");
 
         this.velocity = { x: this.game.player.velocity.x, y: this.game.player.velocity.y }
@@ -44,7 +42,6 @@ class Bullet {
         this.game.entities.forEach(function (entity) {
             if (!that.hitdealt) {
                 if (entity instanceof Enemy) {
-                    console.log(that.hitbox.collide(entity.hitbox));
                     if (that.hitbox.collide(entity.hitbox)) {
                         that.hitdealt = true;
                         entity.hit = true;

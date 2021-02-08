@@ -18,6 +18,8 @@ class Enemy {
 		Object.assign(this, {player, game, x,y});
 		
 
+		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
+
 		this.width = 75;
 		this.height = 93;
 
@@ -117,6 +119,21 @@ class Enemy {
     	var distance = Math.sqrt(dx * dx + dy * dy);
         return (distance < this.visualRadius + other.visualRadius);
 	};
+
+	dropItem() {
+		let chance = Math.random();
+		console.log(chance);
+		if (chance <= this.dropchance) {
+			let itemCount = 1;
+			let itemType = Math.floor(Math.random() * (itemCount));
+			switch (itemType) {
+				case 0:
+					this.game.addEntity(new AmmoPack(this.game, this.x, this.y));
+					break;
+            }
+        }
+    }
+
 
 
 	update() {

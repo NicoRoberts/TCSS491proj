@@ -88,7 +88,6 @@ class Slice {
         this.animation.drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony,1)
         
         if (PARAMS.DEBUG) {
-
             this.hitbox.draw(ctx);
         }
 
