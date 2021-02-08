@@ -12,6 +12,9 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 
+        this.maxEnemies = 2;
+        this.spawnRate = 5;
+        this.timeLeft = 0;
         this.enemiesCount = 0;
 
         this.weapon = null;
@@ -192,8 +195,9 @@ class GameEngine {
             }
         }
 
-        if (this.enemiesCount < 2) {
+        if (this.enemiesCount < this.maxEnemies) {
             this.addEntity(new Enemy(this.player, this, 200, 200));
+            this.maxEnemies--;
         }
     };
 
