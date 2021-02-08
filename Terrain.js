@@ -35,17 +35,17 @@ class Terrain{
     loadStates() {
 
 		this.states[0]
-            = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 1, this.width, this.height, 1, 1, 1, false, true);
         this.states[1]
-            = new Animator(this.spritesheet, 50, 0, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 51, 1, this.width, this.height, 1, 1, 1, false, true);
         this.states[2]
-            = new Animator(this.spritesheet, 0, 50, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 51, this.width, this.height, 1, 1, 1, false, true);
         this.states[3]
-            = new Animator(this.spritesheet, 50, 50, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 51, 51, this.width, this.height, 1, 1, 1, false, true);
         this.states[4]
-            = new Animator(this.spritesheet, 0, 100, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 101, this.width, this.height, 1, 1, 1, false, true);
         this.states[5]
-            = new Animator(this.spritesheet, 50, 100, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 51, 101, this.width, this.height, 1, 1, 1, false, true);
 		
     }
     
