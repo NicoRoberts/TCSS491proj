@@ -13,6 +13,22 @@ function hsl(h, s, l) {
     return "hsl(" + h + "," + s + "%," + l + "%)";
 };
 
+function getRandom(min, max) {
+    return Math.random() * (max - min) + min;
+};
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+};
+
+function distance(a, b) {
+    var dx = a.positionx - b.positionx;
+    var dy = a.positiony - b.positiony;
+    return Math.sqrt(dx * dx + dy * dy);
+};
+
 // creates an alias for requestAnimationFrame for backwards compatibility
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
