@@ -31,6 +31,7 @@ class Enemy {
 		this.positiony = 0;
 
 		this.visualRadius = 300;
+		this.attackRadius = 55;
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
@@ -64,10 +65,13 @@ class Enemy {
 		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
 		this.swinging = false;
 		this.attack = false;
+		this.collideTerrain = false;
 		this.timeLeft = 0;
 		this.hit = false;
 		this.attackTime = 0.45;
 		this.restTime = 3;
+		this.maxSpeed = 2;
+		this.acceleration = 60;
 		
 		// stats
 		this.hpCurrent = 100;
@@ -116,7 +120,26 @@ class Enemy {
         return (distance < this.visualRadius + other.visualRadius);
 	};
 
+	attackCollide(other) {
+		
+		var dx = this.circlex - other.circlex;
+    	var dy = this.circley - other.circley;
+		var distance = Math.sqrt(dx * dx + dy * dy);
+		var i = this.attackRadius;
+		var j = other.visualRadius;
+        return (distance < this.attackRadius + other.visualRadius);
+	};
 
+	testSpeed() {
+        var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+        if (speed > this.maxSpeed) {
+            var ratio = this.maxSpeed / speed;
+            this.velocity.x *= ratio;
+            this.velocity.y *= ratio;
+        }
+    };
+
+	
 	update() {
 		var that = this;
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
@@ -130,26 +153,15 @@ class Enemy {
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.hitbox.playerBooleanCollide(entity.hitbox)) {
-				console.log()
+			if (entity instanceof Player && that.attackCollide(entity)) {
 				that.attack = true;
-				that.velocity.x = 0;
-				that.velocity.y = 0;
-
-				///////////////////////////////////
-				let swingSpeed = Math.PI / 24;
-        		swingSpeed = that.direction == that.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
-				let swingDistance = Math.PI * 2;
-				
-        		let startingDirection = that.direction;
-       			let startingAngle = that.angle;
-
-				//that.state = that.STATE.IDLE;
-
+				that.hitbox.collide(entity.hitbox);
         		if (!that.swinging) {
+					
 					that.enemyAttack = new EnemyAttack(that.game, that.x,
 						that.y, that.angle);
 					that.swinging = true;
+					that.game.addEntity(that.enemyAttack);
 					
 					that.timeLeft = that.attackTime * 1000;
 					that.timeLeft2 = that.restTime * 1000;
@@ -157,14 +169,15 @@ class Enemy {
 					let interval_id = window.setInterval(function () {
 						that.timeLeft -= 10;
 						that.state = that.STATE.ATTACK;
-
+						
 						
 						if (that.timeLeft <= 0) {
-							that.game.addEntity(that.enemyAttack);
+							
 							that.timeLeft = 0;
 							
 							//that.state = that.STATE.IDLE;
 							window.clearInterval(interval_id);
+							that.enemyAttack.removeFromWorld = true;
 
 							let interval_id2 = window.setInterval(function () {
 								that.timeLeft2 -= 10;
@@ -185,9 +198,9 @@ class Enemy {
 					
 				}
 
-			} else if (entity instanceof Player && !that.hitbox.playerBooleanCollide(entity.hitbox)) {
+			} else if (entity instanceof Player && !that.attackCollide(entity)) {
 				that.attack = false;
-			}
+			} 
 
 			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
 
@@ -199,12 +212,24 @@ class Enemy {
 				that.detect = true;
 			}
 			
-			if (entity instanceof Terrain) {
+			if (entity instanceof Terrain && that.attackCollide(entity)) {
+				that.collideTerrain = true;
+				var dist = distance(that, entity);
 				that.hitbox.collide(entity.hitbox);
+				if (dist == 0) {
+					dist = 1;
+				}
+				var difX = (entity.positionx - that.positionx) / dist;
+                var difY = (entity.positiony - that.positiony) / dist;
+                that.velocity.x -= difX * (that.acceleration) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration / 2	) / (dist * dist);
+			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
+				that.collideTerrain = false;
 			}
 
 
 		});
+		this.testSpeed();
 
 		
 
@@ -254,6 +279,13 @@ class Enemy {
 			ctx.beginPath();
             ctx.strokeStyle = 'Red';
 			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			
+            ctx.stroke();
+			ctx.closePath();
+			
+			ctx.beginPath();
+            ctx.strokeStyle = 'White';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.attackRadius, 0, Math.PI * 2, false);
 			
             ctx.stroke();
             ctx.closePath();

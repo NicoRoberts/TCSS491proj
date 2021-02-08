@@ -46,12 +46,47 @@ class HitBox{
     }
 
     playerBooleanCollide(oth) {
+        //var method1 = false;
+        var method2 = false;
         var offset = 2;
-        let var1 = ("this.top: " + (Math.floor(this.top) - offset) + "<" + " oth.bottom: " + (Math.ceil(oth.bottom) + offset));
-        let var2 = ("this.bottom: " + (Math.ceil(this.bottom) + offset) + ">" + " oth.top: " + (Math.floor(oth.top) - offset));
+
+
+        // //horizontal test
+        // this.left = this.x + this.entity.velocity.x;
+        // this.top = this.y;
+        // this.right = this.left + this.width;
+        // this.bottom = this.top + this.height;
+        // if (this.intersects(oth)) {
+        //     if (!this.ignore && !oth.ignore) {
+        //         this.entity.velocity.x = 0;
+        //     }
+        //     method1 = true;
+        // }
+        //  //vertical test
+        //  this.left = this.x;
+        //  this.top = (this.y + this.entity.velocity.y);
+        //  this.right = this.left + this.width;
+        //  this.bottom = this.top + this.height;   
+        //  if (this.intersects(oth)) {
+        //      if (!this.ignore && !oth.ignore) {
+        //          this.entity.velocity.y = 0;
+        //      }
+             
+        //      method1 = true;
+        //  }
+
+        //  return method1;
+        // 
+        // let var1 = ("this.right: " + (Math.ceil(this.right) + offset) + ">=" + " oth.left: " + (Math.floor(oth.left) - offset));
+        // let var2 = ("this.left: " + (Math.floor(this.left) - offset) + "<=" + " oth.right: " + (Math.ceil(oth.right) + offset));
+        // let var3 = ("this.top: " + (Math.floor(this.top) - offset) + "<=" + " oth.bottom: " + (Math.ceil(oth.bottom) + offset));
+        // let var4 = ("this.bottom: " + (Math.ceil(this.bottom) + offset) + ">=" + " oth.top: " + (Math.floor(oth.top) - offset));
+
         if ((Math.ceil(this.right) + offset) >= (Math.floor(oth.left) - offset) && (Math.floor(this.left) - offset) <= (Math.ceil(oth.right) + offset)
-         && (Math.floor(this.top) - offset) < (Math.ceil(oth.bottom) + offset) && (Math.ceil(this.bottom) + offset) > (Math.floor(oth.top) - offset)) return true;
-        return false;
+                && ((Math.floor(this.top) - offset) <= (Math.ceil(oth.bottom) + offset)) && ((Math.ceil(this.bottom) + offset) >= (Math.floor(oth.top) - offset))) {
+                    method2 = true;
+        }
+        return method2;
             
     }
 
@@ -73,6 +108,8 @@ class HitBox{
 
     draw(ctx) {
         ctx.strokeStyle = this.ignore ? 'Orange' : 'Red';
+        
+    
         ctx.strokeRect(this.x, this.y, this.width, this.height);
     }
 };
