@@ -26,9 +26,9 @@ class Player{
 		this.velocity = { x: 0, y: 0 };
 
 		//detection/attack radius
-		this.visualRadius = 100;
-		this.circlex = 0;
-		this.circley = 0;
+		this.visualRadius = 55;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
@@ -48,6 +48,7 @@ class Player{
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
+		this.hit = false;
 	}
 
 	setupCategories() {
@@ -82,6 +83,7 @@ class Player{
 
 		//Update Velocity
 		var moving = false;
+		
 		if(this.game.W){
 			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
 			moving = true;
@@ -92,12 +94,16 @@ class Player{
 			this.velocity.y = 0;
 		}
 		if (this.game.A) {
-			this.direction = this.DIRECTION.LEFT;
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.LEFT;
+			}
 			moving = true;
 
 			this.velocity.x = -1 * this.SET_VELOCITY.X * TICKSCALE;
 		} else if (this.game.D) {
-			this.direction = this.DIRECTION.RIGHT
+			if (!this.game.weapon.swinging) {
+				this.direction = this.DIRECTION.RIGHT;
+			}
 			moving = true;
 			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
 		}
@@ -117,14 +123,26 @@ class Player{
         }
 
 		
+
 		//collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
 
 			if (entity != that && entity.hitbox) {
 
+				
+				if (entity instanceof AmmoPack) {
+					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+						that.game.weapon.fill();
+						entity.removeFromWorld = true;
+                    }
+				}
+
 				that.hitbox.collide(entity.hitbox)
+
+				
 			}
+			
 
 		});
 
@@ -132,8 +150,8 @@ class Player{
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 
-		this.circlex = this.x + 24;
-		this.circley = this.y + 40;
+		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
+		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
 		//Update circlex, circley;
 
@@ -142,6 +160,8 @@ class Player{
 		this.positiony = this.y - this.game.camera.y;
 
 		this.hitbox.update();
+
+		
 		
 	};
 
@@ -157,18 +177,18 @@ class Player{
 			
 			
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1)
+		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony, 1)
 
 		// health bar
-		ctx.fillStyle = 'Red';
-		var hpScale = 5;
-		ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
+		// ctx.fillStyle = 'Red';
+		// var hpScale = 5;
+		// ctx.fillRect(25, 825, this.hpMax * hpScale, 5 * hpScale);
 
-		ctx.fillStyle = 'Green';
-		if (this.hpCurrent < 0) {
-			this.hpCurrent = 0;
-		}
-		ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
+		// ctx.fillStyle = 'Green';
+		// if (this.hpCurrent < 0) {
+		// 	this.hpCurrent = 0;
+		// }
+		// ctx.fillRect(25, 825, this.hpCurrent * hpScale, 5 * hpScale);
 
 	}
 
