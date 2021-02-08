@@ -10,12 +10,17 @@ class Terrain{
         this.states=[];
 
 		this.positionx = 0;
-		this.positiony = 0;
+        this.positiony = 0;
+        this.visualRadius = 40;
+        
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/RockSheet.png");
 
     	this.game.Terrain = this;
-	
+    
+        this.circlex = this.x + (this.width / 2);
+        this.circley = this.y + (this.height / 2);
+
         this.priority = 1;
         
         this.setupTerrainTypes();
@@ -52,14 +57,26 @@ class Terrain{
     update() {
 
         this.positionx = this.x - this.game.camera.x;
-		this.positiony = this.y - this.game.camera.y;
+        this.positiony = this.y - this.game.camera.y;
+        
+        this.circlex = this.x + (this.width / 2);
+        this.circley = this.y + (this.height / 2);
         this.hitbox.update();
 	
     }
     
     draw(ctx) {
 		if (PARAMS.DEBUG) {
-			this.hitbox.draw(ctx);
+
+            this.hitbox.draw(ctx);
+            
+            ctx.beginPath();
+            ctx.strokeStyle = 'Red';
+			ctx.arc(this.circlex - this.game.camera.x, this.circley - this.game.camera.y, this.visualRadius, 0, Math.PI * 2, false);
+			
+            ctx.stroke();
+			ctx.closePath();
+            
         }
         this.states[this.rockState].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,1);
         

@@ -24,8 +24,8 @@ function getRandomInt(min, max) {
 };
 
 function distance(a, b) {
-    var dx = a.x - b.x;
-    var dy = a.y - b.y;
+    var dx = a.positionx - b.positionx;
+    var dy = a.positiony - b.positiony;
     return Math.sqrt(dx * dx + dy * dy);
 };
 
