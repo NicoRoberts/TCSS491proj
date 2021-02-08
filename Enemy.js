@@ -174,6 +174,7 @@ class Enemy {
 
 			if (entity instanceof Player && that.attackCollide(entity)) {
 				that.attack = true;
+			
 				that.hitbox.collide(entity.hitbox);
         		if (!that.swinging) {
 					
