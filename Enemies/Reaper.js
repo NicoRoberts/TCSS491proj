@@ -60,14 +60,14 @@ class Reaper{
 			= new Animator(this.spritesheet, 1, 393, this.width, this.height, 4, 0.15, 2, false, true);
 
 		this.animations[this.STATE.AGRO][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 1, 99, this.width, this.height, 4, 0.15, 1, false, true);
+			= new Animator(this.spritesheet, 1, 99, this.width, this.height, 4, 0.15, 2, false, true);
 		this.animations[this.STATE.AGRO][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 1, 1, this.width, this.height, 4, 0.15, 1, false, true);
+			= new Animator(this.spritesheet, 1, 1, this.width, this.height, 4, 0.15, 2, false, true);
 
 		this.animations[this.STATE.ATTACK][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 1, 197, this.attackWidth, this.attackHeight, 4, 0.15, 1, false, true);
+			= new Animator(this.spritesheet, 1, 197, this.attackWidth, this.attackHeight, 4, 0.15, 2, false, true);
 		this.animations[this.STATE.ATTACK][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 1, 295, this.attackWidth, this.attackHeight, 4, 0.15, 1, false, true);
+			= new Animator(this.spritesheet, 1, 295, this.attackWidth, this.attackHeight, 4, 0.15, 2, false, true);
 	};
 	setupCategories() {
 
@@ -81,7 +81,6 @@ class Reaper{
 
 	dropItem() {
 		let chance = Math.random();
-		console.log(chance);
 		if (chance <= this.dropchance) {
 			let itemCount = 2;
 			let itemType = Math.floor(Math.random() * (itemCount));
@@ -160,7 +159,9 @@ class Reaper{
 
 		// death
 		if (this.hpCurrent <= 0) {
+	
 			this.removeFromWorld = true;
+			this.dropItem();
 		}
 
 	}
@@ -169,12 +170,15 @@ class Reaper{
 
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
+
 			ctx.fillStyle = "White";
 			var fontsize = 15;
 			ctx.font = fontsize + 'px "VT323"'
 
-			ctx.fillText("Angle: " + Math.round(this.angle * 180 / Math.PI), this.positionx, this.positiony - 2);
-			ctx.fillText("Distance: " + Math.round(this.distance), this.positionx, this.positiony - 15);
+			ctx.fillText("Angle: " + Math.round(this.angle * 180 / Math.PI), this.positionx, this.positiony + 15 + this.height);
+			ctx.fillText("Distance: " + Math.round(this.distance), this.positionx, this.positiony + 30 + this.height);
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 45 + this.height);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 60 + this.height);
 
 		}
 		this.healthbar.draw(ctx);

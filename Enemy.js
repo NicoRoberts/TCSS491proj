@@ -144,7 +144,6 @@ class Enemy{
     };
 	dropItem() {
 		let chance = Math.random();
-		console.log(chance);
 		if (chance <= this.dropchance) {
 			let itemCount = 2;
 			let itemType = Math.floor(Math.random() * (itemCount));
@@ -288,7 +287,8 @@ class Enemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
-		}
+			this.dropItem();
+		}3
 
 
 	};
@@ -300,6 +300,13 @@ class Enemy{
 		if (PARAMS.DEBUG) {
 			
 			this.hitbox.draw(ctx);
+
+			ctx.fillStyle = "White";
+			var fontsize = 15;
+			ctx.font = fontsize + 'px "VT323"'
+
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 15 + this.height);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 30 + this.height);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'Red';

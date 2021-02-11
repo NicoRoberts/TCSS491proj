@@ -41,7 +41,7 @@ class Player{
 		this.setupCategories();
 		this.loadAnimations();
 
-		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, true);
+		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
 	
 		this.priority = 3;
 
@@ -187,6 +187,15 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
+
+			ctx.fillStyle = "White";
+			var fontsize = 15;
+			ctx.font = fontsize + 'px "VT323"'
+
+
+			ctx.fillText("Angle: " + Math.round(this.game.weapon.angle * 180 / Math.PI), this.positionx, this.positiony + 15 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 30 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 45 + this.height * PARAMS.PIXELSCALER);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'White';
