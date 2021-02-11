@@ -1,22 +1,22 @@
-class Enemy{
-
-	SET_VELOCITY = {X:0.25, Y:0.25};
-
-	DIRECTION = {
-		RIGHT: 0,
-		LEFT: 1,
-		COUNT: 2
-	};
-	STATE = {
-		IDLE: 0,
-		WALKING: 1,
-		ATTACK: 2,
-		COUNT: 3,
-    };
+class Enemy extends AbstractEnemy{
 
 	constructor(player, game, x, y) {
+		super(game, x, y);
 		Object.assign(this, {player, game, x,y});
-		
+
+		this.SET_VELOCITY = { X: 0.25, Y: 0.25 };
+
+		this.DIRECTION = {
+			RIGHT: 0,
+			LEFT: 1,
+			COUNT: 2
+		};
+		this.STATE = {
+			IDLE: 0,
+			WALKING: 1,
+			ATTACK: 2,
+			COUNT: 3,
+		};
 
 		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
 

@@ -93,22 +93,22 @@ class GameEngine {
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    if (!that.weapon.reloading){
+                    if (!that.weapon.reloading && !that.weapon.firing){
                         that.weapon = that.weapons[0];
                     }              
                     break;
                 case "Digit2":
-                    if (!that.weapon.reloading) {
+                    if (!that.weapon.reloading && !that.weapon.firing) {
                         that.weapon = that.weapons[1];
                     }  
                     break;
                 case "Digit3":
-                    if (!that.weapon.reloading) {
+                    if (!that.weapon.reloading && !that.weapon.firing) {
                         that.weapon = that.weapons[2];
                     }
                     break;
                 case "Digit4":
-                    if (!that.weapon.reloading) {
+                    if (!that.weapon.reloading && !that.weapon.firing) {
                         that.weapon = that.weapons[3];
                     }
                     break;

@@ -1,20 +1,23 @@
-class Reaper{
+class Reaper extends AbstractEnemy{
 
-	SET_VELOCITY = 1.5;
-
-	DIRECTION = {
-		RIGHT: 0,
-		LEFT: 1,
-		COUNT: 2
-	};
-	STATE = {
-		IDLE: 0,
-		AGRO: 1,
-		ATTACK: 2,
-		COUNT: 3,
-	};
 	constructor(game, x, y) {
+		super(game, x, y);
 		Object.assign(this, {game, x, y});
+
+		this.SET_VELOCITY = 1.5;
+
+		this.DIRECTION = {
+			RIGHT: 0,
+			LEFT: 1,
+			COUNT: 2
+		};
+
+		this.STATE = {
+			IDLE: 0,
+			AGRO: 1,
+			ATTACK: 2,
+			COUNT: 3,
+		};
 
 		this.dropchance = 0.3;
 
@@ -24,14 +27,14 @@ class Reaper{
 		//In Pixels
 		this.safeDistance = 300;
 
-		
+
 
 		this.angle = 0;
 		this.velocity = { x: this.SET_VELOCITY * Math.cos(this.angle), y: this.SET_VELOCITY * Math.sin(this.angle) }
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
-		this.center = { x: this.x + this.width / 2, y: this.y + this.height/2 }
+		this.center = { x: this.x + this.width / 2, y: this.y + this.height / 2 }
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/ReaperSheet.png");
 		this.hitbox = new HitBox(this, this.width, this.height);
@@ -51,7 +54,7 @@ class Reaper{
 		this.healthbar = new Healthbar(this);
 
 
-	}
+	};
 
 	loadAnimations() {
 		this.animations[this.STATE.IDLE][this.DIRECTION.RIGHT]
@@ -96,26 +99,26 @@ class Reaper{
 					break;
 			}
 		}
-	}
+	};
 
 	approach() {
-		this.velocity = { x: this.SET_VELOCITY * Math.cos(this.angle), y: this.SET_VELOCITY * Math.sin(this.angle) }
-	}
+		this.velocity = { x: this.SET_VELOCITY * Math.cos(this.angle), y: this.SET_VELOCITY * Math.sin(this.angle) };
+	};
 	pause() {
-		this.velocity = {x:0, y:0}
-	}
+		this.velocity = { x: 0, y: 0 };
+	};
 	flee() {
-		this.velocity = { x: -1*this.SET_VELOCITY * Math.cos(this.angle), y: -1*this.SET_VELOCITY * Math.sin(this.angle) }
-    }
+		this.velocity = { x: -1 * this.SET_VELOCITY * Math.cos(this.angle), y: -1 * this.SET_VELOCITY * Math.sin(this.angle) };
+	};
 	update() {
 		var that = this;
 
 
-		const TICKSCALE = this.game.clockTick* PARAMS.TIMESCALE;
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		let dx = (this.game.player.x - this.x);
 		let dy = (this.game.player.y - this.y);
-		this.distance = Math.sqrt(dx*dx + dy*dy);
+		this.distance = Math.sqrt(dx * dx + dy * dy);
 
 		this.angle = (Math.atan(dy / dx));
 
@@ -130,8 +133,8 @@ class Reaper{
 			this.direction = this.DIRECTION.LEFT;
 		}
 
-		
-		
+
+
 		if (this.distance >= this.safeDistance) {
 			this.approach();
 		}
@@ -140,13 +143,13 @@ class Reaper{
 		}
 		else {
 			this.flee();
-        }
-		
+		}
+
 		this.game.entities.forEach(function (entity) {
 			if (entity != that && entity.hitbox) {
 				that.hitbox.collide(entity.hitbox);
-            }
-			
+			}
+
 		});
 
 		this.x += this.velocity.x * TICKSCALE;
@@ -159,7 +162,7 @@ class Reaper{
 
 		// death
 		if (this.hpCurrent <= 0) {
-	
+
 			this.removeFromWorld = true;
 			this.dropItem();
 		}
@@ -184,5 +187,5 @@ class Reaper{
 		this.healthbar.draw(ctx);
 		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
 
-    }
+	}
 }
