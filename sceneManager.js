@@ -38,6 +38,7 @@ class SceneManager {
 		this.machete = new Machete(this.game);
 		this.pistol = new Pistol(this.game);
 		this.shotgun = new Shotgun(this.game);
+		this.machinegun = new Machinegun(this.game);
 		//this.game.addEntity(this.weapon);
 
 		//this.enemy1 = new Enemy(this.game.player, this.game, 200, 200);
@@ -57,6 +58,7 @@ class SceneManager {
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
+		this.game.addEntity(this.machinegun);
 
 
 		//this.game.addEntity(this.enemy1);

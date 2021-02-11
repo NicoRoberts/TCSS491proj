@@ -1,7 +1,7 @@
 class HUD {
 
     HEART_POS = { X: 2.5, Y: 785 }
-    AMMO_POS = { X: -110, Y:785}
+    AMMO_POS = { X: -150, Y:785}
     constructor(game, player) {
         Object.assign(this, {game, player});
 
@@ -91,17 +91,21 @@ class HUD {
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"'
 
-            var left_padding = this.game.weapon.ammoCount < 10 ? "0" : "";
-            var right_padding = this.game.weapon.maxAmmo < 10 ? "0" : "";
-            ctx.fillText(left_padding + this.game.weapon.ammoCount + "/" + right_padding + this.game.weapon.maxAmmo, ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + fontsize);
 
+            var numdigits = 3
+
+            var left_padding = "0".repeat(numdigits - this.game.weapon.ammoCount.toString().length);
+            var right_padding = "0".repeat(numdigits - this.game.weapon.maxAmmo.toString().length);
+            ctx.fillText(left_padding + this.game.weapon.ammoCount + "/" + right_padding + this.game.weapon.maxAmmo, ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + fontsize);
+            
             var fontsize = 20;
             ctx.font = fontsize + 'px "VT323"';
             ctx.fillText("AMMO", ctx.canvas.width + this.AMMO_POS.X + 5, this.AMMO_POS.Y + 70);
+            
+            left_padding = "0".repeat(numdigits - this.game.weapon.reservesCount.toString().length);
+            right_padding = "0".repeat(numdigits - this.game.weapon.maxReserves.toString().length);
 
-            left_padding = this.game.weapon.reservesCount < 10 ? "0" : "";
-            right_padding = this.game.weapon.maxReserves < 10 ? "0" : "";
-            ctx.fillText(left_padding + this.game.weapon.reservesCount + "/" + right_padding + this.game.weapon.maxReserves, ctx.canvas.width + this.AMMO_POS.X + 58, this.AMMO_POS.Y + 70);
+            ctx.fillText(left_padding + this.game.weapon.reservesCount + "/" + right_padding + this.game.weapon.maxReserves, ctx.canvas.width + this.AMMO_POS.X + 83, this.AMMO_POS.Y + 70);
 
             if (this.game.weapon.reservesCount == 0 && this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Red";

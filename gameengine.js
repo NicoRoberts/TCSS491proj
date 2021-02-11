@@ -18,7 +18,7 @@ class GameEngine {
         this.enemiesCount = 0;
 
         this.weapon = null;
-        this.weapons = [null, null];
+        this.weapons = [];
 
         this.W = false;
         this.A = false;
@@ -105,6 +105,11 @@ class GameEngine {
                 case "Digit3":
                     if (!that.weapon.reloading) {
                         that.weapon = that.weapons[2];
+                    }
+                    break;
+                case "Digit4":
+                    if (!that.weapon.reloading) {
+                        that.weapon = that.weapons[3];
                     }
                     break;
             }
