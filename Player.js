@@ -45,6 +45,8 @@ class Player{
 	
 		this.priority = 3;
 
+		this.coins = 0;
+
 		// stats
 		this.hpCurrent = 150;
 		this.hpMax = 150;
@@ -132,17 +134,27 @@ class Player{
 			if (entity instanceof Shards && that.hitbox.intersects(entity.hitbox)) {
 				entity.removeFromWorld = true;
 				that.shardObtained = true;
-				that.hpCurrent = that.hpMax;  // picking up shards replenishes health
 			}
 
 			else if (entity != that && entity.hitbox) {
 
 				
-				if (entity instanceof AmmoPack) {
-					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
+					}
+				}
+				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
+					that.coins += 1;
+					entity.removeFromWorld = true;
+				}
+				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.hpCurrent != that.hpMax) {
+						that.hpCurrent = that.hpMax;
+						entity.removeFromWorld = true;
                     }
+					
 				}
 
 				that.hitbox.collide(entity.hitbox)

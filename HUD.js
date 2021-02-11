@@ -57,6 +57,7 @@ class HUD {
 
         this.drawHearts(ctx);
         this.drawAmmo(ctx);
+        this.drawCoins(ctx);
 
     };
 
@@ -112,6 +113,13 @@ class HUD {
             }
             
         }
+    }
+
+    drawCoins(ctx) {
+        ctx.fillStyle = "White";
+        var fontsize = 50;
+        ctx.font = fontsize + 'px "VT323"'
+        ctx.fillText("COINS: " + this.player.coins, this.HEART_POS.X+5, fontsize - 15);
     }
 
 };

@@ -41,7 +41,7 @@ class Bullet {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (!that.hitdealt) {
-                if (entity instanceof Enemy) {
+                if (entity instanceof Enemy || entity instanceof Reaper) {
                     if (that.hitbox.collide(entity.hitbox)) {
                         that.hitdealt = true;
                         entity.hit = true;
@@ -54,7 +54,7 @@ class Bullet {
 
         this.hitbox.update();
 
-    }
+    }2
     draw(ctx) {
 
         ctx.drawImage(this.spritesheet, this.positionx - this.RADIUS, this.positiony - this.RADIUS, PARAMS.PIXELSCALER * 2, PARAMS.PIXELSCALER * 2);

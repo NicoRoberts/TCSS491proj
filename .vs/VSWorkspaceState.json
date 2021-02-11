@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\Drops",
-    "\\Projectiles",
-    "\\Weapons"
+    "\\Projectiles"
   ],
-  "SelectedNode": "\\Weapons\\Machete.js",
+  "SelectedNode": "\\Player.js",
   "PreviewInSolutionExplorer": false
 }

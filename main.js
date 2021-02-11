@@ -8,10 +8,13 @@ ASSET_MANAGER.queueDownload("./Sprites/Slice.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shotgun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
+ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/HealthSprite.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");

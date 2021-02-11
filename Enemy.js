@@ -1,4 +1,4 @@
-class Enemy {
+class Enemy{
 
 	SET_VELOCITY = {X:0.25, Y:0.25};
 
@@ -14,7 +14,7 @@ class Enemy {
 		COUNT: 3,
     };
 
-	constructor(player,game,x,y) {
+	constructor(player, game, x, y) {
 		Object.assign(this, {player, game, x,y});
 		
 
@@ -29,8 +29,8 @@ class Enemy {
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 300;
 		this.attackRadius = 55;
@@ -146,11 +146,17 @@ class Enemy {
 		let chance = Math.random();
 		console.log(chance);
 		if (chance <= this.dropchance) {
-			let itemCount = 1;
+			let itemCount = 2;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
 					this.game.addEntity(new AmmoPack(this.game, this.x, this.y));
+					break;
+				case 1:
+					this.game.addEntity(new Coin(this.game, this.x, this.y));
+					break;
+				case 2:
+					this.game.addEntity(new HealthPack(this.game, this.x, this.y));
 					break;
             }
         }
