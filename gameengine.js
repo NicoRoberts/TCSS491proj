@@ -18,7 +18,7 @@ class GameEngine {
         this.enemiesCount = 0;
 
         this.weapon = null;
-        this.weapons = [null, null];
+        this.weapons = [];
 
         this.W = false;
         this.A = false;

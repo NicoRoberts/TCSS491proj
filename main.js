@@ -12,6 +12,9 @@ ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostSprite.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");

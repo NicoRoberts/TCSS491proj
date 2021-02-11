@@ -50,6 +50,17 @@ class Player{
 		this.hpMax = 150;
 		this.shardObtained = false;
 		this.hit = false;
+
+		// perks
+		this.healthBoost = false;
+		this.reloadBoost = false;
+		this.speedBoost = false;
+
+		// stat buff from each perk
+		this.healthBuff = 50;
+		this.reloadBuff = .5;
+		this.speedBuff = 0;
+
 	}
 
 	setupCategories() {
@@ -82,14 +93,18 @@ class Player{
 		
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
+		if (this.speedBoost) {
+			this.speedBuff = 1;
+		}		
+
 		//Update Velocity
 		var moving = false;
 		
 		if(this.game.W){
-			this.velocity.y = -1 * this.SET_VELOCITY.Y * TICKSCALE;
+			this.velocity.y = -1 * (this.SET_VELOCITY.Y + this.speedBuff) * TICKSCALE;
 			moving = true;
 		} else if(this.game.S){
-			this.velocity.y = this.SET_VELOCITY.Y * TICKSCALE;
+			this.velocity.y = (this.SET_VELOCITY.Y + this.speedBuff) * TICKSCALE;
 			moving = true;
 		}else {
 			this.velocity.y = 0;
@@ -100,13 +115,13 @@ class Player{
 			}
 			moving = true;
 
-			this.velocity.x = -1 * this.SET_VELOCITY.X * TICKSCALE;
+			this.velocity.x = -1 * (this.SET_VELOCITY.X + this.speedBuff) * TICKSCALE;
 		} else if (this.game.D) {
 			if (!this.game.weapon.swinging) {
 				this.direction = this.DIRECTION.RIGHT;
 			}
 			moving = true;
-			this.velocity.x = this.SET_VELOCITY.X * TICKSCALE;
+			this.velocity.x = (this.SET_VELOCITY.X + this.speedBuff) * TICKSCALE;
 		}
 		else {
 			this.velocity.x = 0;
@@ -129,13 +144,7 @@ class Player{
 		var that = this;
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Shards && that.hitbox.intersects(entity.hitbox)) {
-				entity.removeFromWorld = true;
-				that.shardObtained = true;
-				that.hpCurrent = that.hpMax;  // picking up shards replenishes health
-			}
-
-			else if (entity != that && entity.hitbox) {
+			if (entity != that && entity.hitbox) {
 
 				
 				if (entity instanceof AmmoPack) {
@@ -143,6 +152,39 @@ class Player{
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
                     }
+				}
+
+				if (entity instanceof Shards) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						entity.removeFromWorld = true;
+						that.shardObtained = true;
+					}
+				}
+
+				if (entity instanceof HealthPerk) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						entity.removeFromWorld = true;
+						that.healthBoost = true;
+						that.hpMax += that.healthBuff;
+						that.hpCurrent += that.healthBuff;
+					}
+				}
+
+				if (entity instanceof ReloadPerk) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						entity.removeFromWorld = true;
+						that.reloadBoost = true;
+						for (var i = 0; i < that.game.weapons.length; i++) {
+							((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
+						}
+					}
+				}
+
+				if (entity instanceof SpeedPerk) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						entity.removeFromWorld = true;
+						that.speedBoost = true;
+					}
 				}
 
 				that.hitbox.collide(entity.hitbox)

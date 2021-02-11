@@ -69,6 +69,13 @@ class SceneManager {
 		this.game.addEntity(this.rocks);
 		this.game.addEntity(this.hud);
 		this.game.addEntity(new AmmoPack(this.game, 800, 500));
+
+
+		// testing in survival stage, should spawn in boat stage
+		this.game.addEntity(new HealthPerk(this.game, 400, 600));
+		this.game.addEntity(new ReloadPerk(this.game, 475, 600));
+		this.game.addEntity(new SpeedPerk(this.game, 550, 600));
+		
 	};
 
 	// loadGameOver() {
