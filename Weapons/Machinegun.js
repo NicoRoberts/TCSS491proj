@@ -29,13 +29,13 @@ class Machinegun {
 
         this.firing = false;
         this.reloading = false;
-        this.reloadTime = 0.5;
+        this.reloadTime = 3;
         this.timeLeft = 0;
 
 
-        this.fireTimeout = 10;
-        this.maxAmmo = 200;
-        this.maxReserves = 999;
+        this.fireTimeout = 100;
+        this.maxAmmo = 100;
+        this.maxReserves = 500;
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
@@ -48,7 +48,7 @@ class Machinegun {
 
     reload() {
 
-        if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading) {
+        if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading && !this.firing) {
             this.reloading = true;
             let that = this;
             this.timeLeft = this.reloadTime * 1000;
