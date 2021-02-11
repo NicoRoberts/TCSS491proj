@@ -73,7 +73,7 @@ class Enemy{
 		this.attackTime = 0.45;
 		this.restTime = 3;
 		this.maxSpeed = 2;
-		this.acceleration = 60;
+		this.acceleration = 20;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -162,6 +162,51 @@ class Enemy{
         }
     }
 
+	doAttack(entity) {
+
+		let that = this
+		that.attack = true;
+
+		// that.velocity.x = 0;
+		// that.velocity.y = 0;
+
+		//that.hitbox.collide(entity.hitbox);
+		if (!that.swinging) {
+			
+			that.enemyAttack = new EnemyAttack(that.game, that.x,
+				that.y, that.angle);
+			that.swinging = true;
+			that.game.addEntity(that.enemyAttack);
+			
+			that.timeLeft = that.attackTime * 1000;
+			that.timeLeft2 = that.restTime * 1000;
+			
+			let interval_id = window.setInterval(function () {
+				that.timeLeft -= 10;
+				that.state = that.STATE.ATTACK;
+				
+				
+				if (that.timeLeft <= 0) {
+					
+					that.timeLeft = 0;
+					
+					//that.state = that.STATE.IDLE;
+					window.clearInterval(interval_id);
+					that.enemyAttack.removeFromWorld = true;
+
+					let interval_id2 = window.setInterval(function () {
+						that.timeLeft2 -= 10;
+						that.state = that.STATE.IDLE;
+						if (that.timeLeft2 <= 0) {
+							that.timeLeft2 = 0;
+							that.swinging = false;
+							window.clearInterval(interval_id2);
+						}
+					}, 10);
+				}
+			}, 10);
+		}
+	}
 
 
 	
@@ -178,52 +223,23 @@ class Enemy{
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.attackCollide(entity)) {
-				that.attack = true;
-				that.hitbox.collide(entity.hitbox);
-        		if (!that.swinging) {
-					
-					that.enemyAttack = new EnemyAttack(that.game, that.x,
-						that.y, that.angle);
-					that.swinging = true;
-					that.game.addEntity(that.enemyAttack);
-					
-					that.timeLeft = that.attackTime * 1000;
-					that.timeLeft2 = that.restTime * 1000;
-					
-					let interval_id = window.setInterval(function () {
-						that.timeLeft -= 10;
-						that.state = that.STATE.ATTACK;
-						
-						
-						if (that.timeLeft <= 0) {
-							
-							that.timeLeft = 0;
-							
-							//that.state = that.STATE.IDLE;
-							window.clearInterval(interval_id);
-							that.enemyAttack.removeFromWorld = true;
+			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) {
+				that.doAttack(entity);
 
-							let interval_id2 = window.setInterval(function () {
-								that.timeLeft2 -= 10;
-								that.state = that.STATE.IDLE;
-								if (that.timeLeft2 <= 0) {
-									that.timeLeft2 = 0;
-									that.swinging = false;
-									window.clearInterval(interval_id2);
-								}
-							}, 10);
-						}
-					}, 10);
-				}
+			}
+			
+			// if (entity instanceof Player && that.attackCollide(entity)) {
+			// 	that.doAttack(entity);
 
-			} else if (entity instanceof Player && !that.attackCollide(entity)) {
+			// }
+			
+			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
 				that.attack = false;
 			} 
 
-			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
+			if (entity != that && entity.hitbox && !(entity instanceof Enemy)  && !(entity instanceof Player) ) {
 
-				that.hitbox.collide(entity.hitbox)
+				that.hitbox.collide(entity.hitbox);
 			}
 
 			//circle detection
@@ -254,8 +270,10 @@ class Enemy{
 		
 
 		//Update Position
-        this.x += this.velocity.x * TICKSCALE;
-		this.y += this.velocity.y * TICKSCALE;
+		if(!this.attack){	
+			this.x += this.velocity.x * TICKSCALE;
+			this.y += this.velocity.y * TICKSCALE;
+		}
 		
 		//update circlex, circley
 		this.circlex = this.x + (this.width / 2);
@@ -266,19 +284,6 @@ class Enemy{
 		this.positiony = this.y - this.game.camera.y;
 
 		this.hitbox.update();
-		
-
-		
-
-
-		if (this.hit) {
-			that.hitColor = true;
-			window.setTimeout(function () {
-				that.hitColor = false;
-			}, 5000 / 60);
-			this.hit = false;
-			//console.log("hit");
-		}
 		
 		// death
 		if (this.hpCurrent <= 0) {

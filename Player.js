@@ -41,7 +41,7 @@ class Player{
 		this.setupCategories();
 		this.loadAnimations();
 
-		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER);
+		this.hitbox = new HitBox(this, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, true);
 	
 		this.priority = 3;
 
@@ -136,7 +136,7 @@ class Player{
 				that.shardObtained = true;
 			}
 
-			else if (entity != that && entity.hitbox) {
+			else if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
 
 				
 				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
