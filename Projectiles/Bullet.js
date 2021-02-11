@@ -4,8 +4,8 @@ class Bullet {
 
     RADIUS = 3;
 
-    constructor(game, x, y, angle) {
-        Object.assign(this, { game, x, y, angle });
+    constructor(game, x, y, angle, damage = 20) {
+        Object.assign(this, { game, x, y, angle,damage});
 
 
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
@@ -19,8 +19,6 @@ class Bullet {
 
         this.hitbox = new HitBox(this, this.RADIUS * 2, this.RADIUS * 2, false, -1*this.RADIUS, -1*this.RADIUS);
         this.hitdealt = false;
-
-        this.damage = 20;
 
         this.update();
     }

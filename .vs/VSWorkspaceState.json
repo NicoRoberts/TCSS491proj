@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Drops",
-    "\\Projectiles"
+    "\\Enemies",
+    "\\Projectiles",
+    "\\Weapons"
   ],
-  "SelectedNode": "\\Player.js",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }

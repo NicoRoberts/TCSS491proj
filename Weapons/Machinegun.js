@@ -34,7 +34,7 @@ class Machinegun {
 
 
         this.fireTimeout = 100;
-        this.maxAmmo = 100;
+        this.maxAmmo = 50;
         this.maxReserves = 500;
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
