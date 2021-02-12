@@ -5,10 +5,17 @@ class SceneManager {
 
 		//for camera scrolling
 		this.x = 0;
-		this.y = 0;
+		this.y = 0;	
 		
+		this.game.stage;
+
+		this.player = new Player(this.game, 100, 700);
+		this.machete = new Machete(this.game);
+		this.pistol = new Pistol(this.game);
+		this.shotgun = new Shotgun(this.game);
+		this.hud = new HUD(this.game, this.player);
 		
-		this.loadLevel();
+		this.loadSurvivalStage();
 
 		
 	};
@@ -17,7 +24,60 @@ class SceneManager {
 		this.game.entities = [];
 	};
 
-	loadLevel() {
+	loadYachtStage() {
+		this.game.stage = "yacht";
+
+		this.game.entities = [];
+
+		// this.machete = new Machete(this.game);
+		// this.pistol = new Pistol(this.game);
+		// this.shotgun = new Shotgun(this.game);
+		
+		let bBoundary = new HBoundary(this.game, -750, 1000, 1000);
+		let tBoundary = new HBoundary(this.game, -750, -250, 1000); 
+		let lBoundary = new VBoundary(this.game, -750, -250, 1250); 
+		let ruBoundary = new VBoundary(this.game, 250, -250, 500);
+		let rlBoundary = new VBoundary(this.game, 250, 500, 500);
+
+		this.gangway = new Gangway(this.game, 250, 250);
+
+		this.game.addEntity(this.player);
+		this.game.addEntity(lBoundary);
+		this.game.addEntity(tBoundary);
+		this.game.addEntity(bBoundary);	
+		this.game.addEntity(ruBoundary);
+		this.game.addEntity(rlBoundary);
+
+		this.game.addEntity(this.gangway);
+		this.game.addEntity(this.machete);
+		this.game.addEntity(this.pistol)
+		this.game.addEntity(this.shotgun);
+		this.game.addEntity(this.hud);
+
+		// should we make perks buyable after each stage?
+		if (!this.player.healthBoost) {
+			this.game.addEntity(new HealthPerk(this.game, -400, 600));
+		}
+		if (!this.player.reloadBoost) {
+			this.game.addEntity(new ReloadPerk(this.game, -475, 600));
+		}
+		if (!this.player.speedBoost) {
+			this.game.addEntity(new SpeedPerk(this.game, -550, 600));
+		}
+		
+	};
+
+	loadSurvivalStage() {
+
+		this.game.stage = "survival";
+
+		this.game.entities = [];
+
+		// this.machete = new Machete(this.game);
+		// this.pistol = new Pistol(this.game);
+		// this.shotgun = new Shotgun(this.game);
+
+		this.marriyacht = new Marriyacht(this.game, -110, 350);
 
 		let bBoundary = new HBoundary(this.game, 0, 832, 1888); 
 		//this.game.addEntsity(bBoundary);
@@ -31,14 +91,6 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 1858, 33, 800); 
 		//this.game.addEntity(rBoundary);
 		
-		this.player = new Player(this.game, 100, 700);
-		this.game.player = this.player;
-		//this.game.addEntity(this.player);
-
-		this.machete = new Machete(this.game);
-		this.pistol = new Pistol(this.game);
-		this.shotgun = new Shotgun(this.game);
-		//this.game.addEntity(this.weapon);
 
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
 
@@ -48,11 +100,10 @@ class SceneManager {
 		//testing rock generation
 		this.rocks = new Terrain(this.game, 300, 300);
 
-		this.shard = new Shards(this.game, 1600, 500);
-
-		this.hud = new HUD(this.game, this.player);
+		this.shard = new Shards(this.game, 200, 500);
 
 		// testing to see if entities can be added in any order
+		this.game.addEntity(this.player);
 		this.game.addEntity(this.shard);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
@@ -61,7 +112,7 @@ class SceneManager {
 
 		this.game.addEntity(this.enemy1);
 		this.game.addEntity(this.enemy2);
-		this.game.addEntity(this.player);
+		//this.game.addEntity(this.player);
 		this.game.addEntity(rBoundary);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
@@ -70,17 +121,16 @@ class SceneManager {
 		this.game.addEntity(this.hud);
 		this.game.addEntity(new AmmoPack(this.game, 800, 500));
 
-
-		// testing in survival stage, should spawn in boat stage
-		this.game.addEntity(new HealthPerk(this.game, 400, 600));
-		this.game.addEntity(new ReloadPerk(this.game, 475, 600));
-		this.game.addEntity(new SpeedPerk(this.game, 550, 600));
+		this.game.addEntity(this.marriyacht);
 		
 	};
 
-	// loadGameOver() {
-	//	
-	// };
+	loadGameOver() {
+		this.game.stage = "game over";
+		this.game.entities = [];
+
+		this.game.addEntity(new Gameover(this.game));
+	};
 
 	update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;

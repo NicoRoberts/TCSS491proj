@@ -29,8 +29,8 @@ class Enemy {
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 300;
 		this.attackRadius = 55;
@@ -277,6 +277,7 @@ class Enemy {
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
+			this.player.killCount++;
 		}
 
 

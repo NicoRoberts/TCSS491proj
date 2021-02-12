@@ -20,8 +20,8 @@ class Player{
     	this.height = 32;
 
 		//POSITION VARIABLES
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.velocity = { x: 0, y: 0 };
 
@@ -32,7 +32,7 @@ class Player{
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
-		this.game.Player = this;
+		this.game.player = this;
 		
 		this.direction = this.DIRECTION.RIGHT;
 		this.state = this.STATE.IDLE
@@ -50,6 +50,7 @@ class Player{
 		this.hpMax = 150;
 		this.shardObtained = false;
 		this.hit = false;
+		this.killCount = 0;
 
 		// perks
 		this.healthBoost = false;
@@ -89,7 +90,9 @@ class Player{
 
 	update(){
 		
-
+		if (this.hpCurrent <= 0) {
+			this.game.camera.loadGameOver();
+		}
 		
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
@@ -184,6 +187,21 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						entity.removeFromWorld = true;
 						that.speedBoost = true;
+					}
+				}
+
+				if (entity instanceof Marriyacht) {
+					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
+						that.game.camera.loadYachtStage();
+					}
+				}
+
+				if (entity instanceof Gangway) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						that.shardObtained = false;
+						that.x -= 125;
+						that.y += 75;
+						that.game.camera.loadSurvivalStage();
 					}
 				}
 

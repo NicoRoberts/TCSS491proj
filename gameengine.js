@@ -24,6 +24,8 @@ class GameEngine {
         this.A = false;
         this.S = false;
         this.D = false;
+
+        this.stage;
     };
 
     init(ctx) {
@@ -177,8 +179,10 @@ class GameEngine {
             if (entity instanceof Enemy) {
                 this.enemiesCount++;
             }
-            if (!entity.removeFromWorld) {
-                entity.update();
+            if (!(typeof entity == 'undefined')) {
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                }
             }
         }
 
@@ -194,10 +198,11 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
-
-        if (this.enemiesCount < this.maxEnemies) {
-            this.addEntity(new Enemy(this.player, this, 200, 200));
-            this.maxEnemies--;
+        if (this.stage == "survival") {
+            if (this.enemiesCount < this.maxEnemies) {
+                this.addEntity(new Enemy(this.player, this, 200, 200));
+                this.maxEnemies--;
+            }
         }
     };
 
