@@ -34,7 +34,7 @@ class Movement {
     idleMovement() {
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
         
-
+        this.enemy.state = this.enemy.STATE.WALKING;
         var switchDirections = getRandomInt(0, 100);
         
         this.timer += this.game.clockTick;     

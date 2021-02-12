@@ -43,6 +43,10 @@ class SceneManager {
 		this.enemy1 = new Enemy(this.player, this.game, 200, 200);
 
 		this.enemy2 = new Enemy(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
+
+		this.banshee1 = new Banshee(this.player, this.game, 350, 350);
+
+		this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
@@ -61,6 +65,8 @@ class SceneManager {
 
 		this.game.addEntity(this.enemy1);
 		this.game.addEntity(this.enemy2);
+		this.game.addEntity(this.banshee1);
+		this.game.addEntity(this.banshee2);
 		this.game.addEntity(this.player);
 		this.game.addEntity(rBoundary);
 		this.game.addEntity(lBoundary);
