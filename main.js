@@ -1,6 +1,7 @@
 var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
+ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsNewMap1.png");
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
 ASSET_MANAGER.queueDownload("./Sprites/Machete.png");
@@ -12,6 +13,7 @@ ASSET_MANAGER.queueDownload("./Sprites/ChargeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
+ASSET_MANAGER.queueDownload("./Sprites/TreeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
