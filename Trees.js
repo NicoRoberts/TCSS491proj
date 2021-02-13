@@ -1,6 +1,7 @@
-class Trees{
+class Trees extends Terrain{
 
-    constructor(game,x,y){
+    constructor(game, x, y) {
+        super(game, x, y);
 		Object.assign(this, {game, x, y});
     
         this.width = 48;
