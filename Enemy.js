@@ -1,22 +1,22 @@
-class Enemy {
+class Enemy extends AbstractEnemy{
 
-	SET_VELOCITY = {X:0.25, Y:0.25};
-
-	DIRECTION = {
-		RIGHT: 0,
-		LEFT: 1,
-		COUNT: 2
-	};
-	STATE = {
-		IDLE: 0,
-		WALKING: 1,
-		ATTACK: 2,
-		COUNT: 3,
-    };
-
-	constructor(player,game,x,y) {
+	constructor(player, game, x, y) {
+		super(game, x, y);
 		Object.assign(this, {player, game, x,y});
-		
+
+		this.SET_VELOCITY = { X: 0.25, Y: 0.25 };
+
+		this.DIRECTION = {
+			RIGHT: 0,
+			LEFT: 1,
+			COUNT: 2
+		};
+		this.STATE = {
+			IDLE: 0,
+			WALKING: 1,
+			ATTACK: 2,
+			COUNT: 3,
+		};
 
 		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
 
@@ -29,8 +29,8 @@ class Enemy {
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 300;
 		this.attackRadius = 55;
@@ -73,7 +73,7 @@ class Enemy {
 		this.attackTime = 0.45;
 		this.restTime = 3;
 		this.maxSpeed = 2;
-		this.acceleration = 60;
+		this.acceleration = 20;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -144,18 +144,68 @@ class Enemy {
     };
 	dropItem() {
 		let chance = Math.random();
-		console.log(chance);
 		if (chance <= this.dropchance) {
-			let itemCount = 1;
+			let itemCount = 2;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
 					this.game.addEntity(new AmmoPack(this.game, this.x, this.y));
 					break;
+				case 1:
+					this.game.addEntity(new Coin(this.game, this.x, this.y));
+					break;
+				case 2:
+					this.game.addEntity(new HealthPack(this.game, this.x, this.y));
+					break;
             }
         }
     }
 
+	doAttack(entity) {
+
+		let that = this
+		that.attack = true;
+
+		// that.velocity.x = 0;
+		// that.velocity.y = 0;
+
+		//that.hitbox.collide(entity.hitbox);
+		if (!that.swinging) {
+			
+			that.enemyAttack = new EnemyAttack(that.game, that.x,
+				that.y, that.angle);
+			that.swinging = true;
+			that.game.addEntity(that.enemyAttack);
+			
+			that.timeLeft = that.attackTime * 1000;
+			that.timeLeft2 = that.restTime * 1000;
+			
+			let interval_id = window.setInterval(function () {
+				that.timeLeft -= 10;
+				that.state = that.STATE.ATTACK;
+				
+				
+				if (that.timeLeft <= 0) {
+					
+					that.timeLeft = 0;
+					
+					//that.state = that.STATE.IDLE;
+					window.clearInterval(interval_id);
+					that.enemyAttack.removeFromWorld = true;
+
+					let interval_id2 = window.setInterval(function () {
+						that.timeLeft2 -= 10;
+						that.state = that.STATE.IDLE;
+						if (that.timeLeft2 <= 0) {
+							that.timeLeft2 = 0;
+							that.swinging = false;
+							window.clearInterval(interval_id2);
+						}
+					}, 10);
+				}
+			}, 10);
+		}
+	}
 
 
 	
@@ -172,53 +222,23 @@ class Enemy {
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.attackCollide(entity)) {
-				that.attack = true;
+			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) {
+				that.doAttack(entity);
+
+			}
 			
-				that.hitbox.collide(entity.hitbox);
-        		if (!that.swinging) {
-					
-					that.enemyAttack = new EnemyAttack(that.game, that.x,
-						that.y, that.angle);
-					that.swinging = true;
-					that.game.addEntity(that.enemyAttack);
-					
-					that.timeLeft = that.attackTime * 1000;
-					that.timeLeft2 = that.restTime * 1000;
-					
-					let interval_id = window.setInterval(function () {
-						that.timeLeft -= 10;
-						that.state = that.STATE.ATTACK;
-						
-						
-						if (that.timeLeft <= 0) {
-							
-							that.timeLeft = 0;
-							
-							//that.state = that.STATE.IDLE;
-							window.clearInterval(interval_id);
-							that.enemyAttack.removeFromWorld = true;
+			// if (entity instanceof Player && that.attackCollide(entity)) {
+			// 	that.doAttack(entity);
 
-							let interval_id2 = window.setInterval(function () {
-								that.timeLeft2 -= 10;
-								that.state = that.STATE.IDLE;
-								if (that.timeLeft2 <= 0) {
-									that.timeLeft2 = 0;
-									that.swinging = false;
-									window.clearInterval(interval_id2);
-								}
-							}, 10);
-						}
-					}, 10);
-				}
-
-			} else if (entity instanceof Player && !that.attackCollide(entity)) {
+			// }
+			
+			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
 				that.attack = false;
 			} 
 
-			if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
+			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy) && !(entity instanceof Player)) {
 
-				that.hitbox.collide(entity.hitbox)
+				that.hitbox.collide(entity.hitbox);
 			}
 
 			//circle detection
@@ -249,8 +269,10 @@ class Enemy {
 		
 
 		//Update Position
-        this.x += this.velocity.x * TICKSCALE;
-		this.y += this.velocity.y * TICKSCALE;
+		if(!this.attack){	
+			this.x += this.velocity.x * TICKSCALE;
+			this.y += this.velocity.y * TICKSCALE;
+		}
 		
 		//update circlex, circley
 		this.circlex = this.x + (this.width / 2);
@@ -262,23 +284,11 @@ class Enemy {
 
 		this.hitbox.update();
 		
-
-		
-
-
-		if (this.hit) {
-			that.hitColor = true;
-			window.setTimeout(function () {
-				that.hitColor = false;
-			}, 5000 / 60);
-			this.hit = false;
-			//console.log("hit");
-		}
-		
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
-		}
+			this.dropItem();
+		}3
 
 
 	};
@@ -290,6 +300,13 @@ class Enemy {
 		if (PARAMS.DEBUG) {
 			
 			this.hitbox.draw(ctx);
+
+			ctx.fillStyle = "White";
+			var fontsize = 15;
+			ctx.font = fontsize + 'px "VT323"'
+
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 15 + this.height);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 30 + this.height);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'Red';

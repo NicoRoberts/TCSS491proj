@@ -18,7 +18,7 @@ class GameEngine {
         this.enemiesCount = 0;
 
         this.weapon = null;
-        this.weapons = [null, null];
+        this.weapons = [];
 
         this.W = false;
         this.A = false;
@@ -93,18 +93,23 @@ class GameEngine {
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    if (!that.weapon.reloading){
+                    if (!that.weapon.reloading && !that.weapon.firing){
                         that.weapon = that.weapons[0];
                     }              
                     break;
                 case "Digit2":
-                    if (!that.weapon.reloading) {
+                    if (!that.weapon.reloading && !that.weapon.firing) {
                         that.weapon = that.weapons[1];
                     }  
                     break;
                 case "Digit3":
-                    if (!that.weapon.reloading) {
+                    if (!that.weapon.reloading && !that.weapon.firing) {
                         that.weapon = that.weapons[2];
+                    }
+                    break;
+                case "Digit4":
+                    if (!that.weapon.reloading && !that.weapon.firing) {
+                        that.weapon = that.weapons[3];
                     }
                     break;
             }
@@ -188,9 +193,6 @@ class GameEngine {
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
-                if (this.entities[i] instanceof Enemy) {
-                    this.entities[i].dropItem();
-                }
                 this.entities.splice(i, 1);
             }
         }

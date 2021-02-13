@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Drops",
+    "\\Enemies",
     "\\Projectiles",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Weapons\\Machete.js",
+  "SelectedNode": "\\Enemies\\AbstractEnemy.js",
   "PreviewInSolutionExplorer": false
 }

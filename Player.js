@@ -45,6 +45,8 @@ class Player{
 	
 		this.priority = 3;
 
+		this.coins = 0;
+
 		// stats
 		this.hpCurrent = 150;
 		this.hpMax = 150;
@@ -132,17 +134,27 @@ class Player{
 			if (entity instanceof Shards && that.hitbox.intersects(entity.hitbox)) {
 				entity.removeFromWorld = true;
 				that.shardObtained = true;
-				that.hpCurrent = that.hpMax;  // picking up shards replenishes health
 			}
 
-			else if (entity != that && entity.hitbox) {
+			else if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
 
 				
-				if (entity instanceof AmmoPack) {
-					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
+					}
+				}
+				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
+					that.coins += 1;
+					entity.removeFromWorld = true;
+				}
+				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.hpCurrent != that.hpMax) {
+						that.hpCurrent = that.hpMax;
+						entity.removeFromWorld = true;
                     }
+					
 				}
 
 				that.hitbox.collide(entity.hitbox)
@@ -175,6 +187,15 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
+
+			ctx.fillStyle = "White";
+			var fontsize = 15;
+			ctx.font = fontsize + 'px "VT323"'
+
+
+			//ctx.fillText("Angle: " + Math.round(this.game.weapon.angle * 180 / Math.PI), this.positionx, this.positiony + 15 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 30 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 45 + this.height * PARAMS.PIXELSCALER);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'White';
