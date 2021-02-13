@@ -2,9 +2,9 @@ class HUD {
 
     HEART_POS = { X: 2.5, Y: 785 }
     PERK_POS = { X: 2.5, Y: 735 }
-    AMMO_POS = { X: -110, Y: 785 } 
-    constructor(game, player) {
-        Object.assign(this, {game, player});
+    AMMO_POS = { X: -110, Y:785}
+    constructor(game, player, timer) {
+        Object.assign(this, {game, player, timer});
 
         this.heartSprite = ASSET_MANAGER.getAsset("./Sprites/Hearts.png");
         this.heartStates = [];
@@ -26,6 +26,9 @@ class HUD {
 
         this.perkWidth = 34;
         this.perkHeight = 34;
+        this.minutes = 0;
+        this.seconds = 0;
+        this.millis = 0;
 
         this.priority = 100; // should be the last thing to be drawn to the screen
 
@@ -57,6 +60,13 @@ class HUD {
     };
 
     update() {
+
+        this.minutes = Math.floor(this.game.ellapsedTime / 60);
+        this.seconds = Math.floor(this.game.ellapsedTime);
+        if (this.seconds >= 60) {
+            this.seconds = 0;   
+        }
+        //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
         this.updateAmmo();
@@ -97,6 +107,8 @@ class HUD {
         this.drawHearts(ctx);
         this.drawAmmo(ctx);
         this.drawPerks(ctx);
+        this.drawTime(ctx);
+        this.drawCoins(ctx);
 
     };
 
@@ -141,17 +153,21 @@ class HUD {
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"'
 
-            var left_padding = this.game.weapon.ammoCount < 10 ? "0" : "";
-            var right_padding = this.game.weapon.maxAmmo < 10 ? "0" : "";
-            ctx.fillText(left_padding + this.game.weapon.ammoCount + "/" + right_padding + this.game.weapon.maxAmmo, ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + fontsize);
 
+            var numdigits = 3
+
+            var left_padding = "0".repeat(numdigits - this.game.weapon.ammoCount.toString().length);
+            var right_padding = "0".repeat(numdigits - this.game.weapon.maxAmmo.toString().length);
+            ctx.fillText(left_padding + this.game.weapon.ammoCount + "/" + right_padding + this.game.weapon.maxAmmo, ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + fontsize);
+            
             var fontsize = 20;
             ctx.font = fontsize + 'px "VT323"';
             ctx.fillText("AMMO", ctx.canvas.width + this.AMMO_POS.X + 5, this.AMMO_POS.Y + 70);
+            
+            left_padding = "0".repeat(numdigits - this.game.weapon.reservesCount.toString().length);
+            right_padding = "0".repeat(numdigits - this.game.weapon.maxReserves.toString().length);
 
-            left_padding = this.game.weapon.reservesCount < 10 ? "0" : "";
-            right_padding = this.game.weapon.maxReserves < 10 ? "0" : "";
-            ctx.fillText(left_padding + this.game.weapon.reservesCount + "/" + right_padding + this.game.weapon.maxReserves, ctx.canvas.width + this.AMMO_POS.X + 58, this.AMMO_POS.Y + 70);
+            ctx.fillText(left_padding + this.game.weapon.reservesCount + "/" + right_padding + this.game.weapon.maxReserves, ctx.canvas.width + this.AMMO_POS.X + 83, this.AMMO_POS.Y + 70);
 
             if (this.game.weapon.reservesCount == 0 && this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Red";
@@ -163,6 +179,30 @@ class HUD {
             }
             
         }
+    }
+
+    drawTime(ctx) {
+        if (PARAMS.DEBUG) {
+            ctx.fillStyle = "White";
+            var fontsize = 50;
+            var offsetx = 250;
+            var offsety = 30;
+            ctx.font = fontsize + 'px "VT323"'
+            ctx.fillText("Time: ", ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+
+            fontsize = 20;
+            offsetx = 190;
+            offsety = 10;
+            ctx.font = fontsize + 'px "VT323"'
+            ctx.fillText(this.minutes + ":" + this.seconds, ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+
+        }
+    }   
+    drawCoins(ctx) {
+        ctx.fillStyle = "White";
+        var fontsize = 50;
+        ctx.font = fontsize + 'px "VT323"'
+        ctx.fillText("COINS: " + this.player.coins, this.HEART_POS.X+5, fontsize - 15);
     }
 
 };

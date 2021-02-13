@@ -44,6 +44,31 @@ class HitBox{
         return intersects;
 
     }
+    willCollide(other) {
+
+        var intersects = false;
+
+        //horizontal test
+        this.left = this.x + this.entity.velocity.x;
+        this.top = this.y;
+        this.right = this.left + this.width;
+        this.bottom = this.top + this.height;
+        if (this.intersects(other)) {
+            intersects = true;
+        }
+
+        //vertical test
+        this.left = this.x;
+        this.top = this.y + this.entity.velocity.y;
+        this.right = this.left + this.width;
+        this.bottom = this.top + this.height;   
+        if (this.intersects(other)) {
+            intersects = true;
+        }
+
+        return intersects;
+
+    }
 
     playerBooleanCollide(oth) {
         //var method1 = false;
@@ -51,29 +76,29 @@ class HitBox{
         var offset = 2;
 
 
-        // //horizontal test
-        // this.left = this.x + this.entity.velocity.x;
-        // this.top = this.y;
-        // this.right = this.left + this.width;
-        // this.bottom = this.top + this.height;
-        // if (this.intersects(oth)) {
-        //     if (!this.ignore && !oth.ignore) {
-        //         this.entity.velocity.x = 0;
-        //     }
-        //     method1 = true;
-        // }
-        //  //vertical test
-        //  this.left = this.x;
-        //  this.top = (this.y + this.entity.velocity.y);
-        //  this.right = this.left + this.width;
-        //  this.bottom = this.top + this.height;   
-        //  if (this.intersects(oth)) {
-        //      if (!this.ignore && !oth.ignore) {
-        //          this.entity.velocity.y = 0;
-        //      }
+        //horizontal test
+        this.left = this.x + this.entity.velocity.x;
+        this.top = this.y;
+        this.right = this.left + this.width;
+        this.bottom = this.top + this.height;
+        if (this.intersects(oth)) {
+            if (!this.ignore && !oth.ignore) {
+                this.entity.velocity.x = 0;
+            }
+            method1 = true;
+        }
+         //vertical test
+         this.left = this.x;
+         this.top = (this.y + this.entity.velocity.y);
+         this.right = this.left + this.width;
+         this.bottom = this.top + this.height;   
+         if (this.intersects(oth)) {
+             if (!this.ignore && !oth.ignore) {
+                 this.entity.velocity.y = 0;
+             }
              
-        //      method1 = true;
-        //  }
+             method1 = true;
+         }
 
         //  return method1;
         // 
@@ -88,6 +113,22 @@ class HitBox{
         }
         return method2;
             
+    }
+
+    collideRight(other) {
+        return (this.right >= other.left);
+    }
+
+    collideLeft(other) {
+        return (this.left <= other.right);
+    }
+    
+    collideTop(other) {
+        return (this.top <= other.bottom);
+    }
+
+    collideBottom(other) {
+        return (this.bottom >= other.top);
     }
 
     intersects(other) {

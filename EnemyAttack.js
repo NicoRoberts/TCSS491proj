@@ -22,7 +22,7 @@ class EnemyAttack {
 
         this.hitbox = new HitBox(this, this.width, this.height, true);
 
-        this.damage = 150;  // change back to 25, testing game over scene
+        this.damage = 25;
        
     }
 

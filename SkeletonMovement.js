@@ -1,4 +1,4 @@
-class Movement {
+class SkeletonMovement {
 
 	constructor(player, game, enemy) {
         Object.assign(this, {player, game, enemy});
@@ -12,19 +12,18 @@ class Movement {
         this.chaseSpeed = 0.2;
         this.maxSpeed = getRandom(1.4, 2.0);
     
-        //periods and states
+        //periods and states for skeleton
         this.movePeriod = getRandom(3, 9);
         this.restPeriod = getRandom(1, 6);
         this.state = getRandomInt(0, 5);
         this.changeState = true;
         this.first = true;
 
-        this.offset = getRandomInt(-24, 8) * 2;
-        //physics
-  
         
 
-        // this.velocity = { x: (this.player.circlex - this.enemy.x) / dist * this.maxSpeed, y: (this.player.circley - this.enemy.y) / dist * this.maxSpeed };
+        //chase point
+        this.offset = getRandomInt(-24, 8) * 3;
+       
 
         
 	};
@@ -34,7 +33,7 @@ class Movement {
     idleMovement() {
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
         
-
+        this.enemy.state = this.enemy.STATE.WALKING;
         var switchDirections = getRandomInt(0, 100);
         
         this.timer += this.game.clockTick;     
@@ -103,6 +102,7 @@ class Movement {
         }
     };
 
+
     chaseMovement() {
         
      
@@ -116,13 +116,13 @@ class Movement {
         // this.enemy.velocity.x = difX;
         // this.enemy.velocity.y = difY;
         if (!this.enemy.collideTerrain) {
-            if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
-                this.enemy.velocity.x = difX;
-                this.enemy.velocity.y = difY;
-            }
+            // if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
+            //     this.enemy.velocity.x = difX;
+            //     this.enemy.velocity.y = difY;
+            // }
             
-            this.enemy.velocity.x += 0.1;
-            this.enemy.velocity.y += 0.1;
+            this.enemy.velocity.x = difX;
+            this.enemy.velocity.y = difY;
         }
         
         

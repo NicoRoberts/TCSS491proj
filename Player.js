@@ -45,6 +45,8 @@ class Player{
 	
 		this.priority = 3;
 
+		this.coins = 0;
+
 		// stats
 		this.hpCurrent = 150;
 		this.hpMax = 150;
@@ -97,6 +99,7 @@ class Player{
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		if (this.speedBoost) {
+			console.log("true");
 			this.speedBuff = 1;
 		}		
 
@@ -146,15 +149,25 @@ class Player{
 		//collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
-
-			if (entity != that && entity.hitbox) {
+			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy)) {
 
 				
-				if (entity instanceof AmmoPack) {
-					if (that.hitbox.collide(entity.hitbox) && (that.game.weapon.reservesCount != that.game.weapon.maxReserves)) {
+				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
+					}
+				}
+				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
+					that.coins += 1;
+					entity.removeFromWorld = true;
+				}
+				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
+					if (that.hpCurrent != that.hpMax) {
+						that.hpCurrent = that.hpMax;
+						entity.removeFromWorld = true;
                     }
+					
 				}
 
 				if (entity instanceof Shards) {
@@ -192,6 +205,7 @@ class Player{
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
+						that.y -= 25;
 						that.game.camera.loadYachtStage();
 					}
 				}
@@ -199,8 +213,8 @@ class Player{
 				if (entity instanceof Gangway) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						that.shardObtained = false;
-						that.x -= 125;
-						that.y += 75;
+						that.x -= 75;
+						that.y += 50;
 						that.game.camera.loadSurvivalStage();
 					}
 				}
@@ -235,6 +249,15 @@ class Player{
 	draw(ctx) {
 		if (PARAMS.DEBUG) {
 			this.hitbox.draw(ctx);
+
+			ctx.fillStyle = "White";
+			var fontsize = 15;
+			ctx.font = fontsize + 'px "VT323"'
+
+
+			//ctx.fillText("Angle: " + Math.round(this.game.weapon.angle * 180 / Math.PI), this.positionx, this.positiony + 15 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 30 + this.height * PARAMS.PIXELSCALER);
+			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 45 + this.height * PARAMS.PIXELSCALER);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'White';
