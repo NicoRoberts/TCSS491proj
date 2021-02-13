@@ -10,14 +10,14 @@ class Shards {
         this.height = 18;
 
         // do later: implement a way to randomize shard location, ensure that shard is not spawned near player at start of a level
-        this.positionx = 0;
-        this.positiony = 0;
+        this.positionx = this.x - this.game.camera.x;
+        this.positiony = this.y - this.game.camera.y;
 
         this.priority = 2;
 
         this.shard = new Animator(this.spritesheet, 0, 0, this.width, this.height, 6, 0.2, 0, false, true);
         
-        this.hitbox = new HitBox(this, this.width * this.scale, this.height * this.scale);
+        this.hitbox = new HitBox(this, this.width * this.scale, this.height * this.scale, true);
     
     };
 

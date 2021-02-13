@@ -12,18 +12,35 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 
-        this.maxEnemies = 2;
-        this.spawnRate = 5;
-        this.timeLeft = 0;
-        this.enemiesCount = 0;
+        // this.maxEnemies = 2;
+        // //this.spawnRate = 5;
+        // this.timeLeft = 0;
+        // this.enemiesCount = 0;
 
         this.weapon = null;
         this.weapons = [];
+
+        this.minutes = 0;
+        this.seconds = 0;
+        this.millis = 0;
+
+        //spawning
+		this.upperRangeX = 1768;
+		this.upperRangeY = 40;
+		this.lowerRangeX = 40
+		this.lowerRangeY = 732;
+
+		this.spawnTimer = 0;
+		this.spawnRate = 10; // 1 enemy / spawnRate (sec)
+        
+
 
         this.W = false;
         this.A = false;
         this.S = false;
         this.D = false;
+
+        this.stage;
     };
 
     init(ctx) {
@@ -32,6 +49,7 @@ class GameEngine {
         this.surfaceHeight = this.ctx.canvas.height;
         this.startInput();
         this.timer = new Timer();
+        this.ellapsedTime = 0;
     };
 
     start() {
@@ -172,18 +190,27 @@ class GameEngine {
 
     update() {
 
+        this.minutes = Math.floor(this.ellapsedTime / 60);
+        this.seconds = Math.floor(this.ellapsedTime % 60);
+
+        if (this.seconds >= 60) {
+            this.seconds = 0;   
+        }
+
         var entitiesCount = this.entities.length;
         //console.log(entitiesCount);
-        this.enemiesCount = 0;
+
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
-            if (entity instanceof Enemy) {
+            if (entity instanceof AbstractEnemy) {
                 this.enemiesCount++;
             }
-            if (!entity.removeFromWorld) {
-                entity.update();
+            if (!(typeof entity == 'undefined')) {
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                }
             }
         }
 
@@ -196,16 +223,36 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
-
-        if (this.enemiesCount < this.maxEnemies) {
-            this.addEntity(new Enemy(this.player, this, 200, 200));
-            this.maxEnemies--;
+        if (this.stage == "survival") {
+            if (this.enemiesCount < this.maxEnemies) {
+                this.addEntity(new Enemy(this.player, this, 200, 200));
+                this.maxEnemies--;
+            }
         }
+
+        this.spawnTimer += this.clockTick;
+
+		//this.spawnSkeletons();
+
     };
+
+    spawnSkeletons() {
+
+	
+		if (this.spawnTimer >= this.spawnRate) {
+			this.spawnTimer = 0;
+			var RandomX = getRandomInt(this.lowerRangeX, this.upperRangeX);
+			var RandomY = getRandomInt(this.lowerRangeY, this.upperRangeY);
+			var skeleton = new Enemy(this.player, this, RandomX, RandomY);
+			this.addEntity(skeleton);
+		}
+
+	}
 
 
     loop() {
         this.clockTick = this.timer.tick();
+        this.ellapsedTime += this.clockTick;
         this.update();
         this.draw();
     };
