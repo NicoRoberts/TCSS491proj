@@ -236,7 +236,7 @@ class Enemy extends AbstractEnemy{
 				that.attack = false;
 			} 
 
-			if (entity != that && entity.hitbox && !(entity instanceof Enemy)  && !(entity instanceof Player) ) {
+			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy) && !(entity instanceof Player)) {
 
 				that.hitbox.collide(entity.hitbox);
 			}

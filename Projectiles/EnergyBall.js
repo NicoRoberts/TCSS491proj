@@ -1,22 +1,25 @@
-class Bullet {
+class EnergyBall{
 
     constructor(game, x, y, angle, damage = 20) {
         Object.assign(this, { game, x, y, angle,damage});
 
-        this.SPEED = 7;
+        this.SPEED = 3;
 
-        this.RADIUS = 3;
+        this.RADIUS = 32;
 
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
 
-        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Bullet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/ChargeSheet.png");
 
         this.velocity = { x: 0, y: 0 }
 
-        this.hitbox = new HitBox(this, this.RADIUS * 2, this.RADIUS * 2, true, -1*this.RADIUS, -1*this.RADIUS);
+
+        this.animation = new Animator(this.spritesheet, 1, 1, this.RADIUS, this.RADIUS, 3, 0.15, 2, false, true);
+
+        this.hitbox = new HitBox(this, this.RADIUS, this.RADIUS, true);
         this.hitdealt = false;
 
         this.update();
@@ -38,7 +41,7 @@ class Bullet {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (!that.hitdealt) {
-                if (entity instanceof AbstractEnemy) {
+                if (entity instanceof Player) {
                     if (that.hitbox.willCollide(entity.hitbox)) {
                         that.hitdealt = true;
                         entity.hit = true;
@@ -54,8 +57,7 @@ class Bullet {
     }2
     draw(ctx) {
 
-        ctx.drawImage(this.spritesheet, this.positionx - this.RADIUS, this.positiony - this.RADIUS, PARAMS.PIXELSCALER * 2, PARAMS.PIXELSCALER * 2);
-
+        this.animation.drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony,1)
         if (PARAMS.DEBUG) {
 
             this.hitbox.draw(ctx);

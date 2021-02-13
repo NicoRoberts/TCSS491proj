@@ -8,6 +8,7 @@ ASSET_MANAGER.queueDownload("./Sprites/Slice.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shotgun.png");
 ASSET_MANAGER.queueDownload("./Sprites/MachineGun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
+ASSET_MANAGER.queueDownload("./Sprites/ChargeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");

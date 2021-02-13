@@ -71,7 +71,7 @@ class SceneManager {
 		this.game.addEntity(this.rocks);
 		this.game.addEntity(this.hud);
 		this.game.addEntity(new AmmoPack(this.game, 800, 500));
-		this.game.addEntity(new Reaper(this.game, 200, 400));
+		this.game.addEntity(new Reaper(this.game, 700, 400));
 	};
 
 	// loadGameOver() {

@@ -5,4 +5,5 @@ class AbstractEnemy {
 		}
 		Object.assign(game, x, y);
 	};
+
 };
