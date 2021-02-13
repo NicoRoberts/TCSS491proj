@@ -64,7 +64,7 @@ class SceneManager {
 		
 		//testing tree generation
 		for(var j = 0; j < 25; j++){
-			var treeRX = Math.random()sd*3200;
+			var treeRX = Math.random()*3200;
 			var treeRY = Math.random()*3600;
 			this.trees = new Trees(this.game, treeRX+242, treeRY-190);
 			this.game.addEntity(this.trees);
