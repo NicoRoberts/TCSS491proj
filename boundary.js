@@ -3,8 +3,8 @@ class Boundary {
 }
 
 class HBoundary {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w });
+    constructor(game, x, y, w, type) {
+        Object.assign(this, { game, x, y, w, type});
         
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 
@@ -34,8 +34,8 @@ class HBoundary {
 
 
 class VBoundary {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w });
+    constructor(game, x, y, w, type) {
+        Object.assign(this, { game, x, y, w, type });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./images/tile.png");
 

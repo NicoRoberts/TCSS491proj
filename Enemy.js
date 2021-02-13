@@ -29,8 +29,8 @@ class Enemy {
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 300;
 		this.attackRadius = 55;
@@ -64,7 +64,7 @@ class Enemy {
 
 
 		//enemy movement
-		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
+		this.movement = new SkeletonMovement(this.player, this.game, this); //this is a reference to THIS enemy
 		this.swinging = false;
 		this.attack = false;
 		this.collideTerrain = false;
@@ -80,6 +80,15 @@ class Enemy {
 		// stats
 		this.hpCurrent = 100;
 		this.hpMax = 100;
+
+		//spawning
+		this.upperRangeX = 1768;
+		this.upperRangeY = 40;
+		this.lowerRangeX = 40
+		this.lowerRangeY = 732;
+
+		this.spawnTimer = 0;
+		this.spawnRate = 10; // 1 enemy / spawnRate (sec)
 
 	};
 
@@ -221,22 +230,15 @@ class Enemy {
 				that.doAttack(entity);
 
 			}
-			
-			// if (entity instanceof Player && that.attackCollide(entity)) {
-			// 	that.doAttack(entity);
-
-			// }
-			
+		
 			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
 				that.attack = false;
 			} 
 
-			if (entity != that && entity.hitbox && !(entity instanceof Enemy)  && !(entity instanceof Player) ) {
+			if (entity != that && entity.hitbox && !(entity instanceof Enemy) && !(entity instanceof Banshee) && !(entity instanceof Player) ) {
 
 				that.hitbox.collide(entity.hitbox);
 			}
-
-			//circle detection
 
 			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
 				that.detect = true;
@@ -252,7 +254,7 @@ class Enemy {
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
                 that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2	) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
 			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
 				that.collideTerrain = false;
 			}
@@ -284,10 +286,38 @@ class Enemy {
 			this.removeFromWorld = true;
 		}
 
+		//spawn Skeletons
+		// this.spawnTimer += this.game.clockTick;
+		// this.spawnSkeletons();
+
 
 	};
 
-	
+	// spawnSkeletons() {
+
+		
+	// 	if (this.spawnTimer >= this.spawnRate) {
+	// 		this.spawnTimer = 0;
+	// 		var RandomX = getRandomInt(this.lowerRangeX, this.upperRangeX);
+	// 		var RandomY = getRandomInt(this.lowerRangeY, this.upperRangeY);
+	// 		var skeleton = new Enemy(this.player, this.game, RandomX, RandomY);
+	// 		this.game.addEntity(skeleton);
+	// 	}
+
+	// }
+
+	// spawnSkeletons(randomX, randomY) {
+	// 	this.spawnTimeLeft = this.spawnTime * 1000;
+	// 	let interval_id = window.setInterval(function () {
+	// 		this.spawnTimeLeft -= 10;
+	// 		if (this.spawnTimeLeft <= 0) {
+	// 			this.game.addEntity(new Enemy(this.player, this.game, randomX, randomY));
+	// 			window.clearInterval(interval_id);
+	// 		}
+	// 	}, 10);
+
+	// }
+
 	draw(ctx) {
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";

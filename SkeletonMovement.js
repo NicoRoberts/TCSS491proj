@@ -1,4 +1,4 @@
-class Movement {
+class SkeletonMovement {
 
 	constructor(player, game, enemy) {
         Object.assign(this, {player, game, enemy});
@@ -12,19 +12,18 @@ class Movement {
         this.chaseSpeed = 0.2;
         this.maxSpeed = getRandom(1.4, 2.0);
     
-        //periods and states
+        //periods and states for skeleton
         this.movePeriod = getRandom(3, 9);
         this.restPeriod = getRandom(1, 6);
         this.state = getRandomInt(0, 5);
         this.changeState = true;
         this.first = true;
 
-        this.offset = getRandomInt(-24, 8) * 2;
-        //physics
-  
         
 
-        // this.velocity = { x: (this.player.circlex - this.enemy.x) / dist * this.maxSpeed, y: (this.player.circley - this.enemy.y) / dist * this.maxSpeed };
+        //chase point
+        this.offset = getRandomInt(-24, 8) * 3;
+       
 
         
 	};
@@ -102,6 +101,7 @@ class Movement {
             this.timer = 0;
         }
     };
+
 
     chaseMovement() {
         

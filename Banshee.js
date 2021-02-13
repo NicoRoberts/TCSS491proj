@@ -29,8 +29,8 @@ class Banshee {
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
-		this.positionx = 0;
-		this.positiony = 0;
+		this.positionx = this.x - this.game.camera.x;
+		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 100;
 		this.attackRadius = 55;
@@ -53,7 +53,7 @@ class Banshee {
 
 		this.hitbox = new HitBox(this, this.width, this.height);
 
-		this.priority = 1;
+		this.priority = 2;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -64,7 +64,7 @@ class Banshee {
 
 
 		//enemy movement
-		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
+		this.movement = new BansheeMovement(this.player, this.game, this); //this is a reference to THIS enemy
 		this.swinging = false;
 		this.attack = false;
 		this.collideTerrain = false;
@@ -74,6 +74,12 @@ class Banshee {
 		this.restTime = 3;
 		this.maxSpeed = 2;
 		this.acceleration = 20;
+
+		//For banshee idle movement
+		this.collideRight = false;
+		this.collideLeft = false;
+		this.collideTop = false;
+		this.collideBottom = false;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -208,11 +214,7 @@ class Banshee {
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		
-		if (that.detect && !that.attack) { //chase the player
-			that.movement.chaseMovement();	
-		} else if (!that.detect) { //idle movement
-			that.movement.idleMovement();
-		}
+		
 		//collision
 		this.game.entities.forEach(function (entity) {
 
@@ -220,12 +222,7 @@ class Banshee {
 				that.doAttack(entity);
 
 			}
-			
-			// if (entity instanceof Player && that.attackCollide(entity)) {
-			// 	that.doAttack(entity);
-
-			// }
-			
+		
 			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
 				that.attack = false;
 			} 
@@ -235,11 +232,31 @@ class Banshee {
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			//circle detection
-
 			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
 				that.detect = true;
 			}
+
+			//Banshee "Pong" movement algorithm
+			if (entity != that && entity.hitbox &&
+				((entity instanceof VBoundary) && entity.type == "right")
+				 && that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideRight = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof VBoundary) && entity.type == "left")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideLeft = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "top")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideTop = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "bottom")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideBottom = true;
+		   	}	
 			
 			if (entity instanceof Terrain && that.attackCollide(entity)) {
 				that.collideTerrain = true;
@@ -251,7 +268,7 @@ class Banshee {
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
                 that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2	) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
 			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
 				that.collideTerrain = false;
 			}
@@ -261,6 +278,11 @@ class Banshee {
 		this.testSpeed();
 
 		
+		if (that.detect && !that.attack) { //chase the player
+			that.movement.chaseMovement();	
+		} else if (!that.detect) { //idle movement
+			that.movement.idleMovement();
+		}
 
 		//Update Position
 		if(!this.attack){	
