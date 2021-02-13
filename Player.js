@@ -136,7 +136,7 @@ class Player{
 				that.shardObtained = true;
 			}
 
-			else if (entity != that && entity.hitbox && !(entity instanceof Enemy)) {
+			else if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy)) {
 
 				
 				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
