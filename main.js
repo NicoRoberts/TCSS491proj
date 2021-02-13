@@ -37,7 +37,12 @@ ASSET_MANAGER.downloadAll(function () {
 	ctx.imageSmoothingEnabled = false;
 
 	PARAMS.CANVAS_WIDTH = canvas.width;
-	PARAMS.CANVAS_HEIGHT = canvas.height; 
+	PARAMS.CANVAS_HEIGHT = canvas.height;
+
+	PARAMS.RIGHTWALL = 1858;
+	PARAMS.LEFTWALL = PARAMS.TILEWIDTH;
+	PARAMS.TOPWALL = PARAMS.TILEHEIGHT;
+	PARAMS.BOTTOMWALL = 832;
 
 
 
