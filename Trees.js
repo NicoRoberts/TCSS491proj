@@ -1,11 +1,11 @@
-class Terrain{
+class Trees{
 
     constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-    	this.width = 48;
-        this.height = 48;
-        this.rockState = Math.floor(Math.random()*6);
+        this.width = 48;
+        this.height = 96;
+        this.treeState = Math.floor(Math.random()*6);
         
         this.states=[];
 
@@ -14,23 +14,23 @@ class Terrain{
         this.visualRadius = 40;
         
 
-		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/RockSheet.png");
+		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/TreeSheet.png");
 
     	this.game.Terrain = this;
     
         this.circlex = this.x + (this.width / 2);
         this.circley = this.y + (this.height / 2);
 
-        this.priority = 1;
+        this.priority = 5;
         
         this.setupTerrainTypes();
         this.loadStates();
 
-        this.hitbox = new HitBox(this, this.width, this.height);
+        this.hitbox = new HitBox(this, this.width*2, this.height, false, 0, this.height);
 
     }
    
-    // 6 possible rock types
+    // 6 possible tree types
     setupTerrainTypes() {
 		for (var i = 0; i < 6; i++) {
 			this.states.push([]);
@@ -44,11 +44,11 @@ class Terrain{
         this.states[1]
             = new Animator(this.spritesheet, 51, 1, this.width, this.height, 1, 1, 1, false, true);
         this.states[2]
-            = new Animator(this.spritesheet, 1, 51, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 98, this.width, this.height, 1, 1, 1, false, true);
         this.states[3]
-            = new Animator(this.spritesheet, 51, 51, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 51, 98, this.width, this.height, 1, 1, 1, false, true);
         this.states[4]
-            = new Animator(this.spritesheet, 1, 101, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 196, this.width, this.height, 1, 1, 1, false, true);
         this.states[5]
             = new Animator(this.spritesheet, 51, 101, this.width, this.height, 1, 1, 1, false, true);
 		
@@ -78,7 +78,7 @@ class Terrain{
 			ctx.closePath();
             
         }
-        this.states[this.rockState].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,1);
+        this.states[this.treeState].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,2);
         
         //ctx.drawImage(this.spritesheet,this.positionx,this.positiony,this.width,this.height,0,0,this.width,this.height)
 	};
