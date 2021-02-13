@@ -1,9 +1,9 @@
 class HUD {
 
     HEART_POS = { X: 2.5, Y: 785 }
-    AMMO_POS = { X: -150, Y:785}
-    constructor(game, player) {
-        Object.assign(this, {game, player});
+    AMMO_POS = { X: -110, Y:785}
+    constructor(game, player, timer) {
+        Object.assign(this, {game, player, timer});
 
         this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Hearts.png");
         this.heartStates = [];
@@ -16,6 +16,10 @@ class HUD {
 
         this.heartWidth = 28;
         this.heartHeight = 28;
+
+        this.minutes = 0;
+        this.seconds = 0;
+        this.millis = 0;
 
         this.priority = 100; // should be the last thing to be drawn to the screen
 
@@ -34,6 +38,13 @@ class HUD {
     };
 
     update() {
+
+        this.minutes = Math.floor(this.game.ellapsedTime / 60);
+        this.seconds = Math.floor(this.game.ellapsedTime);
+        if (this.seconds >= 60) {
+            this.seconds = 0;   
+        }
+        //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
         this.updateAmmo();
@@ -57,6 +68,7 @@ class HUD {
 
         this.drawHearts(ctx);
         this.drawAmmo(ctx);
+        this.drawTime(ctx);
         this.drawCoins(ctx);
 
     };
@@ -119,6 +131,23 @@ class HUD {
         }
     }
 
+    drawTime(ctx) {
+        if (PARAMS.DEBUG) {
+            ctx.fillStyle = "White";
+            var fontsize = 50;
+            var offsetx = 250;
+            var offsety = 30;
+            ctx.font = fontsize + 'px "VT323"'
+            ctx.fillText("Time: ", ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+
+            fontsize = 20;
+            offsetx = 190;
+            offsety = 10;
+            ctx.font = fontsize + 'px "VT323"'
+            ctx.fillText(this.minutes + ":" + this.seconds, ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+
+        }
+    }   
     drawCoins(ctx) {
         ctx.fillStyle = "White";
         var fontsize = 50;

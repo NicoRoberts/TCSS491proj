@@ -1,27 +1,28 @@
-class Enemy extends AbstractEnemy{
+class Banshee extends AbstractEnemy {
 
-	constructor(player, game, x, y) {
+	SET_VELOCITY = {X:0.25, Y:0.25};
+
+	DIRECTION = {
+		RIGHT: 0,
+		LEFT: 1,
+		COUNT: 2
+	};
+	STATE = {
+		IDLE: 0,
+		WALKING: 1,
+		ATTACK: 2,
+		COUNT: 3,
+    };
+
+	constructor(player,game,x,y) {
 		super(game, x, y);
 		Object.assign(this, {player, game, x,y});
-
-		this.SET_VELOCITY = { X: 0.25, Y: 0.25 };
-
-		this.DIRECTION = {
-			RIGHT: 0,
-			LEFT: 1,
-			COUNT: 2
-		};
-		this.STATE = {
-			IDLE: 0,
-			WALKING: 1,
-			ATTACK: 2,
-			COUNT: 3,
-		};
+		
 
 		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
 
-		this.width = 75;
-		this.height = 93;
+		this.width = 86;
+		this.height = 85;
 
 		this.attackWidth = 86;
 		this.attackHeight = 95;
@@ -32,7 +33,7 @@ class Enemy extends AbstractEnemy{
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
-		this.visualRadius = 300;
+		this.visualRadius = 100;
 		this.attackRadius = 55;
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
@@ -47,13 +48,13 @@ class Enemy extends AbstractEnemy{
 
 		this.velocity = {x:2, y:2};
 
-		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/SkeletonSheet.png");
+		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Banshee.png");
 
 		this.game.Enemy = this;
 
 		this.hitbox = new HitBox(this, this.width, this.height);
 
-		this.priority = 1;
+		this.priority = 2;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -64,7 +65,7 @@ class Enemy extends AbstractEnemy{
 
 
 		//enemy movement
-		this.movement = new Movement(this.player, this.game, this); //this is a reference to THIS enemy
+		this.movement = new BansheeMovement(this.player, this.game, this); //this is a reference to THIS enemy
 		this.swinging = false;
 		this.attack = false;
 		this.collideTerrain = false;
@@ -74,6 +75,12 @@ class Enemy extends AbstractEnemy{
 		this.restTime = 3;
 		this.maxSpeed = 2;
 		this.acceleration = 20;
+
+		//For banshee idle movement
+		this.collideRight = false;
+		this.collideLeft = false;
+		this.collideTop = false;
+		this.collideBottom = false;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -96,24 +103,23 @@ class Enemy extends AbstractEnemy{
 	loadAnimations() {
 		//Skeleton is idling and facing right
 		this.animations[this.STATE.IDLE][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 503,8, this.width, this.height, 1, 3, 0, false, true);
+			= new Animator(this.spritesheet, 9, 5, this.width, this.height, 1, 3, 0, false, true);
 		//Skeleton is idling and facing left
 		this.animations[this.STATE.IDLE][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 8, 8, this.width, this.height, 1, 3, 0, false, true);
+			= new Animator(this.spritesheet, 384, 2, this.width, this.height, 1, 3, 0, false, true);
 		//Skeleton is walking and facing right
 		this.animations[this.STATE.WALKING][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 599, 8, this.width, this.height, 4, 0.15, 21, false, true);
+			= new Animator(this.spritesheet, 9, 5, this.width, this.height, 4, 0.15, 10, false, true);
 		//Skeleton is walking and facing left	
 		this.animations[this.STATE.WALKING][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 104, 8, this.width, this.height, 4, 0.15, 21, false, true);
+			= new Animator(this.spritesheet, 384, 2, this.width, this.height, 4, 0.15, 10, false, true);
 		//Skeleton is attacking and facing left	
 		this.animations[this.STATE.ATTACK][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 968, 5, this.attackWidth, this.attackHeight, 3, 0.15, 7, false, true);
+			= new Animator(this.spritesheet, 1152, 0, this.attackWidth, this.attackHeight, 4, 0.05, 10, false, true);
 		//Skeleton is attacking and facing right	
 		this.animations[this.STATE.ATTACK][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.15, 13, false, true);
+			= new Animator(this.spritesheet, 777, 0, this.attackWidth, this.attackHeight, 4, 0.05, 10, false, true);
 
-		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	};
 
 	visionCollide(other) {
@@ -144,18 +150,13 @@ class Enemy extends AbstractEnemy{
     };
 	dropItem() {
 		let chance = Math.random();
+		console.log(chance);
 		if (chance <= this.dropchance) {
-			let itemCount = 2;
+			let itemCount = 1;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
 					this.game.addEntity(new AmmoPack(this.game, this.x, this.y));
-					break;
-				case 1:
-					this.game.addEntity(new Coin(this.game, this.x, this.y));
-					break;
-				case 2:
-					this.game.addEntity(new HealthPack(this.game, this.x, this.y));
 					break;
             }
         }
@@ -214,11 +215,7 @@ class Enemy extends AbstractEnemy{
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		
-		if (that.detect && !that.attack) { //chase the player
-			that.movement.chaseMovement();	
-		} else if (!that.detect) { //idle movement
-			that.movement.idleMovement();
-		}
+		
 		//collision
 		this.game.entities.forEach(function (entity) {
 
@@ -226,26 +223,41 @@ class Enemy extends AbstractEnemy{
 				that.doAttack(entity);
 
 			}
-			
-			// if (entity instanceof Player && that.attackCollide(entity)) {
-			// 	that.doAttack(entity);
-
-			// }
-			
+		
 			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
 				that.attack = false;
 			} 
 
-			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy) && !(entity instanceof Player)) {
+			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy)  && !(entity instanceof Player) ) {
 
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			//circle detection
-
 			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
 				that.detect = true;
 			}
+
+			//Banshee "Pong" movement algorithm
+			if (entity != that && entity.hitbox &&
+				((entity instanceof VBoundary) && entity.type == "right")
+				 && that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideRight = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof VBoundary) && entity.type == "left")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideLeft = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "top")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideTop = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "bottom")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideBottom = true;
+		   	}	
 			
 			if (entity instanceof Terrain && that.attackCollide(entity)) {
 				that.collideTerrain = true;
@@ -257,7 +269,7 @@ class Enemy extends AbstractEnemy{
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
                 that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2	) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
 			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
 				that.collideTerrain = false;
 			}
@@ -267,6 +279,11 @@ class Enemy extends AbstractEnemy{
 		this.testSpeed();
 
 		
+		if (that.detect && !that.attack) { //chase the player
+			that.movement.chaseMovement();	
+		} else if (!that.detect) { //idle movement
+			that.movement.idleMovement();
+		}
 
 		//Update Position
 		if(!this.attack){	
@@ -287,8 +304,7 @@ class Enemy extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
-			this.dropItem();
-		}3
+		}
 
 
 	};
@@ -300,13 +316,6 @@ class Enemy extends AbstractEnemy{
 		if (PARAMS.DEBUG) {
 			
 			this.hitbox.draw(ctx);
-
-			ctx.fillStyle = "White";
-			var fontsize = 15;
-			ctx.font = fontsize + 'px "VT323"'
-
-			ctx.fillText("X: " + Math.round(this.x) + " Y: " + Math.round(this.y), this.positionx, this.positiony + 15 + this.height);
-			ctx.fillText("Vx: " + (this.velocity.x).toFixed(2) + " Vy: " + (this.velocity.y).toFixed(2), this.positionx, this.positiony + 30 + this.height);
 
 			ctx.beginPath();
             ctx.strokeStyle = 'Red';
