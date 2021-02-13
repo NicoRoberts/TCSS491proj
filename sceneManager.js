@@ -55,7 +55,7 @@ class SceneManager {
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
-		for(var i = 0; i < 5; i++){
+		for(var i = 0; i < 25; i++){
 			var rX = Math.random()*3200;
 			var rY = Math.random()*3600;
 			this.rocks = new Terrain(this.game, rX+242, rY-50);
@@ -63,8 +63,8 @@ class SceneManager {
 		}
 		
 		//testing tree generation
-		for(var j = 0; j < 200; j++){
-			var treeRX = Math.random()*3200;
+		for(var j = 0; j < 25; j++){
+			var treeRX = Math.random()sd*3200;
 			var treeRY = Math.random()*3600;
 			this.trees = new Trees(this.game, treeRX+242, treeRY-190);
 			this.game.addEntity(this.trees);
