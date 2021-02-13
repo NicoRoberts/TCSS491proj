@@ -4,8 +4,9 @@
     "\\Drops",
     "\\Enemies",
     "\\Projectiles",
+    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Enemies\\AbstractEnemy.js",
+  "SelectedNode": "\\Sprites\\ChargeSheet.png",
   "PreviewInSolutionExplorer": false
 }
