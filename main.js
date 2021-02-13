@@ -18,6 +18,11 @@ ASSET_MANAGER.queueDownload("./Sprites/TreeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/YachtSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/GameOverSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/HealthSprite.png");
 

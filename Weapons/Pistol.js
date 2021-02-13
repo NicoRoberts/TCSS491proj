@@ -29,7 +29,7 @@ class Pistol {
         this.game.weapons[1] = this;
 
         this.reloading = false;
-        this.reloadTime = 0.5;
+        this.reloadTime = 1;
         this.timeLeft = 0;
 
         this.maxAmmo = 18;

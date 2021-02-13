@@ -39,6 +39,8 @@ class GameEngine {
         this.A = false;
         this.S = false;
         this.D = false;
+
+        this.stage;
     };
 
     init(ctx) {
@@ -202,8 +204,13 @@ class GameEngine {
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
-            if (!entity.removeFromWorld) {
-                entity.update();
+            if (entity instanceof AbstractEnemy) {
+                this.enemiesCount++;
+            }
+            if (!(typeof entity == 'undefined')) {
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                }
             }
         }
 
@@ -214,6 +221,12 @@ class GameEngine {
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
+            }
+        }
+        if (this.stage == "survival") {
+            if (this.enemiesCount < this.maxEnemies) {
+                this.addEntity(new Enemy(this.player, this, 200, 200));
+                this.maxEnemies--;
             }
         }
 
