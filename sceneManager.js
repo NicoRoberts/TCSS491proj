@@ -19,19 +19,20 @@ class SceneManager {
 
 	loadLevel() {
 
-		let bBoundary = new HBoundary(this.game, 0, 832, 1888); 
+		let bBoundary = new HBoundary(this.game, 0, 3600, 3593); 
 		//this.game.addEntsity(bBoundary);
 
-		let tBoundary = new HBoundary(this.game, 0, 0, 1888); 
+		let tBoundary = new HBoundary(this.game, 0, -40, 3600); 
+		
 		//this.game.addEntity(tBoundary);
 
-		let lBoundary = new VBoundary(this.game, 0, 33, 800); 
+		let lBoundary = new VBoundary(this.game, 210, 0, 3590); 
 		//this.game.addEntity(lBoundary);
 
-		let rBoundary = new VBoundary(this.game, 1858, 33, 800); 
-		//this.game.addEntity(rBoundary);
+		let rBoundary = new VBoundary(this.game, 3600, 0, 3590); 
+		this.game.addEntity(rBoundary);
 		
-		this.player = new Player(this.game, 100, 700);
+		this.player = new Player(this.game, 700, 700);
 		this.game.player = this.player;
 		//this.game.addEntity(this.player);
 
@@ -46,13 +47,31 @@ class SceneManager {
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
-		this.rocks = new Terrain(this.game, 300, 300);
+		for(var i = 0; i < 25; i++){
+			var rX = Math.random()*3600;
+			var rY = Math.random()*3600;
+			this.rocks = new Terrain(this.game, rX, rY);
+			this.game.addEntity(this.rocks);
+		}
+		
+		//testing tree generation
+		for(var j = 0; j < 25; j++){
+			var treeRX = Math.random()*3600;
+			var treeRY = Math.random()*3600;
+			this.trees = new Trees(this.game, treeRX, treeRY);
+			this.game.addEntity(this.trees);
+		}
+		
 
 		this.shard = new Shards(this.game, 1600, 500);
 
 		this.hud = new HUD(this.game, this.player);
 
+		// testing map generation
+		this.map = new Map(this.game,0,0);
+		
 		// testing to see if entities can be added in any order
+		this.game.addEntity(this.map);
 		this.game.addEntity(this.shard);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
@@ -66,9 +85,10 @@ class SceneManager {
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);	
-		this.game.addEntity(this.rocks);
+		
 		this.game.addEntity(this.hud);
 		this.game.addEntity(new AmmoPack(this.game, 800, 500));
+		
 	};
 
 	// loadGameOver() {
