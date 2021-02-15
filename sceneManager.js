@@ -140,7 +140,6 @@ class SceneManager {
 		this.game.addEntity(bBoundary);	
 		
 		this.game.addEntity(this.hud);
-		this.game.addEntity(new AmmoPack(this.game, 800, 500));
 
 		this.game.addEntity(this.marriyacht);
 		
