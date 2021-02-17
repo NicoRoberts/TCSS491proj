@@ -4,21 +4,21 @@ class Trees extends Terrain{
         super(game, x, y);
 		Object.assign(this, {game, x, y});
     
-        this.width = 48;
-        this.height = 96;
+        this.width = 96;
+        this.height = 48;
         this.treeState = Math.floor(Math.random()*6);
         
         this.states=[];
 
 		this.positionx = 0;
         this.positiony = 0;
-        this.visualRadius = 40;
+        this.visualRadius = 80;
         
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/TreeSheet.png");
 
     	this.game.Terrain = this;
-    
+ 
         this.circlex = this.x + (this.width / 2);
         this.circley = this.y + (this.height / 2);
 
@@ -27,7 +27,7 @@ class Trees extends Terrain{
         this.setupTerrainTypes();
         this.loadStates();
 
-        this.hitbox = new HitBox(this, this.width*2, this.height, false, 0, this.height);
+        this.hitbox = new HitBox(this, this.width, this.height, false);    
 
     }
    
@@ -41,17 +41,17 @@ class Trees extends Terrain{
     loadStates() {
 
 		this.states[0]
-            = new Animator(this.spritesheet, 1, 1, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 1, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[1]
-            = new Animator(this.spritesheet, 51, 1, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 102, 1, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[2]
-            = new Animator(this.spritesheet, 1, 98, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 196, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[3]
-            = new Animator(this.spritesheet, 51, 98, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 102, 392, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[4]
-            = new Animator(this.spritesheet, 1, 196, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 1, 392, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[5]
-            = new Animator(this.spritesheet, 51, 101, this.width, this.height, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 102, 202, this.width, this.height*4, 1, 1, 1, false, true);
 		
     }
     
@@ -79,7 +79,7 @@ class Trees extends Terrain{
 			ctx.closePath();
             
         }
-        this.states[this.treeState].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,2);
+        this.states[this.treeState].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony - this.height*3, 1);
         
         //ctx.drawImage(this.spritesheet,this.positionx,this.positiony,this.width,this.height,0,0,this.width,this.height)
 	};

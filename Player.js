@@ -90,7 +90,7 @@ class Player{
 
     }
 
-	update(){
+	update() {
 		
 		if (this.hpCurrent <= 0) {
 			this.game.camera.loadGameOver();
