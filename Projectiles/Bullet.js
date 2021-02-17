@@ -5,7 +5,7 @@ class Bullet {
 
         this.SPEED = 7;
 
-        this.RADIUS = 3;
+        this.RADIUS = 6;
 
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
@@ -16,7 +16,7 @@ class Bullet {
 
         this.velocity = { x: 0, y: 0 }
 
-        this.hitbox = new HitBox(this, this.RADIUS * 2, this.RADIUS * 2, true, -1*this.RADIUS, -1*this.RADIUS);
+        this.hitbox = new HitBox(this, this.RADIUS * 1.5, this.RADIUS * 1.5, true, -1*this.RADIUS, -1*this.RADIUS);
         this.hitdealt = false;
 
         this.update();
@@ -54,7 +54,7 @@ class Bullet {
     }2
     draw(ctx) {
 
-        ctx.drawImage(this.spritesheet, this.positionx - this.RADIUS, this.positiony - this.RADIUS, PARAMS.PIXELSCALER * 2, PARAMS.PIXELSCALER * 2);
+        ctx.drawImage(this.spritesheet, this.positionx - this.RADIUS, this.positiony - this.RADIUS, this.RADIUS*1.5, this.RADIUS*1.5);
 
         if (PARAMS.DEBUG) {
 
