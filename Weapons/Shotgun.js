@@ -28,7 +28,7 @@ class Shotgun {
         this.game.weapons[2] = this;
 
         this.reloading = false;
-        this.reloadTime = 1;
+        this.reloadTime = 2;
         this.timeLeft = 0;
 
         this.maxAmmo = 10;

@@ -71,7 +71,7 @@ class Slice {
 
         var that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity instanceof Enemy || entity instanceof Reaper) {
+            if (entity instanceof AbstractEnemy || entity instanceof Reaper) {
                 if (that.hitbox.collide(entity.hitbox) && (!that.hitdealt)) {
                     that.hitdealt = true;
                     entity.hit = true;

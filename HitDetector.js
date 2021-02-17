@@ -115,6 +115,22 @@ class HitBox{
             
     }
 
+    collideRight(other) {
+        return (this.right >= other.left);
+    }
+
+    collideLeft(other) {
+        return (this.left <= other.right);
+    }
+    
+    collideTop(other) {
+        return (this.top <= other.bottom);
+    }
+
+    collideBottom(other) {
+        return (this.bottom >= other.top);
+    }
+
     intersects(other) {
         //not (not intersecting)
         return !(this.right <= other.left || this.left >= other.right || this.bottom <= other.top || this.top >= other.bottom);
