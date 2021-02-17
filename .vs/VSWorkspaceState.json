@@ -4,9 +4,8 @@
     "\\Drops",
     "\\Enemies",
     "\\Projectiles",
-    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Sprites\\ChargeSheet.png",
+  "SelectedNode": "\\Enemies\\Reaper.js",
   "PreviewInSolutionExplorer": false
 }

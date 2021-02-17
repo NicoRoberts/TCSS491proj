@@ -31,7 +31,7 @@ class Bullet {
         this.x += this.SPEED * Math.cos(this.angle) * TICKSCALE + this.velocity.x;
         this.y += this.SPEED * Math.sin(this.angle) * TICKSCALE + this.velocity.y;
 
-        if (this.positionx < 0 || this.positiony < 0 || this.positionx > this.game.ctx.canvas.width || this.positiony > this.game.ctx.canvas.height ) {
+        if (this.positionx < 0 || this.positiony < 0 || this.positionx > this.game.ctx.canvas.width || this.positiony > this.game.ctx.canvas.height) {
             this.removeFromWorld = true;
         }
 

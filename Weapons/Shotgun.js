@@ -102,6 +102,8 @@ class Shotgun {
 
         this.x = this.game.player.positionx;
         this.y = this.game.player.positiony;
+        this.positionx = this.x;
+        this.positiony = this.y;
 
         let facingRight = this.game.player.direction == this.DIRECTION.RIGHT;
 
