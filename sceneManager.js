@@ -90,7 +90,7 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
 		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH, 0, 68, 73, 49);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width, this.marriyacht.y, this.marriyacht.width, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
 
