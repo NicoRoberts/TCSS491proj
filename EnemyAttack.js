@@ -20,7 +20,7 @@ class EnemyAttack {
         //this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Slice.png");
 
 
-        this.hitbox = new HitBox(this, this.width, this.height, true);
+        this.hitbox = new HitBox(this, this.width + 50, this.height + 50, true, -5, -5);
 
         this.damage = 25;
        

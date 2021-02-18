@@ -32,6 +32,10 @@ class HUD {
 
         this.priority = 100; // should be the last thing to be drawn to the screen
 
+        //difficulty bar
+        this.maxDifficulty = 150; //approx 2 min
+        this.currentDifficulty = 0;
+
         //this.setUpHearts();
         this.loadHearts();
         this.loadPerks();
@@ -62,15 +66,18 @@ class HUD {
     update() {
 
         this.minutes = Math.floor(this.game.ellapsedTime / 60);
-        this.seconds = Math.floor(this.game.ellapsedTime);
+        this.seconds = Math.floor(this.game.ellapsedTime % 60);
         if (this.seconds >= 60) {
             this.seconds = 0;   
         }
+
+        this.currentDifficulty = this.game.ellapsedTime;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
         this.updateAmmo();
         this.updatePerks();
+        
 
     };
 
@@ -109,6 +116,7 @@ class HUD {
         this.drawPerks(ctx);
         this.drawTime(ctx);
         this.drawCoins(ctx);
+        this.updateDifficulty(ctx);
 
     };
 
@@ -203,6 +211,22 @@ class HUD {
         var fontsize = 50;
         ctx.font = fontsize + 'px "VT323"'
         ctx.fillText("COINS: " + this.player.coins, this.HEART_POS.X+5, fontsize - 15);
+    }
+
+    updateDifficulty(ctx) {
+        var offsety = 30;
+        ctx.fillText("Round Difficulty", ctx.canvas.width / 2, ctx.canvas.height - offsety);
+        if (this.currentDifficulty < this.maxDifficulty) {
+
+            ctx.fillStyle = rgb(218, 165, 32); // gold
+            var ratio = this.currentDifficulty / this.maxDifficulty;
+            offsety = 15;
+            ctx.fillRect(ctx.canvas.width / 2, ctx.canvas.height - offsety, 300 * ratio, 15);
+        } else {
+            offsety = 15;
+            ctx.fillStyle = rgb(218, 165, 32); // gol
+            ctx.fillRect(ctx.canvas.width / 2, ctx.canvas.height - offsety, 300, 15);
+        }
     }
 
 };

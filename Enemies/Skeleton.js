@@ -26,6 +26,9 @@ class Skeleton extends AbstractEnemy{
 		this.attackWidth = 86;
 		this.attackHeight = 95;
 
+		this.attackx = 90;
+		this.attacky = 90;
+
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
