@@ -65,6 +65,6 @@ ASSET_MANAGER.downloadAll(function () {
 
 	this.scene = new SceneManager(gameEngine);
 	gameEngine.addEntity(scene);
-
+	this.scene.loadSurvivalStage();
 	gameEngine.start();
 });
