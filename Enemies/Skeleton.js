@@ -185,7 +185,7 @@ class Skeleton extends AbstractEnemy{
 		if (!that.swinging) {
 			
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
-				that.y, that.angle);
+				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
 			that.game.addEntity(that.enemyAttack);
 			
@@ -234,7 +234,7 @@ class Skeleton extends AbstractEnemy{
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) {
+			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) { //change to circle
 				that.doAttack(entity);
 
 			}

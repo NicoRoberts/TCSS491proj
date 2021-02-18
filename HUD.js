@@ -193,13 +193,13 @@ class HUD {
         if (PARAMS.DEBUG) {
             ctx.fillStyle = "White";
             var fontsize = 50;
-            var offsetx = 250;
+            var offsetx = 400;
             var offsety = 30;
             ctx.font = fontsize + 'px "VT323"'
             ctx.fillText("Time: ", ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
 
             fontsize = 20;
-            offsetx = 190;
+            offsetx = 340;
             offsety = 10;
             ctx.font = fontsize + 'px "VT323"'
             ctx.fillText(this.minutes + ":" + this.seconds, ctx.canvas.width - offsetx, ctx.canvas.height - offsety);

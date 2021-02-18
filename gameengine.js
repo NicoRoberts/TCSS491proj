@@ -237,19 +237,41 @@ class GameEngine {
 
         this.spawnTimer += this.clockTick;
 
-		//this.spawnSkeletons();
+		this.spawnSkeletons();
 
     };
 
     spawnSkeletons() {
 
-	
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
+
+        var entitiesCount = this.entities.length;
+
 		if (this.spawnTimer >= this.spawnRate) {
-			this.spawnTimer = 0;
-			var RandomX = getRandomInt(this.lowerRangeX, this.upperRangeX);
-			var RandomY = getRandomInt(this.lowerRangeY, this.upperRangeY);
-			var skeleton = new Enemy(this.player, this, RandomX, RandomY);
-			this.addEntity(skeleton);
+            this.spawnTimer = 0;
+            
+            for (var i = 0; i < entitiesCount; i++) {
+                var entity = this.entities[i];
+    
+                if (entity instanceof Grid) {
+                    openGrids = entity.getOpenGrids();
+                    randomGridIndex = getRandomInt(0, openGrids.length);
+                    let grid = openGrids[randomGridIndex];
+
+                    spawnX = grid.x;
+                    spawnY = grid.y;
+                }
+            }
+
+            if (typeof spawnX !== 'undefined' && typeof spawnY !== 'undefined' ) {
+                var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
+			    this.addEntity(skeleton);
+            }
+			
+			
 		}
 
 	}
