@@ -2,7 +2,7 @@ class HUD {
 
     HEART_POS = { X: 2.5, Y: 785 }
     PERK_POS = { X: 2.5, Y: 735 }
-    AMMO_POS = { X: -110, Y:785}
+    AMMO_POS = { X: -145, Y:785}
     constructor(game, player, timer) {
         Object.assign(this, {game, player, timer});
 

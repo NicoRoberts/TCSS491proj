@@ -5,16 +5,16 @@ class Marriyacht {
 
         this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/YachtSprite.png");
 
-        this.scale = 2;
-        this.width = 76;
-        this.height = 144;
+        this.scale = 1;
+        this.width = 152;
+        this.height = 288;
 
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
 
         this.priority = 2;
 
-        this.marriyacht = new Animator(this.spritesheet, 0, 144, this.width, this.height, 4, 0.25, 0, false, true);
+        this.marriyacht = new Animator(this.spritesheet, 0, this.height, this.width, this.height, 4, 0.25, 0, false, true);
 
         this.hitbox = new HitBox(this, this.width * this.scale, this.height * this.scale, false);
         

@@ -149,7 +149,6 @@ class HitBox{
     draw(ctx) {
         ctx.strokeStyle = this.ignore ? 'Orange' : 'Red';
         
-    
         ctx.strokeRect(this.x, this.y, this.width, this.height);
 
        

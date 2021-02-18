@@ -75,6 +75,8 @@ class SceneManager {
 
 		
 
+		
+
 		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom"); 
 		//this.game.addEntsity(bBoundary);
 
@@ -86,8 +88,12 @@ class SceneManager {
 		//this.game.addEntity(lBoundary);
 
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
-		this.game.addEntity(rBoundary);
-		
+
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH, 0, 68, 73, 49);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
+		this.game.grid = this.grid;
+		this.game.addEntity(this.grid);
+
 
 		//this.enemy1 = new Enemy(this.game.player, this.game, 200, 200);
 
@@ -99,19 +105,28 @@ class SceneManager {
 		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
-		for(var i = 0; i < 25; i++){
-			var rX = Math.random()*3200;
-			var rY = Math.random()*3600;
-			this.rocks = new Terrain(this.game, rX+242, rY-50);
-			this.game.addEntity(this.rocks);
+
+		this.grid.update();
+
+		for (var i = 0; i < 100; i++){
+			let open = this.grid.getOpenGrids();
+			if (open.length <= 0) {
+				break;
+            }
+			let randomIndex = randomInt(open.length);
+			let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addEntity(rock);
 		}
 		
 		//testing tree generation
-		for(var j = 0; j < 25; j++){
-			var treeRX = Math.random()*3200;
-			var treeRY = Math.random()*3600;
-			this.trees = new Trees(this.game, treeRX+242, treeRY-190);
-			this.game.addEntity(this.trees);
+		for(var j = 0; j < 100; j++){
+			let open = this.grid.getOpenGrids();
+			if (open.length <= 0) {
+				break;
+			}
+			let randomIndex = randomInt(open.length);
+			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addEntity(tree);
 		}
 		
 
@@ -157,7 +172,8 @@ class SceneManager {
 	};
 
 	update() {
-        PARAMS.DEBUG = document.getElementById("debug").checked;
+		PARAMS.DEBUG = document.getElementById("debug").checked;
+		PARAMS.GRID = document.getElementById("grid").checked;
 		
 		let xmid = PARAMS.CANVAS_WIDTH / 2 - PARAMS.TILEWIDTH / 2;
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;

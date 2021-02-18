@@ -90,6 +90,8 @@ class Pistol {
 
         this.x = this.game.player.positionx;
         this.y = this.game.player.positiony;
+        this.positionx = this.x;
+        this.positiony = this.y;
 
         let facingRight = this.game.player.direction == this.DIRECTION.RIGHT;
 
@@ -118,6 +120,7 @@ class Pistol {
             this.angle = this.game.mouse.x >= this.source.x ? this.angle : this.angle + Math.PI;
             this.direction = this.game.mouse.x >= this.source.x ? this.DIRECTION.RIGHT : this.DIRECTION.LEFT;
             this.angle = this.game.player.direction == this.DIRECTION.LEFT ? this.angle - Math.PI : this.angle;
+           
 
         }
 
