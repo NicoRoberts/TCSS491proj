@@ -11,7 +11,8 @@ class ReloadPerk {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-        this.priority = 2;
+        this.priority = 4;
+        this.cost = 3;
 
         this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        
 
@@ -32,5 +33,14 @@ class ReloadPerk {
             this.hitbox.draw(ctx);
         }
         this.perk.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+        
+        // prints description when player hovers on item
+        if (this.game.player.hitbox.collide(this.hitbox)) {
+            ctx.fillStyle = "White";
+            var fontsize = 50;
+            ctx.font = fontsize + 'px "VT323"';
+
+            ctx.fillText("Increases Reload Speed: " + this.cost + " Coins", this.game.player.positionx, this.game.player.positiony - 25);  // - 25 for offset
+        }
     };
 }

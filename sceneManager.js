@@ -16,9 +16,6 @@ class SceneManager {
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
 		
-		this.loadSurvivalStage();
-
-		
 	};
 
 	clearEntities(){
@@ -58,10 +55,10 @@ class SceneManager {
 
 		// should we make perks buyable after each stage?
 		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -200, 1800));
+			this.game.addEntity(new HealthPerk(this.game, -150, 1800));
 		}
 		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -275, 1800));
+			this.game.addEntity(new ReloadPerk(this.game, -250, 1800));
 		}
 		if (!this.player.speedBoost) {
 			this.game.addEntity(new SpeedPerk(this.game, -350, 1800));
@@ -108,7 +105,7 @@ class SceneManager {
 
 		this.grid.update();
 
-		for (var i = 0; i < 100; i++){
+		for (var i = 0; i < 1; i++){
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
 				break;
@@ -119,7 +116,7 @@ class SceneManager {
 		}
 		
 		//testing tree generation
-		for(var j = 0; j < 100; j++){
+		for(var j = 0; j < 1; j++){
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
 				break;
@@ -127,6 +124,17 @@ class SceneManager {
 			let randomIndex = randomInt(open.length);
 			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
 			open[randomIndex].addEntity(tree);
+		}
+
+		// spawning coins to test shop system
+		for(var k = 0; k < 100; k++){
+			let open = this.grid.getOpenGrids();
+			if (open.length <= 0) {
+				break;
+			}
+			let randomIndex = randomInt(open.length);
+			let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addEntity(coin);
 		}
 		
 

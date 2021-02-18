@@ -40,6 +40,8 @@ class GameEngine {
         this.S = false;
         this.D = false;
 
+        this.E = false;
+
         this.stage;
     };
 
@@ -107,6 +109,9 @@ class GameEngine {
                 case "KeyD":
                     that.D = true;
                     break;
+                case "KeyE":
+                    that.E = true;
+                    break;
                 case "KeyR":
                     that.weapon.reload();
                     break;
@@ -148,6 +153,9 @@ class GameEngine {
                     break;
                 case "KeyD":
                     that.D = false;
+                    break;
+                case "KeyE":
+                    that.E = false;
                     break;
             }
     

@@ -179,27 +179,42 @@ class Player{
 
 				if (entity instanceof HealthPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.healthBoost = true;
-						that.hpMax += that.healthBuff;
-						that.hpCurrent += that.healthBuff;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.healthBoost = true;
+								that.hpMax += that.healthBuff;
+								that.hpCurrent += that.healthBuff;
+							}
+						}
 					}
 				}
 
 				if (entity instanceof ReloadPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.reloadBoost = true;
-						for (var i = 0; i < that.game.weapons.length; i++) {
-							((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.reloadBoost = true;
+								for (var i = 0; i < that.game.weapons.length; i++) {
+									((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
+								}
+							}
 						}
 					}
 				}
 
 				if (entity instanceof SpeedPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.speedBoost = true;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.speedBoost = true;
+							}
+						}
 					}
 				}
 
