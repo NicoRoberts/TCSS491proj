@@ -212,7 +212,9 @@ class Reaper extends AbstractEnemy{
 		
 		var that = this;
 
-
+		if (this.hpCurrent < this.hpMax) {
+			this.state = this.STATE.AGRO;
+        }
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
 		let dx = (this.game.player.x - this.x);
@@ -240,9 +242,7 @@ class Reaper extends AbstractEnemy{
 			this.fire();
 		}
 
-		if (this.hpCurrent < this.hpMax) {
-			this.state = this.STATE.AGRO;
-        }
+		
 
 
 		this.game.entities.forEach(function (entity) {

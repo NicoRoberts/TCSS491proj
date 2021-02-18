@@ -181,7 +181,13 @@ class GameEngine {
         }
 
         for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);
+            let entity = this.entities[i];
+            if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height*4 < this.ctx.canvas.height)
+                || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary ||
+                entity instanceof Gameover) {
+                entity.draw(this.ctx);
+            }
+            
         }
 
         this.camera.draw(this.ctx);
