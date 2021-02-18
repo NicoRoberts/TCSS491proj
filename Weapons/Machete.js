@@ -33,6 +33,8 @@ class Machete {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
+        this.isAvailable = true;
+
     }
 
     fill() {

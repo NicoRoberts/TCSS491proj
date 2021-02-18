@@ -45,14 +45,15 @@ class Player{
 	
 		this.priority = 3;
 
+		// player game stats
 		this.coins = 0;
+		this.killCount = 0;
+		this.shardObtained = false;
 
-		// stats
+		// player stats
 		this.hpCurrent = 150;
 		this.hpMax = 150;
-		this.shardObtained = false;
 		this.hit = false;
-		this.killCount = 0;
 
 		// perks
 		this.healthBoost = false;
@@ -63,6 +64,12 @@ class Player{
 		this.healthBuff = 50;
 		this.reloadBuff = .5;
 		this.speedBuff = 0;
+
+		// // weapon inventory (may not need to implement this way)
+		// this.hasMachete = true;
+		// this.hasPistol = true;
+		// this.hasShotgun = false;
+		// this.hasMachinegun = false;
 
 	}
 
@@ -213,6 +220,30 @@ class Player{
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.speedBoost = true;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof DisplayShotgun) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.game.weapons[2].isAvailable = true;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof DisplayMachinegun) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.game.weapons[3].isAvailable = true;
 							}
 						}
 					}

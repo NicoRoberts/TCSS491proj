@@ -39,6 +39,8 @@ class Machinegun {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
+        this.isAvailable = false;
+
     }
 
     fill() {

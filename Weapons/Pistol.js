@@ -37,6 +37,8 @@ class Pistol {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
+        this.isAvailable = true;
+
     }
 
     fill() {

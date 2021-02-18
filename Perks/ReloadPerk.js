@@ -11,7 +11,7 @@ class ReloadPerk {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-        this.priority = 4;
+        this.priority = 5;
         this.cost = 3;
 
         this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        

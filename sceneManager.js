@@ -55,15 +55,22 @@ class SceneManager {
 
 		// should we make perks buyable after each stage?
 		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -150, 1800));
+			this.game.addEntity(new HealthPerk(this.game, -200, 2250));
 		}
 		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -250, 1800));
+			this.game.addEntity(new ReloadPerk(this.game, -300, 2250));
 		}
 		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -350, 1800));
+			this.game.addEntity(new SpeedPerk(this.game, -400, 2250));
 		}
+
 		
+		if (!this.shotgun.isAvailable) {
+			this.game.addEntity(new DisplayShotgun(this.game, -400, 1800));
+		}
+		if (!this.machinegun.isAvailable) {
+			this.game.addEntity(new DisplayMachinegun(this.game, -100, 1800));
+		}
 	};
 
 	loadSurvivalStage() {
