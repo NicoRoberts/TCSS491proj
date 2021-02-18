@@ -109,6 +109,7 @@ class HUD {
         this.drawPerks(ctx);
         this.drawTime(ctx);
         this.drawCoins(ctx);
+        this.drawWeapons(ctx);
 
     };
 
@@ -203,6 +204,12 @@ class HUD {
         var fontsize = 50;
         ctx.font = fontsize + 'px "VT323"'
         ctx.fillText("COINS: " + this.player.coins, this.HEART_POS.X+5, fontsize - 15);
+    }
+
+    drawWeapons(ctx) {
+        for (var i = 0; i < 9; i++) {
+
+        }
     }
 
 };

@@ -6,6 +6,8 @@ class EnergyBall{
         this.SPEED = 3;
 
         this.RADIUS = 32;
+        this.height = this.RADIUS * 2;
+        this.width = this.RADIUS * 2;
 
         const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
@@ -21,6 +23,8 @@ class EnergyBall{
 
         this.hitbox = new HitBox(this, this.RADIUS, this.RADIUS, true);
         this.hitdealt = false;
+
+        this.priority = 3;
 
         this.update();
     }
