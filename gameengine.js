@@ -12,6 +12,8 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 
+        this.grid = null;
+
         // this.maxEnemies = 2;
         // //this.spawnRate = 5;
         // this.timeLeft = 0;
@@ -238,19 +240,42 @@ class GameEngine {
 
         this.spawnTimer += this.clockTick;
 
-		//this.spawnSkeletons();
+		this.spawnSkeletons();
 
     };
 
     spawnSkeletons() {
 
-	
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
+
+        var entitiesCount = this.entities.length;
+
 		if (this.spawnTimer >= this.spawnRate) {
-			this.spawnTimer = 0;
-			var RandomX = getRandomInt(this.lowerRangeX, this.upperRangeX);
-			var RandomY = getRandomInt(this.lowerRangeY, this.upperRangeY);
-			var skeleton = new Enemy(this.player, this, RandomX, RandomY);
-			this.addEntity(skeleton);
+            this.spawnTimer = 0;
+            
+            
+    
+                
+            openGrids = this.grid.getNonClosedGrids();
+            randomGridIndex = getRandomInt(0, openGrids.length);
+            let grid = openGrids[randomGridIndex];
+
+            spawnX = grid.x;
+            spawnY = grid.y;
+                
+
+
+            var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
+            grid.addEnemy(skeleton);
+            
+            
+
+            
+			
+			
 		}
 
 	}
