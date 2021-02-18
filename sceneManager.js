@@ -15,8 +15,10 @@ class SceneManager {
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
+		this.rockCount = 100;
+		this.treeCount = 100;
 		
-		this.loadSurvivalStage();
+		
 
 		
 	};
@@ -98,7 +100,8 @@ class SceneManager {
 
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH, 0, 68, 73, 49);
+		let gridblockSize = 49;
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH, 0, 67, 71, gridblockSize);
 		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
@@ -117,25 +120,25 @@ class SceneManager {
 
 		this.grid.update();
 
-		for (var i = 0; i < 100; i++){
+		for (var i = 0; i < this.rockCount; i++){
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
 				break;
             }
 			let randomIndex = randomInt(open.length);
 			let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addEntity(rock);
+			open[randomIndex].addTerrain(rock);
 		}
 		
 		//testing tree generation
-		for(var j = 0; j < 100; j++){
+		for (var j = 0; j < this.treeCount; j++){
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
 				break;
 			}
 			let randomIndex = randomInt(open.length);
 			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addEntity(tree);
+			open[randomIndex].addTerrain(tree);
 		}
 		
 
