@@ -76,27 +76,16 @@ class SceneManager {
 		
 
 		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom"); 
-		//this.game.addEntsity(bBoundary);
 
 		let tBoundary = new HBoundary(this.game, 0, -40, 3600, "top"); 
 		
-		//this.game.addEntity(tBoundary);
-
 		let lBoundary = new VBoundary(this.game, 210, 0, 3590, "left"); 
-		//this.game.addEntity(lBoundary);
 
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
-		this.game.addEntity(rBoundary);
-		
-
-		//this.enemy1 = new Enemy(this.game.player, this.game, 200, 200);
 
 		this.enemy2 = new Skeleton(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
 
-		//this.banshee1 = new Banshee(this.player, this.game, 350, 350);
-
 		this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
-		//this.game.addEntity(this.enemy);
 
 		//testing rock generation
 		for(var i = 0; i < 25; i++){
@@ -132,8 +121,6 @@ class SceneManager {
 
 		this.game.addEntity(this.enemy2);
 		this.game.addEntity(this.banshee2);
-		//this.game.addEntity(this.banshee1);
-		//this.game.addEntity(this.banshee2);
 		this.game.addEntity(rBoundary);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
