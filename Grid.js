@@ -11,7 +11,12 @@ class Grid{
 		for (var c = 0; c < this.width; c++) {
 			this.grid.push([]);
 			for (var r = 0; r < this.height; r++) {
-				this.grid[c].push(new GridBlock(this.game, this.positionx + c * this.blockSize, this.positiony + r * this.blockSize, this.blockSize,c,r));
+
+				let newGrid = new GridBlock(this.game, this.positionx + c * this.blockSize, this.positiony + r * this.blockSize, this.blockSize, c, r)
+				if (r < 3) {
+					newGrid.restrict();
+                }
+				this.grid[c].push(newGrid);
 			}
 		}
 	}
@@ -150,12 +155,40 @@ class GridBlock {
 
 		}
 	}
-	addEntity(entity) {
+	addTerrain(entity) {
 		this.game.addEntity(entity);
 		this.closeBounds(entity);
-		this.restrictRadius(entity);
-		
+		this.restrictRadius(entity);	
 	}
+
+	addEnemy(entity) {
+
+		let cstart = this.column;
+		let cfinish = this.column + Math.floor(entity.width / this.blockSize);
+		let rstart = this.row;
+		let rfinish = this.row + Math.floor(entity.height / this.blockSize);
+
+		let isblocked = false;
+
+		for (let c = cstart; c <= cfinish; c++) {
+			for (let r = rstart; r <= rfinish; r++) {
+				if (this.game.grid.gridAtIndex(c, r)) {
+					if (this.game.grid.gridAtIndex(c, r).isClosed()) {
+						isblocked = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (isblocked) {
+			this.game.grid.gridAtIndex(this.col, this.row-1).addEnemy(entity);
+		}
+		else {
+			this.game.addEntity(entity);
+        }
+		
+    }
 	
 	update() {
 		this.positionx = this.x - this.game.camera.x;
@@ -171,7 +204,7 @@ class GridBlock {
 		else {
 			this.playerOccupied = false;
 		}
-	}2
+	}
 	draw(ctx) {
 
 		if (this.playerOccupied) {
