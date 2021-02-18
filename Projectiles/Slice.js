@@ -24,6 +24,8 @@ class Slice {
 
         this.hitbox = new HitBox(this, this.width, this.height, true);
 
+        this.priority = 3;
+
         this.damage = 20;
        
     }

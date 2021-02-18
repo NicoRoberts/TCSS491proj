@@ -102,7 +102,7 @@ class GridBlock {
 		};
 
 		this.vRestrict = 3;
-		this.hRestrict= 4;
+		this.hRestrict= 2;
 		this.playerOccupied = false;	
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -125,9 +125,9 @@ class GridBlock {
 	}
 	restrictRadius(entity) {
 		let cstart = Math.max(this.column - this.hRestrict, 0);
-		let cfinish = Math.min(this.column + this.hRestrict + Math.floor(entity.width / this.blockSize) - 1, this.game.grid.width - 1);
+		let cfinish = Math.min(this.column + this.hRestrict + Math.floor(entity.width / this.blockSize), this.game.grid.width - 1);
 		let rstart = Math.max(this.row - this.vRestrict, 0);
-		let rfinish = Math.min(this.row + this.vRestrict + Math.floor(entity.height / this.blockSize) - 1, this.game.grid.height - 1);
+		let rfinish = Math.min(this.row + this.vRestrict + Math.floor(entity.height / this.blockSize), this.game.grid.height - 1);
 
 		for (let c = cstart; c <= cfinish; c++) {
 			for (let r = rstart; r <= rfinish; r++) {

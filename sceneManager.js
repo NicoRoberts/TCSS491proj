@@ -26,6 +26,10 @@ class SceneManager {
 	};
 
 	loadYachtStage() {
+
+		this.x = 0;
+		this.y = 0;
+
 		this.game.stage = "yacht";
 
 		this.game.entities = [];
@@ -67,6 +71,12 @@ class SceneManager {
 
 	loadSurvivalStage() {
 
+		this.game.camera = this;
+
+		//for camera scrolling
+		this.x = 0;
+		this.y = 0;
+
 		this.game.stage = "survival";
 
 		this.game.entities = [];
@@ -76,7 +86,6 @@ class SceneManager {
 		
 
 		
-
 		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom"); 
 		//this.game.addEntsity(bBoundary);
 
@@ -104,7 +113,7 @@ class SceneManager {
 		this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
 		//this.game.addEntity(this.enemy);
 
-		//testing rock generation
+		//testing rock generation 
 
 		this.grid.update();
 

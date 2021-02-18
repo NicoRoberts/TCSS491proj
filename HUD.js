@@ -117,6 +117,7 @@ class HUD {
         this.drawTime(ctx);
         this.drawCoins(ctx);
         this.updateDifficulty(ctx);
+        this.drawWeapons(ctx);
 
     };
 
@@ -226,6 +227,12 @@ class HUD {
             offsety = 15;
             ctx.fillStyle = rgb(218, 165, 32); // gol
             ctx.fillRect(ctx.canvas.width / 2, ctx.canvas.height - offsety, 300, 15);
+        }
+    }
+    
+    drawWeapons(ctx) {
+        for (var i = 0; i < 9; i++) {
+
         }
     }
 
