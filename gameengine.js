@@ -14,6 +14,7 @@ class GameEngine {
 
         this.grid = null;
 
+
         // this.maxEnemies = 2;
         // //this.spawnRate = 5;
         // this.timeLeft = 0;
@@ -33,7 +34,7 @@ class GameEngine {
 		this.lowerRangeY = 732;
 
 		this.spawnTimer = 0;
-		this.spawnRate = 10; // 1 enemy / spawnRate (sec)
+		this.spawnRate = 2; // 1 enemy / spawnRate (sec)
         
 
 
@@ -258,15 +259,25 @@ class GameEngine {
 
 		if (this.spawnTimer >= this.spawnRate) {
             this.spawnTimer = 0;
-            openGrids = this.grid.getNonClosedGrids();
-            randomGridIndex = getRandomInt(0, openGrids.length);
-            let grid = openGrids[randomGridIndex];
+            
+            
+           
+            openGrids = this.grid.getSpawnableGrids();
 
+            //modify here
+
+            randomGridIndex = randomInt(openGrids.length);
+            let grid = openGrids[randomGridIndex];
+            
             spawnX = grid.x;
             spawnY = grid.y;
 
             var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
-            grid.addEnemy(skeleton);
+            if (grid !== null) {
+               // console.log("Column: " + grid.column + " Row: " + grid.row);
+                grid.addEnemy(skeleton);
+            }
+            
             
             
 
