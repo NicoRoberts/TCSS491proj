@@ -101,7 +101,7 @@ class GridBlock {
 			CLOSED: 2
 		};
 
-		this.vRestrict = 2;
+		this.vRestrict = 3;
 		this.hRestrict= 2;
 		this.playerOccupied = false;	
 		this.positionx = this.x - this.game.camera.x;
