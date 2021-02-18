@@ -55,13 +55,27 @@ class Grid{
 		for (var c = 0; c < this.width; c++) {
 			for (var r = 0; r < this.height; r++) {
 				let gridbox = this.grid[c][r]
-				if (gridbox.isOpen() && !gridbox.playerOccupied) {
+				if (gridbox.isOpen()) {
 					openGrids.push(gridbox);
 				}
 			}
 		}
 		return openGrids;
 	}
+
+	getSpawnableGrids() {
+		let openGrids = [];
+		for (var c = 0; c < this.width; c++) {
+			for (var r = 0; r < this.height; r++) {
+				let gridbox = this.grid[c][r]
+				if ((gridbox.isOpen() || gridbox.isRestricted()) && !gridbox.playerOccupied) {
+					openGrids.push(gridbox);
+				}
+			}
+		}
+		return openGrids;
+	}
+	
 	getNonClosedGrids() {
 		let openGrids = [];
 		for (var c = 0; c < this.width; c++) {
@@ -107,7 +121,7 @@ class GridBlock {
 		};
 
 		this.vRestrict = 3;
-		this.hRestrict= 2;
+		this.hRestrict= 3;
 		this.playerOccupied = false;	
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -162,6 +176,7 @@ class GridBlock {
 	}
 
 	addEnemy(entity) {
+		console.log("Column: " + this.column + " Row: " + this.row);
 
 		let cstart = this.column;
 		let cfinish = this.column + Math.floor(entity.width / this.blockSize);
@@ -182,9 +197,13 @@ class GridBlock {
 		}
 
 		if (isblocked) {
-			this.game.grid.gridAtIndex(this.col, this.row-1).addEnemy(entity);
+			console.log("blocked");
+			this.game.grid.gridAtIndex(this.column, this.row-1).addEnemy(entity);
 		}
+
 		else {
+			entity.x = this.x;
+			entity.y = this.y;
 			this.game.addEntity(entity);
         }
 		
@@ -195,10 +214,7 @@ class GridBlock {
 		this.positiony = this.y - this.game.camera.y;
 
 		//Detect player location on grid
-		if (!(this.positionx + this.blockSize <= this.game.player.positionx
-			|| this.positionx >= this.game.player.positionx + this.game.player.width * PARAMS.PIXELSCALER
-			|| this.positiony + this.blockSize <= this.game.player.positiony
-			|| this.positiony >= this.game.player.positiony + this.game.player.height * PARAMS.PIXELSCALER)) {
+		if ((this.positionx + this.blockSize > 0 && this.positiony + this.blockSize > 0 && this.positionx < this.game.ctx.canvas.width && this.positiony - this.blockSize < this.game.ctx.canvas.height)) {
 			this.playerOccupied = true;
 		}
 		else {
@@ -207,10 +223,8 @@ class GridBlock {
 	}
 	draw(ctx) {
 
-		if (this.playerOccupied) {
-			ctx.fillStyle = 'rgba(255,165,0,0.3)';
-		}
-		else if (this.isOpen()) {
+	
+		if (this.isOpen()) {
 			ctx.fillStyle = 'rgba(255,255,255,0.3)';
 
 		} else if (this.isRestricted()) {

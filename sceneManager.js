@@ -101,11 +101,11 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
 		let gridblockSize = 49;
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH, 0, 67, 71, gridblockSize);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize, 0, 67, 71, gridblockSize);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
-
+		
 
 		//this.enemy1 = new Enemy(this.game.player, this.game, 200, 200);
 
@@ -119,6 +119,8 @@ class SceneManager {
 		//testing rock generation 
 
 		this.grid.update();
+
+		
 
 		for (var i = 0; i < this.rockCount; i++){
 			let open = this.grid.getOpenGrids();
