@@ -113,23 +113,27 @@ class GameEngine {
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    if (!that.weapon.reloading && !that.weapon.firing){
-                        that.weapon = that.weapons[0];
+                    if (!that.weapon.reloading && !that.weapon.firing) {
+                        that.chosenWeapon = 0;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }              
                     break;
                 case "Digit2":
                     if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[1];
+                        that.chosenWeapon = 1;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }  
                     break;
                 case "Digit3":
                     if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[2];
+                        that.chosenWeapon = 2;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
                 case "Digit4":
                     if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[3];
+                        that.chosenWeapon = 3;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
             }
@@ -206,7 +210,6 @@ class GameEngine {
         }
 
         var entitiesCount = this.entities.length;
-        //console.log(entitiesCount);
 
 
         for (var i = 0; i < entitiesCount; i++) {
@@ -255,18 +258,12 @@ class GameEngine {
 
 		if (this.spawnTimer >= this.spawnRate) {
             this.spawnTimer = 0;
-            
-            
-    
-                
             openGrids = this.grid.getNonClosedGrids();
             randomGridIndex = getRandomInt(0, openGrids.length);
             let grid = openGrids[randomGridIndex];
 
             spawnX = grid.x;
             spawnY = grid.y;
-                
-
 
             var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
             grid.addEnemy(skeleton);

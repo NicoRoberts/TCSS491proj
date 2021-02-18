@@ -107,7 +107,7 @@ class GridBlock {
 		};
 
 		this.vRestrict = 3;
-		this.hRestrict= 2;
+		this.hRestrict= 3;
 		this.playerOccupied = false;	
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -182,7 +182,7 @@ class GridBlock {
 		}
 
 		if (isblocked) {
-			this.game.grid.gridAtIndex(this.col, this.row-1).addEnemy(entity);
+			this.game.grid.gridAtIndex(this.column, this.row-1).addEnemy(entity);
 		}
 		else {
 			this.game.addEntity(entity);
