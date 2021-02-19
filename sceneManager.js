@@ -8,6 +8,9 @@ class SceneManager {
 		this.y = 0;	
 		
 		this.game.stage;
+		
+		this.shardSpawned = false;
+		this.shardSpawnTime = 5;
 
 		this.player = new Player(this.game, 300, 1800);
 		this.machete = new Machete(this.game);
@@ -83,6 +86,8 @@ class SceneManager {
 
 		this.game.stage = "survival";
 
+		this.shardSpawned = false;
+
 		this.game.entities = [];
 
 		this.marriyacht = new Marriyacht(this.game, 90, 1728);
@@ -134,7 +139,7 @@ class SceneManager {
 		}
 
 		// spawning coins to test shop system
-		for(var k = 0; k < 100; k++){
+		for(var k = 0; k < 1; k++){
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
 				break;
@@ -145,15 +150,12 @@ class SceneManager {
 		}
 		
 
-		this.shard = new Shards(this.game, 500, 1800);
-
 		// testing map generation
 		this.map = new Map(this.game,0,0);
 		
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.player);
 		this.game.addEntity(this.map);
-		this.game.addEntity(this.shard);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
@@ -195,6 +197,12 @@ class SceneManager {
 
 		this.spawnTimer += this.game.clockTick;
 
+		// spawning shard
+		if (this.game.ellapsedShardSpawnTime >= this.shardSpawnTime && !this.shardSpawned) {
+			this.shardSpawned = true;
+			this.game.addEntity(new Shards(this.game, 500, 1800));
+			
+		}
 	
 	};
 

@@ -52,6 +52,8 @@ class GameEngine {
         this.startInput();
         this.timer = new Timer();
         this.ellapsedTime = 0;
+
+        this.ellapsedShardSpawnTime = 0;
     };
 
     start() {
@@ -267,6 +269,14 @@ class GameEngine {
     loop() {
         this.clockTick = this.timer.tick();
         this.ellapsedTime += this.clockTick;
+
+        if (this.stage == "survival") {
+            this.ellapsedShardSpawnTime += this.clockTick;
+        }
+        else {
+            this.ellapsedShardSpawnTime = 0;
+        }
+
         this.update();
         this.draw();
     };

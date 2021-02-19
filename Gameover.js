@@ -1,18 +1,18 @@
 class Gameover {
 
-    GAMEOVER_POS = { X: 0, Y: 0 }
-    KILLS_POS = { X: 1000, Y: 250};
+    // increment position down by 125
+    GAMEOVER_POS = { X: 600, Y: 150 };
+    KILLS_POS = { X: 650, Y: 275 };
+    COINS_POS = { X: 650, Y: 400 };
+    LEVEL_POS = { X: 650, Y: 525};
+    TIME_POS = { X: 650, Y: 650};
     constructor(game, x, y) {
         Object.assign(this, {game});
 
-        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/GameOverSprite.png");
-        
-        this.width = 835;
-        this.height = 676;
-
         this.priority = 1;
 
-        this.gameover = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 0, false, true);
+        this.minutes = this.game.minutes;
+        this.seconds = this.game.seconds;
     };
 
     update() {
@@ -20,15 +20,28 @@ class Gameover {
     };
 
     draw(ctx) {
-        this.gameover.drawFrame(this.game.clockTick, this.game.ctx, this.GAMEOVER_POS.X, this.GAMEOVER_POS.Y, 1);
-        this.drawScores(ctx);
-    };
-
-    drawScores(ctx) {
         ctx.fillStyle = "White";
-        var fontsize = 150;
+        var fontsize = 200;
         ctx.font = fontsize + 'px "VT323"';
+        // GAME OVER
+        ctx.fillText("GAME OVER", this.GAMEOVER_POS.X, this.GAMEOVER_POS.Y);
+
+        fontsize = 100;
+        ctx.font = fontsize + 'px "VT323"';
+        // Kill count
         ctx.fillText("Kills: ", this.KILLS_POS.X, this.KILLS_POS.Y);
-        ctx.fillText(this.game.player.killCount, this.KILLS_POS.X + 400, this.KILLS_POS.Y);
-    }
+        ctx.fillText(this.game.player.killCount, this.KILLS_POS.X + 300, this.KILLS_POS.Y);
+
+        // Coins
+        ctx.fillText("Coins: ", this.COINS_POS.X, this.COINS_POS.Y);
+        ctx.fillText(this.game.player.coins, this.COINS_POS.X + 300, this.COINS_POS.Y);
+
+        // Level player is on
+        ctx.fillText("Level: ", this.LEVEL_POS.X, this.LEVEL_POS.Y);
+        ctx.fillText(this.game.player.stageLevel, this.LEVEL_POS.X + 300, this.LEVEL_POS.Y);
+
+        // Time alive
+        ctx.fillText("Time: ", this.TIME_POS.X, this.TIME_POS.Y);
+        ctx.fillText(this.minutes + ":" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+    };
 }

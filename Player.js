@@ -51,9 +51,10 @@ class Player{
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 150;
-		this.hpMax = 150;
+		this.hpCurrent = 25; // using 25 to test game over scene, originally 150
+		this.hpMax = 25; // using 25 to test game over scene, originally 150
 		this.hit = false;
+		this.stageLevel = 1;
 
 		// perks
 		this.healthBoost = false;
@@ -259,6 +260,7 @@ class Player{
 				if (entity instanceof Gangway) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						that.shardObtained = false;
+						that.stageLevel++;
 						that.x -= 75;
 						that.y += 50;
 						that.game.camera.loadSurvivalStage();
