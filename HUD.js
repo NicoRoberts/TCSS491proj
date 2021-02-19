@@ -88,7 +88,7 @@ class HUD {
             this.seconds = 0;   
         }
 
-        this.currentDifficulty = this.game.ellapsedTime;
+        this.currentDifficulty = this.game.ellapsedShardSpawnTime;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
@@ -204,7 +204,7 @@ class HUD {
     }
 
     drawTime(ctx) {
-        if (PARAMS.DEBUG) {
+        
 
             ctx.fillStyle = "White";
             var fontsize = 50;
@@ -219,7 +219,7 @@ class HUD {
             offsetx = offsetx - 100;
             ctx.fillText(left_padding + this.minutes + ":" + right_padding + this.seconds, ctx.canvas.width - offsetx,  offsety);
 
-        }
+        
     }   
     drawCoins(ctx) {
         ctx.fillStyle = "White";
@@ -229,12 +229,16 @@ class HUD {
     }
 
     updateDifficulty(ctx) {
-        var offsety = 35;
-        var offsetx = 150
+
         ctx.fillStyle = "White";
         var fontsize = 50;
         ctx.font = fontsize + 'px "VT323"'
-        ctx.fillText("Round Difficulty", ctx.canvas.width / 2 - offsetx, offsety);
+
+        var offsety = 35;
+        var offsetx = 150;
+        var titleOffsetX = 160;
+        ctx.fillText("Round " + this.game.player.stageLevel + " Difficulty", ctx.canvas.width / 2 - titleOffsetX, offsety);
+        
         if (this.currentDifficulty < this.maxDifficulty) {
 
             ctx.fillStyle = rgb(218, 165, 32); // gold

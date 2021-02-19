@@ -263,14 +263,14 @@ class GameEngine {
                     this.maxEnemies--;
                 }
                 this.spawnTimer += this.clockTick;
-                var randomEnemy = getRandomInt(0, 3);
+                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
                 if (randomEnemy == 0) {
                     this.spawnSkeletons();
                 } else if (randomEnemy == 1) {
                     this.spawnBanshees();
                 } else {
                     this.spawnReapers();
-                }
+                } 
                 
                 
                 
