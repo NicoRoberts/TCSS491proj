@@ -122,22 +122,26 @@ class GameEngine {
                     break;
                 case "Digit1":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){
-                        that.weapon = that.weapons[0];
+                        that.chosenWeapon = 0;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }              
                     break;
                 case "Digit2":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[1].isAvailable) {
-                        that.weapon = that.weapons[1];
+                        that.chosenWeapon = 1;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }  
                     break;
                 case "Digit3":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[2].isAvailable) {
-                        that.weapon = that.weapons[2];
+                        that.chosenWeapon = 2;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
                 case "Digit4":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[3].isAvailable) {
-                        that.weapon = that.weapons[3];
+                        that.chosenWeapon = 3;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
             }
@@ -217,7 +221,6 @@ class GameEngine {
         }
 
         var entitiesCount = this.entities.length;
-        //console.log(entitiesCount);
 
 
         for (var i = 0; i < entitiesCount; i++) {
@@ -277,8 +280,6 @@ class GameEngine {
             
             spawnX = grid.x;
             spawnY = grid.y;
-                
-
 
             var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
             if (grid !== null) {

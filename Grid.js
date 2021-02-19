@@ -197,7 +197,6 @@ class GridBlock {
 		}
 
 		if (isblocked) {
-			console.log("blocked");
 			this.game.grid.gridAtIndex(this.column, this.row-1).addEnemy(entity);
 		}
 
