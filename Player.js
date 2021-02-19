@@ -51,8 +51,8 @@ class Player{
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 25; // using 25 to test game over scene, originally 150
-		this.hpMax = 25; // using 25 to test game over scene, originally 150
+		this.hpCurrent = 150; // using 25 to test game over scene, originally 150
+		this.hpMax = 150; // using 25 to test game over scene, originally 150
 		this.hit = false;
 		this.stageLevel = 1;
 
@@ -253,7 +253,7 @@ class Player{
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
 						that.y -= 25;
-						that.game.camera.loadYachtStage();
+						that.game.camera.loadDeparture();
 					}
 				}
 
@@ -261,9 +261,9 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						that.shardObtained = false;
 						that.stageLevel++;
-						that.x -= 75;
-						that.y += 50;
-						that.game.camera.loadSurvivalStage();
+						that.x = 243;
+						that.y = 1800;
+						that.game.camera.loadArrival();
 					}
 				}
 

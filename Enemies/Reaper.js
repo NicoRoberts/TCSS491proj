@@ -20,7 +20,7 @@ class Reaper extends AbstractEnemy{
 			COUNT: 3,
 		};
 
-		this.dropchance = 0.3;
+		this.dropchance = 0.4;
 
 		this.width = 63;
 		this.height = 96;

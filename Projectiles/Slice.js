@@ -26,7 +26,7 @@ class Slice {
 
         this.priority = 3;
 
-        this.damage = 20;
+        this.damage = 50;
        
     }
 

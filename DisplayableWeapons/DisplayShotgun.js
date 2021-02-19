@@ -39,7 +39,15 @@ class DisplayShotgun {
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"';
 
-            ctx.fillText("Shotgun: " + this.cost + " Coins", this.game.player.positionx, this.game.player.positiony - 25);  // - 25 for offset
+            ctx.fillText("Shotgun: " + this.cost + " Coins", this.game.player.positionx, this.game.player.positiony - 75);  // - 25 for offset
+            let message;
+            if (this.game.player.coins < this.cost) {
+                message = "Not enough coins!";
+            }
+            else {
+                message = "Press E to purchase";
+            }
+            ctx.fillText(message, this.game.player.positionx, this.game.player.positiony - 25);
         }
     };
 }
