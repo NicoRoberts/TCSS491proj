@@ -12,7 +12,7 @@ class Trees extends Terrain{
 
 		this.positionx = 0;
         this.positiony = 0;
-        this.visualRadius = 80;
+        this.visualRadius = 55;
         
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/TreeSheet.png");

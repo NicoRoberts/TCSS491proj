@@ -38,6 +38,12 @@ class Banshee extends AbstractEnemy {
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
+
+		//random chance to chase
+		var chance = getRandomInt(0, 10);
+		if (chance == 1) {
+			this.detect = true;
+		}
 		this.attack = false;
 
 		this.first = true; //flag to omit buggy first attack
@@ -54,7 +60,7 @@ class Banshee extends AbstractEnemy {
 
 		this.hitbox = new HitBox(this, this.width, this.height);
 
-		this.priority = 2;
+		this.priority = 6;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -233,7 +239,7 @@ class Banshee extends AbstractEnemy {
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
+			if ((entity instanceof Player) && (that.visionCollide(entity) || (that.hpCurrent < that.hpMax))) { // enemy detects player
 				that.detect = true;
 			}
 
@@ -259,20 +265,20 @@ class Banshee extends AbstractEnemy {
 			   that.collideBottom = true;
 		   	}	
 			
-			if (entity instanceof Terrain && that.attackCollide(entity)) {
-				that.collideTerrain = true;
-				var dist = distance(that, entity);
-				that.hitbox.collide(entity.hitbox);
-				if (dist == 0) {
-					dist = 1;
-				}
-				var difX = (entity.positionx - that.positionx) / dist;
-                var difY = (entity.positiony - that.positiony) / dist;
-                that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
-			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
-				that.collideTerrain = false;
-			}
+			// if (entity instanceof Terrain && that.attackCollide(entity)) {
+			// 	that.collideTerrain = true;
+			// 	var dist = distance(that, entity);
+			// 	that.hitbox.collide(entity.hitbox);
+			// 	if (dist == 0) {
+			// 		dist = 1;
+			// 	}
+			// 	var difX = (entity.positionx - that.positionx) / dist;
+            //     var difY = (entity.positiony - that.positiony) / dist;
+            //     that.velocity.x -= difX * (that.acceleration) / (dist * dist);
+            //     that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
+			// } else if (entity instanceof Terrain && !that.attackCollide(entity)) {
+			// 	that.collideTerrain = false;
+			// }
 
 
 		});

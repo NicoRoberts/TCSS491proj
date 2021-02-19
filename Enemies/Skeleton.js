@@ -42,6 +42,11 @@ class Skeleton extends AbstractEnemy{
 		this.detect = false;
 		this.attack = false;
 
+		var chance = getRandomInt(0, 10);
+		if (chance == 1) {
+			this.detect = true;
+		}
+
 		this.first = true; //flag to omit buggy first attack
 
 		this.attackCooldown = 0;
@@ -76,7 +81,7 @@ class Skeleton extends AbstractEnemy{
 		this.attackTime = 0.45;
 		this.restTime = 3;
 		this.maxSpeed = 2;
-		this.acceleration = 20;
+		this.acceleration = 50;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -248,21 +253,21 @@ class Skeleton extends AbstractEnemy{
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
+			if ((entity instanceof Player) && (that.visionCollide(entity) || (that.hpCurrent < that.hpMax))) { // enemy detects player
 				that.detect = true;
 			}
 			
 			if (entity instanceof Terrain && that.attackCollide(entity)) {
 				that.collideTerrain = true;
 				var dist = distance(that, entity);
-				that.hitbox.collide(entity.hitbox);
+				//that.hitbox.collide(entity.hitbox);
 				if (dist == 0) {
 					dist = 1;
 				}
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
                 that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration * 3) / (dist * dist);
 			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
 				that.collideTerrain = false;
 			}
