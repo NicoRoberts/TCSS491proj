@@ -11,7 +11,8 @@ class HealthPerk {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-        this.priority = 2;
+        this.priority = 5;
+        this.cost = 2;
 
         this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        
 
@@ -32,5 +33,22 @@ class HealthPerk {
             this.hitbox.draw(ctx);
         }
         this.perk.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+
+        // prints description when player hovers on item
+        if (this.game.player.hitbox.collide(this.hitbox)) {
+            ctx.fillStyle = "White";
+            var fontsize = 50;
+            ctx.font = fontsize + 'px "VT323"';
+
+            ctx.fillText("Increases Health: " + this.cost + " Coins", this.game.player.positionx, this.game.player.positiony - 75);  // - 25 for offset
+            let message;
+            if (this.game.player.coins < this.cost) {
+                message = "Not enough coins!";
+            }
+            else {
+                message = "Press E to purchase";
+            }
+            ctx.fillText(message, this.game.player.positionx, this.game.player.positiony - 25);
+        }
     };
 }

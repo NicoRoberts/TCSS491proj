@@ -176,7 +176,7 @@ class GridBlock {
 	}
 
 	addEnemy(entity) {
-		console.log("Column: " + this.column + " Row: " + this.row);
+		//console.log("Column: " + this.column + " Row: " + this.row);
 
 		let cstart = this.column;
 		let cfinish = this.column + Math.floor(entity.width / this.blockSize);
@@ -197,7 +197,6 @@ class GridBlock {
 		}
 
 		if (isblocked) {
-			console.log("blocked");
 			this.game.grid.gridAtIndex(this.column, this.row-1).addEnemy(entity);
 		}
 

@@ -51,7 +51,7 @@ class Trees extends Terrain{
         this.states[4]
             = new Animator(this.spritesheet, 1, 392, this.width, this.height*4, 1, 1, 1, false, true);
         this.states[5]
-            = new Animator(this.spritesheet, 102, 202, this.width, this.height*4, 1, 1, 1, false, true);
+            = new Animator(this.spritesheet, 102, 196, this.width, this.height*4, 1, 1, 1, false, true);
 		
     }
     

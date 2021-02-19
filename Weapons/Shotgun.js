@@ -35,6 +35,8 @@ class Shotgun {
         this.maxReserves = 60;
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
+
+        this.isAvailable = false;
         
     }
 

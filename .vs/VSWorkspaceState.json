@@ -1,11 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Drops",
     "\\Enemies",
+    "\\Maps",
+    "\\Perks",
     "\\Projectiles",
+    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Enemies\\Reaper.js",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }

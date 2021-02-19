@@ -8,8 +8,11 @@ class SceneManager {
 		this.y = 0;	
 		
 		this.game.stage;
+		
+		this.shardSpawned = false;
+		this.shardSpawnTime = 10;
 
-		this.player = new Player(this.game, 300, 1800);
+		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
 		this.pistol = new Pistol(this.game);
 		this.shotgun = new Shotgun(this.game);
@@ -60,17 +63,99 @@ class SceneManager {
 
 		// should we make perks buyable after each stage?
 		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -200, 1800));
+			this.game.addEntity(new HealthPerk(this.game, -200, 2250));
 		}
 		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -275, 1800));
+			this.game.addEntity(new ReloadPerk(this.game, -300, 2250));
 		}
 		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -350, 1800));
+			this.game.addEntity(new SpeedPerk(this.game, -400, 2250));
 		}
-		
-	};
 
+		
+		if (!this.shotgun.isAvailable) {
+			this.game.addEntity(new DisplayShotgun(this.game, -400, 1800));
+		}
+		if (!this.machinegun.isAvailable) {
+			this.game.addEntity(new DisplayMachinegun(this.game, -100, 1800));
+		}
+		this.update();
+	};
+	loadArrival() {
+		this.x = 0;
+		this.y = 0;
+		this.game.stage = "arrival";
+		this.game.entities = [];
+
+		this.marriyacht = new Marriyacht(this.game, 90, -300);
+		this.game.addEntity(this.marriyacht);
+
+		let dock = new Dock(this.game, 242, 1800);
+
+
+		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom");
+
+		let tBoundary = new HBoundary(this.game, 0, -40, 3600, "top");
+
+		let lBoundary = new VBoundary(this.game, 210, 0, 3590, "left");
+
+		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
+
+		let gridblockSize = 49;
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize, 0, 67, 71, gridblockSize);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
+		this.game.grid = this.grid;
+		this.game.addEntity(this.grid);
+
+		this.grid.update();
+
+
+
+		for (var i = 0; i < this.rockCount; i++) {
+			let open = this.grid.getOpenGrids();
+			if (open.length <= 0) {
+				break;
+			}
+			let randomIndex = randomInt(open.length);
+			let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addTerrain(rock);
+		}
+
+		//testing tree generation
+		for (var j = 0; j < this.treeCount; j++) {
+			let open = this.grid.getOpenGrids();
+			if (open.length <= 0) {
+				break;
+			}
+			let randomIndex = randomInt(open.length);
+			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addTerrain(tree);
+		}
+
+		this.map = new Map(this.game, -1350, -1645);
+
+		this.game.addEntity(this.map);
+		this.game.addEntity(rBoundary);
+		this.game.addEntity(lBoundary);
+		this.game.addEntity(tBoundary);
+		this.game.addEntity(bBoundary);
+		this.game.addEntity(dock);
+		this.update();
+	}
+	loadDeparture() {
+		this.x = 0;
+		this.y = 0;
+		this.game.stage = "departure";
+
+		this.game.removeEntity(this.player);
+		this.game.removeEntity(this.machete);
+		this.game.removeEntity(this.pistol)
+		this.game.removeEntity(this.shotgun);
+		this.game.removeEntity(this.machinegun);
+		this.game.removeEntity(this.hud);
+		this.update();
+
+    }
 	loadSurvivalStage() {
 
 		this.game.camera = this;
@@ -81,101 +166,45 @@ class SceneManager {
 
 		this.game.stage = "survival";
 
-		this.game.entities = [];
+		this.shardSpawned = false;
 
-		this.marriyacht = new Marriyacht(this.game, 90, 1728);
+		//this.enemy2 = new Skeleton(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
 
-		
-
-		
-		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom"); 
-		//this.game.addEntsity(bBoundary);
-
-		let tBoundary = new HBoundary(this.game, 0, -40, 3600, "top"); 
-		
-		//this.game.addEntity(tBoundary);
-
-		let lBoundary = new VBoundary(this.game, 210, 0, 3590, "left"); 
-		//this.game.addEntity(lBoundary);
-
-		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
-
-		let gridblockSize = 49;
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize, 0, 67, 71, gridblockSize);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize, this.marriyacht.y, this.marriyacht.width*2, this.marriyacht.height);
-		this.game.grid = this.grid;
-		this.game.addEntity(this.grid);
-		
-
-		//this.enemy1 = new Enemy(this.game.player, this.game, 200, 200);
-
-		this.enemy2 = new Skeleton(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
-
-		//this.banshee1 = new Banshee(this.player, this.game, 350, 350);
-
-		this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
-		//this.game.addEntity(this.enemy);
+		//this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
 
 		//testing rock generation 
 
-		this.grid.update();
-
 		
 
-		for (var i = 0; i < this.rockCount; i++){
-			let open = this.grid.getOpenGrids();
-			if (open.length <= 0) {
-				break;
-            }
-			let randomIndex = randomInt(open.length);
-			let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addTerrain(rock);
-		}
+		// spawning coins to test shop system
+		//for(var k = 0; k < 50; k++){
+		//	let open = this.grid.getNonClosedGrids();
+		//	if (open.length <= 0) {
+		//		break;
+		//	}
+		//	let randomIndex = randomInt(open.length);
+		//	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
+		//	open[randomIndex].addTerrain(coin);
+		//}
 		
-		//testing tree generation
-		for (var j = 0; j < this.treeCount; j++){
-			let open = this.grid.getOpenGrids();
-			if (open.length <= 0) {
-				break;
-			}
-			let randomIndex = randomInt(open.length);
-			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addTerrain(tree);
-		}
-		
-
-		this.shard = new Shards(this.game, 500, 1800);
 
 		// testing map generation
-		this.map = new Map(this.game,0,0);
+		
 		
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.player);
-		this.game.addEntity(this.map);
-		this.game.addEntity(this.shard);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
 		this.game.addEntity(this.machinegun);
-
-
-		this.game.addEntity(this.enemy2);
-		this.game.addEntity(this.banshee2);
-		//this.game.addEntity(this.banshee1);
-		//this.game.addEntity(this.banshee2);
-		this.game.addEntity(rBoundary);
-		this.game.addEntity(lBoundary);
-		this.game.addEntity(tBoundary);
-		this.game.addEntity(bBoundary);	
-		
 		this.game.addEntity(this.hud);
-		this.game.addEntity(new AmmoPack(this.game, 800, 500));
 
-		this.game.addEntity(this.marriyacht);
 		
-		this.game.addEntity(new AmmoPack(this.game, 800, 500));	
+		
+		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
-		this.game.addEntity(new Reaper(this.game, 700, 400));
+		//this.game.addEntity(new Reaper(this.game, 700, 400));
+		this.update();
 	};
 
 	loadGameOver() {
@@ -183,6 +212,7 @@ class SceneManager {
 		this.game.entities = [];
 
 		this.game.addEntity(new Gameover(this.game));
+		this.update();
 	};
 
 	update() {
@@ -192,11 +222,43 @@ class SceneManager {
 		let xmid = PARAMS.CANVAS_WIDTH / 2 - PARAMS.TILEWIDTH / 2;
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;
 
-		this.x = this.player.x - xmid;
-		this.y = this.player.y - ymid;
+		if (this.game.stage == "arrival" || this.game.stage == "departure") {
+			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
+			this.y = this.marriyacht.y - ymid + this.game.player.height * PARAMS.PIXELSCALER;
+			if (this.marriyacht.y < ymid - this.game.player.height * PARAMS.PIXELSCALER&& this.game.stage == "arrival") {
+				this.y = 0;
+			}
+			if (this.marriyacht.y > 3593 - PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT/2 - this.game.player.height * PARAMS.PIXELSCALER && this.game.stage == "departure") {
+				this.y = 3593 - PARAMS.CANVAS_HEIGHT;
+			}
+
+		}
+		else {
+			this.x = this.player.x - xmid;
+			this.y = this.player.y - ymid;
+		}
+
+		
+		
+		
 
 		this.spawnTimer += this.game.clockTick;
 
+		// spawning shard
+		if (this.game.ellapsedShardSpawnTime >= this.shardSpawnTime && !this.shardSpawned) {
+			this.shardSpawned = true;
+
+			let openGrids = this.game.grid.getSpawnableGrids();
+			let randomGridIndex = randomInt(openGrids.length);
+			let grid = openGrids[randomGridIndex];
+			//let grid = this.game.grid.gridAtIndex(5,37)
+			let shard = new Shards(this.game, grid.x, grid.y);
+			this.game.player.coins = 2;
+			if (grid !== null) {
+				grid.addTerrain(shard);
+				//console.log("spawned");
+		   }
+		}
 	
 	};
 

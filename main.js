@@ -1,7 +1,7 @@
 var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
-ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsNewMap1.png");
+ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
 ASSET_MANAGER.queueDownload("./Sprites/Machete.png");
@@ -25,6 +25,12 @@ ASSET_MANAGER.queueDownload("./Sprites/YachtSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/GameOverSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/HealthSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machete.png");
+ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
+ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Pistol.png");
+ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Shotgun.png");
+ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
+ASSET_MANAGER.queueDownload("./Sprites/Dock.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
@@ -65,6 +71,6 @@ ASSET_MANAGER.downloadAll(function () {
 
 	this.scene = new SceneManager(gameEngine);
 	gameEngine.addEntity(scene);
-	this.scene.loadSurvivalStage();
+	this.scene.loadArrival();
 	gameEngine.start();
 });

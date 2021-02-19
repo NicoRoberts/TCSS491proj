@@ -26,6 +26,7 @@ class Pistol {
         this.priority = 4;
 
         this.game.weapon = this;
+        this.game.chosenWeapon = 1;
         this.game.weapons[1] = this;
 
         this.reloading = false;
@@ -36,6 +37,8 @@ class Pistol {
         this.maxReserves = 96;
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
+
+        this.isAvailable = true;
 
     }
 
