@@ -252,13 +252,17 @@ class Player{
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
-						that.y -= 25;
+						that.x = 250;
+						that.y = 1775;
 						that.game.camera.loadDeparture();
 					}
 				}
 
 				if (entity instanceof Gangway) {
 					if (that.hitbox.collide(entity.hitbox)) {
+
+						//console.log("Good luck");
+
 						that.shardObtained = false;
 						that.stageLevel++;
 						that.x = 243;
