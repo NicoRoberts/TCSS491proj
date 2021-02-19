@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 10;
+		this.shardSpawnTime = 30;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -242,7 +242,7 @@ class SceneManager {
 			let openGrids = this.game.grid.getSpawnableGrids();
 			let randomGridIndex = randomInt(openGrids.length);
 			let grid = openGrids[randomGridIndex];
-			//let grid = this.game.grid.gridAtIndex(5,37)
+			//let grid = this.game.grid.gridAtIndex(5,37);
 			let shard = new Shards(this.game, grid.x, grid.y);
 			if (grid !== null) {
 				grid.addTerrain(shard);
