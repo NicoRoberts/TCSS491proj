@@ -51,8 +51,8 @@ class Player{
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 150; // using 25 to test game over scene, originally 150
-		this.hpMax = 150; // using 25 to test game over scene, originally 150
+		this.hpCurrent = 200; // using 25 to test game over scene, originally 150
+		this.hpMax = 200; // using 25 to test game over scene, originally 150
 		this.hit = false;
 		this.stageLevel = 1;
 

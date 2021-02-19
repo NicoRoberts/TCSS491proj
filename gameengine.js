@@ -34,7 +34,7 @@ class GameEngine {
 		this.lowerRangeY = 732;
 
 		this.spawnTimer = 0;
-		this.spawnRate = 2; // 1 enemy / spawnRate (sec)
+		this.spawnRate = 5; // 1 enemy / spawnRate (sec)
         
 
 
@@ -265,8 +265,18 @@ class GameEngine {
                     this.maxEnemies--;
                 }
                 this.spawnTimer += this.clockTick;
+                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                if (randomEnemy == 0) {
+                    this.spawnSkeletons();
+                } else if (randomEnemy == 1) {
+                    this.spawnBanshees();
+                } else {
+                    this.spawnReapers();
+                } 
+                
+                
+                
 
-                this.spawnSkeletons();
             }
         }
 
@@ -300,17 +310,74 @@ class GameEngine {
             if (grid !== null) {
                // console.log("Column: " + grid.column + " Row: " + grid.row);
                 grid.addEnemy(skeleton);
-            }
-            
-            
-            
+            }	
+        }
+        
 
-            
-			
-			
-		}
+    }
+    
+    spawnBanshees() {
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
 
-	}
+        var entitiesCount = this.entities.length;
+
+		if (this.spawnTimer >= this.spawnRate) {
+            this.spawnTimer = 0;
+            
+            
+           
+            openGrids = this.grid.getSpawnableGrids();
+
+            //modify here
+
+            randomGridIndex = randomInt(openGrids.length);
+            let grid = openGrids[randomGridIndex];
+            
+            spawnX = grid.x;
+            spawnY = grid.y;
+
+            var banshee = new Banshee(this.player, this, spawnX, spawnY);
+            if (grid !== null) {
+               // console.log("Column: " + grid.column + " Row: " + grid.row);
+                grid.addEnemy(banshee);
+            }	
+        }
+
+    }
+
+    spawnReapers() {
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
+
+        var entitiesCount = this.entities.length;
+
+		if (this.spawnTimer >= this.spawnRate) {
+            this.spawnTimer = 0;
+            
+            
+           
+            openGrids = this.grid.getSpawnableGrids();
+
+            //modify here
+
+            randomGridIndex = randomInt(openGrids.length);
+            let grid = openGrids[randomGridIndex];
+            
+            spawnX = grid.x;
+            spawnY = grid.y;
+
+            var reaper = new Reaper(this, spawnX, spawnY);
+            if (grid !== null) {
+               // console.log("Column: " + grid.column + " Row: " + grid.row);
+                grid.addEnemy(reaper);
+            }	
+        }
+    }
 
 
     loop() {

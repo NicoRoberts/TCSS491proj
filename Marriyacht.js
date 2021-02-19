@@ -53,6 +53,7 @@ class Marriyacht {
     draw(ctx) {
         if (PARAMS.DEBUG) {
             this.hitbox.draw(ctx);
+            
         }
         if (this.game.stage == "survival") {
             this.docked.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1 * this.scale);

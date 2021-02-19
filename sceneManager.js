@@ -257,7 +257,6 @@ class SceneManager {
 			let grid = openGrids[randomGridIndex];
 			//let grid = this.game.grid.gridAtIndex(5,37);
 			let shard = new Shards(this.game, grid.x, grid.y);
-			this.game.player.coins = 2;
 			if (grid !== null) {
 				grid.addTerrain(shard);
 				//console.log("spawned");
