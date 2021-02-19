@@ -87,7 +87,7 @@ class SceneManager {
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
-		this.marriyacht = new Marriyacht(this.game, 90, 0);
+		this.marriyacht = new Marriyacht(this.game, 90, -300);
 		this.game.addEntity(this.marriyacht);
 
 		let dock = new Dock(this.game, 242, 1800);
@@ -132,7 +132,7 @@ class SceneManager {
 			open[randomIndex].addTerrain(tree);
 		}
 
-		this.map = new Map(this.game, 0, 0);
+		this.map = new Map(this.game, -1350, -1645);
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
@@ -223,13 +223,22 @@ class SceneManager {
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;
 
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
-			this.x = this.marriyacht.x - xmid;
-			this.y = this.marriyacht.y - ymid;
+			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
+			this.y = this.marriyacht.y - ymid + this.game.player.height * PARAMS.PIXELSCALER;
+			if (this.marriyacht.y < ymid - this.game.player.height * PARAMS.PIXELSCALER&& this.game.stage == "arrival") {
+				this.y = 0;
+			}
+			if (this.marriyacht.y > 3593 - PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT/2 - this.game.player.height * PARAMS.PIXELSCALER && this.game.stage == "departure") {
+				this.y = 3593 - PARAMS.CANVAS_HEIGHT;
+			}
+
 		}
 		else {
 			this.x = this.player.x - xmid;
 			this.y = this.player.y - ymid;
-        }
+		}
+
+		
 		
 		
 
@@ -244,6 +253,7 @@ class SceneManager {
 			let grid = openGrids[randomGridIndex];
 			//let grid = this.game.grid.gridAtIndex(5,37);
 			let shard = new Shards(this.game, grid.x, grid.y);
+			this.game.player.coins = 2;
 			if (grid !== null) {
 				grid.addTerrain(shard);
 				//console.log("spawned");
