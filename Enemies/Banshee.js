@@ -38,6 +38,12 @@ class Banshee extends AbstractEnemy {
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
+
+		//random chance to chase
+		var chance = getRandomInt(0, 10);
+		if (chance == 1) {
+			this.detect = true;
+		}
 		this.attack = false;
 
 		this.first = true; //flag to omit buggy first attack
@@ -54,7 +60,7 @@ class Banshee extends AbstractEnemy {
 
 		this.hitbox = new HitBox(this, this.width, this.height);
 
-		this.priority = 2;
+		this.priority = 6;
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
@@ -182,7 +188,7 @@ class Banshee extends AbstractEnemy {
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
 				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
-			that.game.addEntity(that.enemyAttack);
+			
 			
 			that.timeLeft = that.attackTime * 1000;
 			that.timeLeft2 = that.restTime * 1000;
@@ -190,22 +196,24 @@ class Banshee extends AbstractEnemy {
 			let interval_id = window.setInterval(function () {
 				that.timeLeft -= 10;
 				that.state = that.STATE.ATTACK;
-				
+				that.enemyAttack.removeFromWorld = true;
 				
 				if (that.timeLeft <= 0) {
 					
 					that.timeLeft = 0;
-					
+					that.game.addEntity(that.enemyAttack);
 					//that.state = that.STATE.IDLE;
 					window.clearInterval(interval_id);
-					that.enemyAttack.removeFromWorld = true;
+					
 
 					let interval_id2 = window.setInterval(function () {
+						
 						that.timeLeft2 -= 10;
 						that.state = that.STATE.IDLE;
 						if (that.timeLeft2 <= 0) {
 							that.timeLeft2 = 0;
 							that.swinging = false;
+							that.enemyAttack.removeFromWorld = true;
 							window.clearInterval(interval_id2);
 						}
 					}, 10);
@@ -239,7 +247,7 @@ class Banshee extends AbstractEnemy {
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
+			if ((entity instanceof Player) && (that.visionCollide(entity) || (that.hpCurrent < that.hpMax))) { // enemy detects player
 				that.detect = true;
 			}
 
@@ -265,20 +273,20 @@ class Banshee extends AbstractEnemy {
 			   that.collideBottom = true;
 		   	}	
 			
-			if (entity instanceof Terrain && that.attackCollide(entity)) {
-				that.collideTerrain = true;
-				var dist = distance(that, entity);
-				that.hitbox.collide(entity.hitbox);
-				if (dist == 0) {
-					dist = 1;
-				}
-				var difX = (entity.positionx - that.positionx) / dist;
-                var difY = (entity.positiony - that.positiony) / dist;
-                that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
-			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
-				that.collideTerrain = false;
-			}
+			// if (entity instanceof Terrain && that.attackCollide(entity)) {
+			// 	that.collideTerrain = true;
+			// 	var dist = distance(that, entity);
+			// 	that.hitbox.collide(entity.hitbox);
+			// 	if (dist == 0) {
+			// 		dist = 1;
+			// 	}
+			// 	var difX = (entity.positionx - that.positionx) / dist;
+            //     var difY = (entity.positiony - that.positiony) / dist;
+            //     that.velocity.x -= difX * (that.acceleration) / (dist * dist);
+            //     that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
+			// } else if (entity instanceof Terrain && !that.attackCollide(entity)) {
+			// 	that.collideTerrain = false;
+			// }
 
 
 		});

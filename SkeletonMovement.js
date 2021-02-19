@@ -115,15 +115,15 @@ class SkeletonMovement {
         
         // this.enemy.velocity.x = difX;
         // this.enemy.velocity.y = difY;
-        if (!this.enemy.collideTerrain) {
-            // if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
-            //     this.enemy.velocity.x = difX;
-            //     this.enemy.velocity.y = difY;
-            // }
+        //if (!this.enemy.collideTerrain) {
+            if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
+                this.enemy.velocity.x = difX;
+                this.enemy.velocity.y = difY;
+            }
             
             this.enemy.velocity.x = difX;
             this.enemy.velocity.y = difY;
-        }
+       // }
         
         
         
