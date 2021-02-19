@@ -188,7 +188,7 @@ class Banshee extends AbstractEnemy {
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
 				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
-			that.game.addEntity(that.enemyAttack);
+			
 			
 			that.timeLeft = that.attackTime * 1000;
 			that.timeLeft2 = that.restTime * 1000;
@@ -196,22 +196,24 @@ class Banshee extends AbstractEnemy {
 			let interval_id = window.setInterval(function () {
 				that.timeLeft -= 10;
 				that.state = that.STATE.ATTACK;
-				
+				that.enemyAttack.removeFromWorld = true;
 				
 				if (that.timeLeft <= 0) {
 					
 					that.timeLeft = 0;
-					
+					that.game.addEntity(that.enemyAttack);
 					//that.state = that.STATE.IDLE;
 					window.clearInterval(interval_id);
-					that.enemyAttack.removeFromWorld = true;
+					
 
 					let interval_id2 = window.setInterval(function () {
+						
 						that.timeLeft2 -= 10;
 						that.state = that.STATE.IDLE;
 						if (that.timeLeft2 <= 0) {
 							that.timeLeft2 = 0;
 							that.swinging = false;
+							that.enemyAttack.removeFromWorld = true;
 							window.clearInterval(interval_id2);
 						}
 					}, 10);
