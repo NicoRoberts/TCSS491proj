@@ -240,7 +240,6 @@ class SceneManager {
 
 		
 		
-		
 
 		this.spawnTimer += this.game.clockTick;
 
