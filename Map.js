@@ -3,8 +3,8 @@ class Map{
     constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-    	this.width = 3600;
-        this.height = 3600;
+    	this.width = 6684;
+        this.height = 6360;
         this.mapState = 0
         
         this.states=[];
@@ -12,7 +12,7 @@ class Map{
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-		this.spritesheet = ASSET_MANAGER.getAsset("./Maps/CastToTheShadowsNewMap1.png");
+		this.spritesheet = ASSET_MANAGER.getAsset("./Maps/CastToTheShadowsMapBIG.png");
 
     	this.game.Map= this;
 
