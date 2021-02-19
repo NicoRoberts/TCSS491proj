@@ -2,6 +2,7 @@ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
+ASSET_MANAGER.queueDownload("./Maps/YachtMap.png")
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
 ASSET_MANAGER.queueDownload("./Sprites/Machete.png");
