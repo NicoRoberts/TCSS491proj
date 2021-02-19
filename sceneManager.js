@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 10;
+		this.shardSpawnTime = 0;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -36,7 +36,7 @@ class SceneManager {
 		this.y = 0;
 
 		this.game.stage = "yacht";
-
+		
 		this.game.entities = [];
 		
 		let bBoundary = new HBoundary(this.game, -600, 2500 - 72, 1000);
@@ -46,14 +46,16 @@ class SceneManager {
 		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 500);
 
 		this.gangway = new Gangway(this.game, 400, 1750 - 72);
-
+		this.boatMap = new Boat(this.game, 0, 0);
+		this.game.addEntity(this.boatMap);
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);	
 		this.game.addEntity(ruBoundary);
 		this.game.addEntity(rlBoundary);
-
+		
+		
 		this.game.addEntity(this.gangway);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
@@ -241,8 +243,8 @@ class SceneManager {
 
 			let openGrids = this.game.grid.getSpawnableGrids();
 			let randomGridIndex = randomInt(openGrids.length);
-			let grid = openGrids[randomGridIndex];
-			//let grid = this.game.grid.gridAtIndex(5,37)
+			//let grid = openGrids[randomGridIndex];
+			let grid = this.game.grid.gridAtIndex(5,37)
 			let shard = new Shards(this.game, grid.x, grid.y);
 			if (grid !== null) {
 				grid.addTerrain(shard);
