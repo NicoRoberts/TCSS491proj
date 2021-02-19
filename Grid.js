@@ -11,7 +11,12 @@ class Grid{
 		for (var c = 0; c < this.width; c++) {
 			this.grid.push([]);
 			for (var r = 0; r < this.height; r++) {
-				this.grid[c].push(new GridBlock(this.game, this.positionx + c * this.blockSize, this.positiony + r * this.blockSize, this.blockSize,c,r));
+
+				let newGrid = new GridBlock(this.game, this.positionx + c * this.blockSize, this.positiony + r * this.blockSize, this.blockSize, c, r)
+				if (r < 3) {
+					newGrid.restrict();
+                }
+				this.grid[c].push(newGrid);
 			}
 		}
 	}
@@ -50,13 +55,27 @@ class Grid{
 		for (var c = 0; c < this.width; c++) {
 			for (var r = 0; r < this.height; r++) {
 				let gridbox = this.grid[c][r]
-				if (gridbox.isOpen() && !gridbox.playerOccupied) {
+				if (gridbox.isOpen()) {
 					openGrids.push(gridbox);
 				}
 			}
 		}
 		return openGrids;
 	}
+
+	getSpawnableGrids() {
+		let openGrids = [];
+		for (var c = 0; c < this.width; c++) {
+			for (var r = 0; r < this.height; r++) {
+				let gridbox = this.grid[c][r]
+				if ((gridbox.isOpen() || gridbox.isRestricted()) && !gridbox.playerOccupied) {
+					openGrids.push(gridbox);
+				}
+			}
+		}
+		return openGrids;
+	}
+	
 	getNonClosedGrids() {
 		let openGrids = [];
 		for (var c = 0; c < this.width; c++) {
@@ -102,7 +121,7 @@ class GridBlock {
 		};
 
 		this.vRestrict = 3;
-		this.hRestrict= 2;
+		this.hRestrict= 3;
 		this.playerOccupied = false;	
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
@@ -150,34 +169,62 @@ class GridBlock {
 
 		}
 	}
-	addEntity(entity) {
+	addTerrain(entity) {
 		this.game.addEntity(entity);
 		this.closeBounds(entity);
-		this.restrictRadius(entity);
-		
+		this.restrictRadius(entity);	
 	}
+
+	addEnemy(entity) {
+		console.log("Column: " + this.column + " Row: " + this.row);
+
+		let cstart = this.column;
+		let cfinish = this.column + Math.floor(entity.width / this.blockSize);
+		let rstart = this.row;
+		let rfinish = this.row + Math.floor(entity.height / this.blockSize);
+
+		let isblocked = false;
+
+		for (let c = cstart; c <= cfinish; c++) {
+			for (let r = rstart; r <= rfinish; r++) {
+				if (this.game.grid.gridAtIndex(c, r)) {
+					if (this.game.grid.gridAtIndex(c, r).isClosed()) {
+						isblocked = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (isblocked) {
+			console.log("blocked");
+			this.game.grid.gridAtIndex(this.column, this.row-1).addEnemy(entity);
+		}
+
+		else {
+			entity.x = this.x;
+			entity.y = this.y;
+			this.game.addEntity(entity);
+        }
+		
+    }
 	
 	update() {
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
 		//Detect player location on grid
-		if (!(this.positionx + this.blockSize <= this.game.player.positionx
-			|| this.positionx >= this.game.player.positionx + this.game.player.width * PARAMS.PIXELSCALER
-			|| this.positiony + this.blockSize <= this.game.player.positiony
-			|| this.positiony >= this.game.player.positiony + this.game.player.height * PARAMS.PIXELSCALER)) {
+		if ((this.positionx + this.blockSize > 0 && this.positiony + this.blockSize > 0 && this.positionx < this.game.ctx.canvas.width && this.positiony - this.blockSize < this.game.ctx.canvas.height)) {
 			this.playerOccupied = true;
 		}
 		else {
 			this.playerOccupied = false;
 		}
-	}2
+	}
 	draw(ctx) {
 
-		if (this.playerOccupied) {
-			ctx.fillStyle = 'rgba(255,165,0,0.3)';
-		}
-		else if (this.isOpen()) {
+	
+		if (this.isOpen()) {
 			ctx.fillStyle = 'rgba(255,255,255,0.3)';
 
 		} else if (this.isRestricted()) {

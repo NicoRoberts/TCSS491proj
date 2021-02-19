@@ -26,6 +26,9 @@ class Skeleton extends AbstractEnemy{
 		this.attackWidth = 86;
 		this.attackHeight = 95;
 
+		this.attackx = 90;
+		this.attacky = 90;
+
 		this.heightDifference = 3; //difference in height between enemy and player so that enemy chases on an even plane
 		this.rightOffset = 32.5; //A value to offset the skeleton when the skeleton is to the right of the player.
 		//position variables
@@ -182,7 +185,7 @@ class Skeleton extends AbstractEnemy{
 		if (!that.swinging) {
 			
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
-				that.y, that.angle);
+				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
 			that.game.addEntity(that.enemyAttack);
 			
@@ -231,7 +234,7 @@ class Skeleton extends AbstractEnemy{
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) {
+			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) { //change to circle
 				that.doAttack(entity);
 
 			}

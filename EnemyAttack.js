@@ -1,11 +1,10 @@
 class EnemyAttack {
 
-    constructor(game, x, y, angle) {
-        Object.assign(this, {game, x, y, angle });
+    constructor(game, x, y, angle, width, height) {
+        Object.assign(this, {game, x, y, angle, width, height });
 
 
-        this.width = 48;
-        this.height = 48;
+    
 
         this.velocity = { x: 0, y: 0 };
 
@@ -15,12 +14,13 @@ class EnemyAttack {
         this.positiony = this.y - this.game.camera.y;
         this.hitdealt = false;
 
-        
+        console.log(this.game.entity);
 
         //this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Slice.png");
 
-
-        this.hitbox = new HitBox(this, this.width, this.height, true);
+       
+        var offset = 5;
+        this.hitbox = new HitBox(this, this.width + offset*2, this.height + offset*2, true,  -1 * offset, -1 * offset);
 
         this.damage = 25;
        

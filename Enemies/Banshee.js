@@ -174,7 +174,7 @@ class Banshee extends AbstractEnemy {
 		if (!that.swinging) {
 			
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
-				that.y, that.angle);
+				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
 			that.game.addEntity(that.enemyAttack);
 			
