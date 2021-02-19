@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 5;
+		this.shardSpawnTime = 10;
 
 		this.player = new Player(this.game, 300, 1800);
 		this.machete = new Machete(this.game);
@@ -97,7 +97,7 @@ class SceneManager {
 
 		this.marriyacht = new Marriyacht(this.game, 90, 1728);
 
-		
+		let dock = new Dock(this.game, 242, 1800);
 
 		
 		let bBoundary = new HBoundary(this.game, 0, 3600, 3593, "bottom"); 
@@ -147,14 +147,14 @@ class SceneManager {
 		}
 
 		// spawning coins to test shop system
-		for(var k = 0; k < 1; k++){
-			let open = this.grid.getOpenGrids();
+		for(var k = 0; k < 50; k++){
+			let open = this.grid.getNonClosedGrids();
 			if (open.length <= 0) {
 				break;
 			}
 			let randomIndex = randomInt(open.length);
 			let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addEntity(coin);
+			open[randomIndex].addTerrain(coin);
 		}
 		
 
@@ -180,6 +180,7 @@ class SceneManager {
 		this.game.addEntity(this.hud);
 
 		this.game.addEntity(this.marriyacht);
+		this.game.addEntity(dock);
 		
 		this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
@@ -208,8 +209,15 @@ class SceneManager {
 		// spawning shard
 		if (this.game.ellapsedShardSpawnTime >= this.shardSpawnTime && !this.shardSpawned) {
 			this.shardSpawned = true;
-			this.game.addEntity(new Shards(this.game, 500, 1800));
-			
+
+			let openGrids = this.game.grid.getNonClosedGrids();
+			let randomGridIndex = randomInt(openGrids.length);
+			let grid = openGrids[randomGridIndex];
+			let shard = new Shards(this.game, grid.x, grid.y);
+			if (grid !== null) {
+				grid.addTerrain(shard);
+				//console.log("spawned");
+		   }
 		}
 	
 	};

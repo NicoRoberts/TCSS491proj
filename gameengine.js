@@ -247,11 +247,10 @@ class GameEngine {
                 this.addEntity(new Enemy(this.player, this, 200, 200));
                 this.maxEnemies--;
             }
+            this.spawnTimer += this.clockTick;
+
+		    this.spawnSkeletons();
         }
-
-        this.spawnTimer += this.clockTick;
-
-		this.spawnSkeletons();
 
     };
 
