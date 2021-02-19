@@ -71,7 +71,7 @@ class HUD {
             this.seconds = 0;   
         }
 
-        this.currentDifficulty = this.game.ellapsedTime;
+        this.currentDifficulty = this.game.ellapsedShardSpawnTime;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
@@ -217,8 +217,9 @@ class HUD {
 
     updateDifficulty(ctx) {
         var offsety = 35;
-        var offsetx = 150
-        ctx.fillText("Round Difficulty", ctx.canvas.width / 2 - offsetx, offsety);
+        var offsetx = 150;
+        var titleOffsetX = 160;
+        ctx.fillText("Round " + this.game.player.stageLevel + " Difficulty", ctx.canvas.width / 2 - titleOffsetX, offsety);
         if (this.currentDifficulty < this.maxDifficulty) {
 
             ctx.fillStyle = rgb(218, 165, 32); // gold
