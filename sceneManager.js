@@ -132,7 +132,7 @@ class SceneManager {
 			open[randomIndex].addTerrain(tree);
 		}
 
-		this.map = new Map(this.game, 0, 0);
+		this.map = new Map(this.game, -1350, -1645);
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
