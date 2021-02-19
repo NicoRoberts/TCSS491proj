@@ -46,8 +46,8 @@ class SceneManager {
 		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 500);
 
 		this.gangway = new Gangway(this.game, 400, 1750 - 72);
-		this.boatMap = new Boat(this.game, 0, 0);
-		this.game.addEntity(this.boatMap);
+	//	this.boatMap = new Boat(this.game, 0, 0);
+	//	this.game.addEntity(this.boatMap);
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
