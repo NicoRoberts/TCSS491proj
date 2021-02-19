@@ -42,6 +42,11 @@ class Skeleton extends AbstractEnemy{
 		this.detect = false;
 		this.attack = false;
 
+		var chance = getRandomInt(0, 10);
+		if (chance == 1) {
+			this.detect = true;
+		}
+
 		this.first = true; //flag to omit buggy first attack
 
 		this.attackCooldown = 0;
@@ -76,7 +81,7 @@ class Skeleton extends AbstractEnemy{
 		this.attackTime = 0.45;
 		this.restTime = 3;
 		this.maxSpeed = 2;
-		this.acceleration = 20;
+		this.acceleration = 50;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -157,7 +162,7 @@ class Skeleton extends AbstractEnemy{
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
-			let itemCount = 3;
+			let itemCount = 2;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
@@ -187,7 +192,7 @@ class Skeleton extends AbstractEnemy{
 			that.enemyAttack = new EnemyAttack(that.game, that.x,
 				that.y, that.angle, that.width, that.height);
 			that.swinging = true;
-			that.game.addEntity(that.enemyAttack);
+			
 			
 			that.timeLeft = that.attackTime * 1000;
 			that.timeLeft2 = that.restTime * 1000;
@@ -195,22 +200,24 @@ class Skeleton extends AbstractEnemy{
 			let interval_id = window.setInterval(function () {
 				that.timeLeft -= 10;
 				that.state = that.STATE.ATTACK;
-				
+				that.enemyAttack.removeFromWorld = true;
 				
 				if (that.timeLeft <= 0) {
 					
 					that.timeLeft = 0;
-					
+					that.game.addEntity(that.enemyAttack);
 					//that.state = that.STATE.IDLE;
 					window.clearInterval(interval_id);
-					that.enemyAttack.removeFromWorld = true;
+					
 
 					let interval_id2 = window.setInterval(function () {
+						
 						that.timeLeft2 -= 10;
 						that.state = that.STATE.IDLE;
 						if (that.timeLeft2 <= 0) {
 							that.timeLeft2 = 0;
 							that.swinging = false;
+							that.enemyAttack.removeFromWorld = true;
 							window.clearInterval(interval_id2);
 						}
 					}, 10);
@@ -248,21 +255,21 @@ class Skeleton extends AbstractEnemy{
 				that.hitbox.collide(entity.hitbox);
 			}
 
-			if ((entity instanceof Player) && that.visionCollide(entity)) { // enemy detects player
+			if ((entity instanceof Player) && (that.visionCollide(entity) || (that.hpCurrent < that.hpMax))) { // enemy detects player
 				that.detect = true;
 			}
 			
 			if (entity instanceof Terrain && that.attackCollide(entity)) {
 				that.collideTerrain = true;
 				var dist = distance(that, entity);
-				that.hitbox.collide(entity.hitbox);
+				//that.hitbox.collide(entity.hitbox);
 				if (dist == 0) {
 					dist = 1;
 				}
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
                 that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration / 2) / (dist * dist);
+                that.velocity.y -= difY * (that.acceleration * 3) / (dist * dist);
 			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
 				that.collideTerrain = false;
 			}
