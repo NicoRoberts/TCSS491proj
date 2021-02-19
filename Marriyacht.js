@@ -28,9 +28,10 @@ class Marriyacht {
 
 
     update() {
+        const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
         console.log("UPDATE IN: " + this.game.stage);
         if (this.game.stage == "arrival" || this.game.stage == "departure") {
-            this.y += this.speed;
+            this.y += this.speed*TICKSCALE;
             this.positionx = this.x - this.game.camera.x;
             this.positiony = this.y - this.game.camera.y;
         }
