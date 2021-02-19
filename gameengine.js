@@ -56,7 +56,7 @@ class GameEngine {
         this.timer = new Timer();
         this.ellapsedTime = 0;
 
-        this.ellapsedShardSpawnTime = 0;
+        this.timeInSurvival = 0;
     };
 
     start() {
@@ -208,7 +208,8 @@ class GameEngine {
             let entity = this.entities[i];
             if (!(this.stage == "game over")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
-                    || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary) {
+                    || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
+                    || entity instanceof YachtMap) {
                     entity.draw(this.ctx);
                 }
             }
@@ -224,6 +225,7 @@ class GameEngine {
     };
 
     update() {
+        //console.log("Stage: " + this.stage);
         if (!(this.stage == "game over")) {
             this.minutes = Math.floor(this.ellapsedTime / 60);
             this.seconds = Math.floor(this.ellapsedTime % 60);
@@ -383,10 +385,10 @@ class GameEngine {
         this.ellapsedTime += this.clockTick;
 
         if (this.stage == "survival") {
-            this.ellapsedShardSpawnTime += this.clockTick;
+            this.timeInSurvival += this.clockTick;
         }
         else {
-            this.ellapsedShardSpawnTime = 0;
+            this.timeInSurvival = 0;
         }
 
         this.update();

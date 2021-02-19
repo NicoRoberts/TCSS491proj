@@ -88,7 +88,7 @@ class HUD {
             this.seconds = 0;   
         }
 
-        this.currentDifficulty = this.game.ellapsedShardSpawnTime;
+        this.currentDifficulty = this.game.timeInSurvival;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
