@@ -192,18 +192,19 @@ class HUD {
 
     drawTime(ctx) {
         if (PARAMS.DEBUG) {
+
             ctx.fillStyle = "White";
             var fontsize = 50;
-            var offsetx = 400;
-            var offsety = 30;
+            var offsetx = 205;
+            var offsety = 35;
             ctx.font = fontsize + 'px "VT323"'
-            ctx.fillText("Time: ", ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+            ctx.fillText("Time: ", ctx.canvas.width - offsetx, offsety);;
 
-            fontsize = 20;
-            offsetx = 340;
-            offsety = 10;
-            ctx.font = fontsize + 'px "VT323"'
-            ctx.fillText(this.minutes + ":" + this.seconds, ctx.canvas.width - offsetx, ctx.canvas.height - offsety);
+            var left_padding = "0".repeat(2 - this.minutes.toString().length);
+            var right_padding = "0".repeat(2 - this.seconds.toString().length);
+
+            offsetx = offsetx - 100;
+            ctx.fillText(left_padding + this.minutes + ":" + right_padding + this.seconds, ctx.canvas.width - offsetx,  offsety);
 
         }
     }   
@@ -215,24 +216,53 @@ class HUD {
     }
 
     updateDifficulty(ctx) {
-        var offsety = 30;
-        ctx.fillText("Round Difficulty", ctx.canvas.width / 2, ctx.canvas.height - offsety);
+        var offsety = 35;
+        var offsetx = 150
+        ctx.fillText("Round Difficulty", ctx.canvas.width / 2 - offsetx, offsety);
         if (this.currentDifficulty < this.maxDifficulty) {
 
             ctx.fillStyle = rgb(218, 165, 32); // gold
             var ratio = this.currentDifficulty / this.maxDifficulty;
-            offsety = 15;
-            ctx.fillRect(ctx.canvas.width / 2, ctx.canvas.height - offsety, 300 * ratio, 15);
+            offsety = 50;
+            ctx.fillRect(ctx.canvas.width / 2 - offsetx, offsety, 300 * ratio, 15);
         } else {
-            offsety = 15;
+            offsety = 50;
             ctx.fillStyle = rgb(218, 165, 32); // gol
-            ctx.fillRect(ctx.canvas.width / 2, ctx.canvas.height - offsety, 300, 15);
+            ctx.fillRect(ctx.canvas.width / 2 - offsetx, offsety, 300, 15);
         }
+
+        ctx.strokeStyle = "Black";
+        ctx.strokeRect(ctx.canvas.width / 2 - offsetx, offsety, 300, 15);
+
     }
     
     drawWeapons(ctx) {
+        ctx.fillStyle = "White";
+        ctx.strokeStyle = "White";
+        var fontsize = 20;
+        ctx.font = fontsize + 'px "VT323"'
+        let chosen = this.game.chosenWeapon;
         for (var i = 0; i < 9; i++) {
+            let size = 50;
+            let scale = 1.29
+            let extra = scale * size - size
+            let xoffset = ctx.canvas.width / 2 - 8 * size / 2 - extra;
+            let yoffset = ctx.canvas.height - size - 5;
+            
+            
+            if (i < chosen) {
+                ctx.strokeRect(xoffset + size * i - extra / 2, yoffset, size, size);
+                ctx.fillText(i+1, xoffset + size * i - extra / 2+1, yoffset+13)
+            }
+            else if (i == chosen) {
+                ctx.strokeRect(xoffset + size * i - size * 0 - extra / 2, yoffset - extra, size * scale, size * scale);
+                ctx.fillText(i+1, xoffset + size * i - extra / 2 + 1, yoffset - extra + 13)
+            } else {
+                ctx.strokeRect(xoffset + size * i + extra / 2, yoffset, size, size);
+                ctx.fillText(i+1, xoffset + size * i + extra / 2 + 1, yoffset + 13)
 
+            }
+            
         }
     }
 

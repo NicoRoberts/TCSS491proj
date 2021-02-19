@@ -43,6 +43,8 @@ class GameEngine {
         this.S = false;
         this.D = false;
 
+        this.E = false;
+
         this.stage;
     };
 
@@ -53,6 +55,8 @@ class GameEngine {
         this.startInput();
         this.timer = new Timer();
         this.ellapsedTime = 0;
+
+        this.ellapsedShardSpawnTime = 0;
     };
 
     start() {
@@ -82,7 +86,7 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener("mousedown", function (e) {
             //Left mouse button
-            if (e.which == 1) {
+            if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht")) {
                 that.click = true;
                 that.weapon.fire();
             }
@@ -110,27 +114,34 @@ class GameEngine {
                 case "KeyD":
                     that.D = true;
                     break;
+                case "KeyE":
+                    that.E = true;
+                    break;
                 case "KeyR":
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    if (!that.weapon.reloading && !that.weapon.firing){
-                        that.weapon = that.weapons[0];
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){
+                        that.chosenWeapon = 0;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }              
                     break;
                 case "Digit2":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[1];
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[1].isAvailable) {
+                        that.chosenWeapon = 1;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }  
                     break;
                 case "Digit3":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[2];
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[2].isAvailable) {
+                        that.chosenWeapon = 2;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
                 case "Digit4":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
-                        that.weapon = that.weapons[3];
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[3].isAvailable) {
+                        that.chosenWeapon = 3;
+                        that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
             }
@@ -152,6 +163,9 @@ class GameEngine {
                 case "KeyD":
                     that.D = false;
                     break;
+                case "KeyE":
+                    that.E = false;
+                    break;
             }
     
         }, false);
@@ -167,12 +181,19 @@ class GameEngine {
 
     addEntity(entity) {
         //this.entities.enqueue(entity);
+        entity.removeFromWorld = false;
         this.entities.push(entity);
         this.sorted = false;
     };
+    removeEntity(entity) {
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            if (this.entities[i] == entity) {
+                entity.removeFromWorld = true;
+            }
+        }
+    }
 
     draw() {
-        
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         // this.ctx.save();
 
@@ -185,11 +206,16 @@ class GameEngine {
 
         for (var i = 0; i < this.entities.length; i++) {
             let entity = this.entities[i];
-            if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height*4 < this.ctx.canvas.height)
-                || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary ||
-                entity instanceof Gameover) {
+            if (!(this.stage == "game over")) {
+                if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
+                    || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary) {
+                    entity.draw(this.ctx);
+                }
+            }
+            else if (entity instanceof Gameover) {
                 entity.draw(this.ctx);
             }
+            
             
         }
 
@@ -198,50 +224,49 @@ class GameEngine {
     };
 
     update() {
+        if (!(this.stage == "game over")) {
+            this.minutes = Math.floor(this.ellapsedTime / 60);
+            this.seconds = Math.floor(this.ellapsedTime % 60);
 
-        this.minutes = Math.floor(this.ellapsedTime / 60);
-        this.seconds = Math.floor(this.ellapsedTime % 60);
-
-        if (this.seconds >= 60) {
-            this.seconds = 0;   
-        }
-
-        var entitiesCount = this.entities.length;
-        //console.log(entitiesCount);
-
-
-        for (var i = 0; i < entitiesCount; i++) {
-            var entity = this.entities[i];
-
-            if (entity instanceof AbstractEnemy) {
-                this.enemiesCount++;
+            if (this.seconds >= 60) {
+                this.seconds = 0;
             }
-            if (!(typeof entity == 'undefined')) {
-                if (!entity.removeFromWorld) {
-                    entity.update();
+
+            var entitiesCount = this.entities.length;
+
+
+            for (var i = 0; i < entitiesCount; i++) {
+                var entity = this.entities[i];
+
+                if (entity instanceof AbstractEnemy) {
+                    this.enemiesCount++;
+                }
+                if (!(typeof entity == 'undefined')) {
+                    if (!entity.removeFromWorld) {
+                        entity.update();
+                    }
                 }
             }
-        }
 
-      
 
-        this.camera.update();
 
-        for (var i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
+            this.camera.update();
+
+            for (var i = this.entities.length - 1; i >= 0; --i) {
+                if (this.entities[i].removeFromWorld) {
+                    this.entities.splice(i, 1);
+                }
+            }
+            if (this.stage == "survival") {
+                if (this.enemiesCount < this.maxEnemies) {
+                    this.addEntity(new Enemy(this.player, this, 200, 200));
+                    this.maxEnemies--;
+                }
+                this.spawnTimer += this.clockTick;
+
+                this.spawnSkeletons();
             }
         }
-        if (this.stage == "survival") {
-            if (this.enemiesCount < this.maxEnemies) {
-                this.addEntity(new Enemy(this.player, this, 200, 200));
-                this.maxEnemies--;
-            }
-        }
-
-        this.spawnTimer += this.clockTick;
-
-		this.spawnSkeletons();
 
     };
 
@@ -268,8 +293,6 @@ class GameEngine {
             
             spawnX = grid.x;
             spawnY = grid.y;
-                
-
 
             var skeleton = new Skeleton(this.player, this, spawnX, spawnY);
             if (grid !== null) {
@@ -291,6 +314,14 @@ class GameEngine {
     loop() {
         this.clockTick = this.timer.tick();
         this.ellapsedTime += this.clockTick;
+
+        if (this.stage == "survival") {
+            this.ellapsedShardSpawnTime += this.clockTick;
+        }
+        else {
+            this.ellapsedShardSpawnTime = 0;
+        }
+
         this.update();
         this.draw();
     };

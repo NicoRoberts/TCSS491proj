@@ -45,14 +45,16 @@ class Player{
 	
 		this.priority = 3;
 
+		// player game stats
 		this.coins = 0;
-
-		// stats
-		this.hpCurrent = 150;
-		this.hpMax = 150;
-		this.shardObtained = false;
-		this.hit = false;
 		this.killCount = 0;
+		this.shardObtained = false;
+
+		// player stats
+		this.hpCurrent = 150; // using 25 to test game over scene, originally 150
+		this.hpMax = 150; // using 25 to test game over scene, originally 150
+		this.hit = false;
+		this.stageLevel = 1;
 
 		// perks
 		this.healthBoost = false;
@@ -63,6 +65,12 @@ class Player{
 		this.healthBuff = 50;
 		this.reloadBuff = .5;
 		this.speedBuff = 0;
+
+		// // weapon inventory (may not need to implement this way)
+		// this.hasMachete = true;
+		// this.hasPistol = true;
+		// this.hasShotgun = false;
+		// this.hasMachinegun = false;
 
 	}
 
@@ -179,43 +187,83 @@ class Player{
 
 				if (entity instanceof HealthPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.healthBoost = true;
-						that.hpMax += that.healthBuff;
-						that.hpCurrent += that.healthBuff;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.healthBoost = true;
+								that.hpMax += that.healthBuff;
+								that.hpCurrent += that.healthBuff;
+							}
+						}
 					}
 				}
 
 				if (entity instanceof ReloadPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.reloadBoost = true;
-						for (var i = 0; i < that.game.weapons.length; i++) {
-							((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.reloadBoost = true;
+								for (var i = 0; i < that.game.weapons.length; i++) {
+									((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
+								}
+							}
 						}
 					}
 				}
 
 				if (entity instanceof SpeedPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
-						entity.removeFromWorld = true;
-						that.speedBoost = true;
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.speedBoost = true;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof DisplayShotgun) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.game.weapons[2].isAvailable = true;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof DisplayMachinegun) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.game.weapons[3].isAvailable = true;
+							}
+						}
 					}
 				}
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
 						that.y -= 25;
-						that.game.camera.loadYachtStage();
+						that.game.camera.loadDeparture();
 					}
 				}
 
 				if (entity instanceof Gangway) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						that.shardObtained = false;
-						that.x -= 75;
-						that.y += 50;
-						that.game.camera.loadSurvivalStage();
+						that.stageLevel++;
+						that.x = 243;
+						that.y = 1800;
+						that.game.camera.loadArrival();
 					}
 				}
 
