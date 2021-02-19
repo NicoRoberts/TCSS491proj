@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 30;
+		this.shardSpawnTime = 10;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -39,13 +39,19 @@ class SceneManager {
 
 		this.game.entities = [];
 		
-		let bBoundary = new HBoundary(this.game, -600, 2500 - 72, 1000);
-		let tBoundary = new HBoundary(this.game, -600, 1250 - 72, 1000); 
-		let lBoundary = new VBoundary(this.game, -600, 1250 - 72, 1250); 
-		let ruBoundary = new VBoundary(this.game, 400, 1250 - 72, 500);
-		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 500);
+		let bBoundary = new HBoundary(this.game, -600, 2550 - 72, 1000);
+		let tBoundary = new HBoundary(this.game, -600, 1150 - 72, 1000); 
+		let lBoundary = new VBoundary(this.game, -600, 1150 - 72, 1400); 
+		let ruBoundary = new VBoundary(this.game, 400, 1150 - 72, 600);
+		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 550);
 
-		this.gangway = new Gangway(this.game, 400, 1750 - 72);
+		//this.gangway = new Gangway(this.game, 400, 1750 - 72);
+
+		// testing delete later maybe
+		this.timeInYacht = 0; 
+		this.gangwaySpawned = false;
+
+		this.game.addEntity(new YachtMap(this.game, -575, 1065));
 
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
@@ -54,7 +60,7 @@ class SceneManager {
 		this.game.addEntity(ruBoundary);
 		this.game.addEntity(rlBoundary);
 
-		this.game.addEntity(this.gangway);
+		//this.game.addEntity(this.gangway);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
@@ -63,21 +69,21 @@ class SceneManager {
 
 		// should we make perks buyable after each stage?
 		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -200, 2250));
+			this.game.addEntity(new HealthPerk(this.game, -235, 2250));
 		}
 		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -300, 2250));
+			this.game.addEntity(new ReloadPerk(this.game, -330, 2250));
 		}
 		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -400, 2250));
+			this.game.addEntity(new SpeedPerk(this.game, -425, 2250));
 		}
 
 		
 		if (!this.shotgun.isAvailable) {
-			this.game.addEntity(new DisplayShotgun(this.game, -400, 1800));
+			this.game.addEntity(new DisplayShotgun(this.game, -325, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
-			this.game.addEntity(new DisplayMachinegun(this.game, -100, 1800));
+			this.game.addEntity(new DisplayMachinegun(this.game, -325, 1880));
 		}
 		this.update();
 	};
@@ -198,8 +204,6 @@ class SceneManager {
 		this.game.addEntity(this.shotgun);
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
-
-		
 		
 		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
@@ -245,7 +249,7 @@ class SceneManager {
 		this.spawnTimer += this.game.clockTick;
 
 		// spawning shard
-		if (this.game.ellapsedShardSpawnTime >= this.shardSpawnTime && !this.shardSpawned) {
+		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned) {
 			this.shardSpawned = true;
 
 			let openGrids = this.game.grid.getSpawnableGrids();
@@ -258,6 +262,15 @@ class SceneManager {
 				grid.addTerrain(shard);
 				//console.log("spawned");
 		   }
+		}
+
+		// gangway testing
+		if (this.game.stage == "yacht") {
+			this.timeInYacht += this.game.clockTick;
+			if (this.timeInYacht > .2 && !this.gangwaySpawned) {
+				this.gangwaySpawned = true;
+				this.game.addEntity(new Gangway(this.game, 400, 1750 - 72));
+			}
 		}
 	
 	};

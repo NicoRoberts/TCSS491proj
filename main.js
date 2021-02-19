@@ -2,6 +2,7 @@ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
+ASSET_MANAGER.queueDownload("./Maps/YachtMap.png")
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
 ASSET_MANAGER.queueDownload("./Sprites/Machete.png");
@@ -29,7 +30,6 @@ ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machete.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Pistol.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Shotgun.png");
-ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Dock.png");
 
 // Black #3 Download Assets
