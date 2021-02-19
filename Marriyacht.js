@@ -10,7 +10,7 @@ class Marriyacht {
         this.height = 288;
 
         this.destinationy = 1728;
-        this.finaldestinationy = this.destinationy * 2;
+        this.finaldestinationy = this.destinationy * 2 + 300;
 
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
