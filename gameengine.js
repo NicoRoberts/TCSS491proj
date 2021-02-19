@@ -43,6 +43,8 @@ class GameEngine {
         this.S = false;
         this.D = false;
 
+        this.E = false;
+
         this.stage;
     };
 
@@ -53,6 +55,8 @@ class GameEngine {
         this.startInput();
         this.timer = new Timer();
         this.ellapsedTime = 0;
+
+        this.ellapsedShardSpawnTime = 0;
     };
 
     start() {
@@ -110,29 +114,32 @@ class GameEngine {
                 case "KeyD":
                     that.D = true;
                     break;
+                case "KeyE":
+                    that.E = true;
+                    break;
                 case "KeyR":
                     that.weapon.reload();
                     break;
                 case "Digit1":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){
                         that.chosenWeapon = 0;
                         that.weapon = that.weapons[that.chosenWeapon];
                     }              
                     break;
                 case "Digit2":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[1].isAvailable) {
                         that.chosenWeapon = 1;
                         that.weapon = that.weapons[that.chosenWeapon];
                     }  
                     break;
                 case "Digit3":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[2].isAvailable) {
                         that.chosenWeapon = 2;
                         that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
                 case "Digit4":
-                    if (!that.weapon.reloading && !that.weapon.firing) {
+                    if (!that.weapon.reloading && !that.weapon.firing && that.weapons[3].isAvailable) {
                         that.chosenWeapon = 3;
                         that.weapon = that.weapons[that.chosenWeapon];
                     }
@@ -155,6 +162,9 @@ class GameEngine {
                     break;
                 case "KeyD":
                     that.D = false;
+                    break;
+                case "KeyE":
+                    that.E = false;
                     break;
             }
     
@@ -240,11 +250,10 @@ class GameEngine {
                 this.addEntity(new Enemy(this.player, this, 200, 200));
                 this.maxEnemies--;
             }
+            this.spawnTimer += this.clockTick;
+
+		    this.spawnSkeletons();
         }
-
-        this.spawnTimer += this.clockTick;
-
-		this.spawnSkeletons();
 
     };
 
@@ -292,6 +301,14 @@ class GameEngine {
     loop() {
         this.clockTick = this.timer.tick();
         this.ellapsedTime += this.clockTick;
+
+        if (this.stage == "survival") {
+            this.ellapsedShardSpawnTime += this.clockTick;
+        }
+        else {
+            this.ellapsedShardSpawnTime = 0;
+        }
+
         this.update();
         this.draw();
     };

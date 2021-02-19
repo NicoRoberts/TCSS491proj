@@ -1,6 +1,6 @@
 class EnergyBall{
 
-    constructor(game, x, y, angle, damage = 20) {
+    constructor(game, x, y, angle, damage = 25) {
         Object.assign(this, { game, x, y, angle,damage});
 
         this.SPEED = 3;
