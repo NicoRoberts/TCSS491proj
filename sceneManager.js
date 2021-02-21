@@ -182,16 +182,16 @@ class SceneManager {
 
 		
 
-		// spawning coins to test shop system
-		//for(var k = 0; k < 50; k++){
-		//	let open = this.grid.getNonClosedGrids();
-		//	if (open.length <= 0) {
-		//		break;
-		//	}
-		//	let randomIndex = randomInt(open.length);
-		//	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
-		//	open[randomIndex].addTerrain(coin);
-		//}
+		//spawning coins to test shop system
+		for(var k = 0; k < 50; k++){
+			let open = this.grid.getNonClosedGrids();
+			if (open.length <= 0) {
+				break;
+			}
+			let randomIndex = randomInt(open.length);
+			let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
+			open[randomIndex].addTerrain(coin);
+		}
 		
 
 		// testing map generation
