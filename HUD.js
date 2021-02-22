@@ -28,8 +28,8 @@ class HUD {
         this.hpMax = this.player.hpMax;
 
         // health points for hearts
-        this.hpFullHeart = 50;
-        this.hpHalfHeart = 25;
+        this.hpFullHeart = 10;
+        this.hpHalfHeart = 5;
 
         this.heartWidth = 28;
         this.heartHeight = 28;
