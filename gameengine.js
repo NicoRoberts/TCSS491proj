@@ -33,8 +33,10 @@ class GameEngine {
 		this.lowerRangeX = 40
 		this.lowerRangeY = 732;
 
-		this.spawnTimer = 0;
-		this.spawnRate = 2; // 1 enemy / spawnRate (sec)
+        this.spawnTimer = 0;
+        this.maxEnemies = 0;
+        this.enemiesCount = 0;
+		this.spawnRate = 5; //  enemy / spawnRate (sec)
         
 
 
@@ -56,7 +58,7 @@ class GameEngine {
         this.timer = new Timer();
         this.ellapsedTime = 0;
 
-        this.ellapsedShardSpawnTime = 0;
+        this.timeInSurvival = 0;
     };
 
     start() {
@@ -208,7 +210,8 @@ class GameEngine {
             let entity = this.entities[i];
             if (!(this.stage == "game over")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
-                    || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary) {
+                    || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
+                    || entity instanceof YachtMap) {
                     entity.draw(this.ctx);
                 }
             }
@@ -224,6 +227,7 @@ class GameEngine {
     };
 
     update() {
+        //console.log("Stage: " + this.stage);
         if (!(this.stage == "game over")) {
             this.minutes = Math.floor(this.ellapsedTime / 60);
             this.seconds = Math.floor(this.ellapsedTime % 60);
@@ -239,7 +243,7 @@ class GameEngine {
                 var entity = this.entities[i];
 
                 if (entity instanceof AbstractEnemy) {
-                    this.enemiesCount++;
+                    //this.enemiesCount++;
                 }
                 if (!(typeof entity == 'undefined')) {
                     if (!entity.removeFromWorld) {
@@ -258,13 +262,20 @@ class GameEngine {
                 }
             }
             if (this.stage == "survival") {
-                if (this.enemiesCount < this.maxEnemies) {
-                    this.addEntity(new Enemy(this.player, this, 200, 200));
-                    this.maxEnemies--;
-                }
+                
                 this.spawnTimer += this.clockTick;
+                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                if (randomEnemy == 0) {
+                    this.spawnSkeletons();
+                } else if (randomEnemy == 1) {
+                    this.spawnBanshees();
+                } else {
+                    this.spawnReapers();
+                } 
+                
+                
+                
 
-                this.spawnSkeletons();
             }
         }
 
@@ -279,7 +290,9 @@ class GameEngine {
 
         var entitiesCount = this.entities.length;
 
-		if (this.spawnTimer >= this.spawnRate) {
+		if (this.spawnTimer >= this.spawnRate && (this.enemiesCount < this.maxEnemies)) {
+            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -298,17 +311,89 @@ class GameEngine {
             if (grid !== null) {
                // console.log("Column: " + grid.column + " Row: " + grid.row);
                 grid.addEnemy(skeleton);
+                this.enemiesCount++;
             }
-            
-            
-            
+            console.log("Number of enemies: " + this.enemiesCount + ", Max: " + this.maxEnemies);
+            console.log("SpawnRate: " + this.spawnRate)	
+        }
+        
 
-            
-			
-			
-		}
+    }
+    
+    spawnBanshees() {
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
 
-	}
+        var entitiesCount = this.entities.length;
+
+		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
+            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.spawnTimer = 0;
+            
+            
+           
+            openGrids = this.grid.getSpawnableGrids();
+
+            //modify here
+
+            randomGridIndex = randomInt(openGrids.length);
+            let grid = openGrids[randomGridIndex];
+            
+            spawnX = grid.x;
+            spawnY = grid.y;
+
+            var banshee = new Banshee(this.player, this, spawnX, spawnY);
+            if (grid !== null) {
+               // console.log("Column: " + grid.column + " Row: " + grid.row);
+                grid.addEnemy(banshee);
+                this.enemiesCount++;
+            }
+            console.log("Number of enemies: " + this.enemiesCount + ", Max: " + this.maxEnemies);
+            console.log("SpawnRate: " + this.spawnRate)	
+        }
+        
+
+    }
+
+    spawnReapers() {
+        var openGrids;
+        var randomGridIndex;
+        var spawnX;
+        var spawnY;
+
+        var entitiesCount = this.entities.length;
+
+		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
+            var adjustmentPercentage = (0.2 / 10) * this.spawnRate; //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.spawnTimer = 0;
+            
+            
+           
+            openGrids = this.grid.getSpawnableGrids();
+
+            //modify here
+
+            randomGridIndex = randomInt(openGrids.length);
+            let grid = openGrids[randomGridIndex];
+            
+            spawnX = grid.x;
+            spawnY = grid.y;
+
+            var reaper = new Reaper(this, spawnX, spawnY);
+            if (grid !== null) {
+               // console.log("Column: " + grid.column + " Row: " + grid.row);
+                grid.addEnemy(reaper);
+                this.enemiesCount++;
+            }
+            console.log("Number of enemies: " + this.enemiesCount + ", Max: " + this.maxEnemies);
+            console.log("SpawnRate: " + this.spawnRate)	
+        }
+        
+    }
 
 
     loop() {
@@ -316,10 +401,10 @@ class GameEngine {
         this.ellapsedTime += this.clockTick;
 
         if (this.stage == "survival") {
-            this.ellapsedShardSpawnTime += this.clockTick;
+            this.timeInSurvival += this.clockTick;
         }
         else {
-            this.ellapsedShardSpawnTime = 0;
+            this.timeInSurvival = 0;
         }
 
         this.update();

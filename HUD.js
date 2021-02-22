@@ -12,14 +12,24 @@ class HUD {
         this.healthBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/HealthBoostSprite.png");
         this.reloadBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReloadBoostSprite.png");
         this.speedBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostSprite.png");
+
+        this.weaponSprites = [];
+        this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Machete.png"));
+        this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Pistol.png"));
+        this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Shotgun.png"));
+        this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Machinegun.png"));
+        this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Machete.png"));
+
         this.perks = [];
+        this.weapons = [];
+        this.inventorySize = 65;
 
         this.hpCurrent = this.player.hpCurrent;
         this.hpMax = this.player.hpMax;
 
         // health points for hearts
-        this.hpFullHeart = 50;
-        this.hpHalfHeart = 25;
+        this.hpFullHeart = 10;
+        this.hpHalfHeart = 5;
 
         this.heartWidth = 28;
         this.heartHeight = 28;
@@ -39,6 +49,7 @@ class HUD {
         //this.setUpHearts();
         this.loadHearts();
         this.loadPerks();
+        this.loadWeapons();
     };
 
     loadHearts() {
@@ -51,6 +62,12 @@ class HUD {
 
     };
 
+    loadWeapons() {
+        for (let i = 0; i < this.weaponSprites.length; i++) {
+            this.weapons.push(new Animator(this.weaponSprites[i], 0, 0, this.weaponSprites[i].width, this.weaponSprites[i].height, 1, 1, 0, false, true));
+        }
+    }
+
     loadPerks() {
 
         this.healthPerk = new Animator(this.healthBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
@@ -62,7 +79,7 @@ class HUD {
         this.speedPerkObtained = false;
 
     };
-
+    
     update() {
 
         this.minutes = Math.floor(this.game.ellapsedTime / 60);
@@ -71,11 +88,10 @@ class HUD {
             this.seconds = 0;   
         }
 
-        this.currentDifficulty = this.game.ellapsedTime;
+        this.currentDifficulty = this.game.timeInSurvival;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
 
         this.updateHearts();
-        this.updateAmmo();
         this.updatePerks();
         
 
@@ -105,10 +121,6 @@ class HUD {
         }
     }
 
-    updateAmmo() {
-
-    }
-
     draw(ctx) {
 
         this.drawHearts(ctx);
@@ -118,6 +130,7 @@ class HUD {
         this.drawCoins(ctx);
         this.updateDifficulty(ctx);
         this.drawWeapons(ctx);
+        this.drawMessage(ctx);
 
     };
 
@@ -191,7 +204,7 @@ class HUD {
     }
 
     drawTime(ctx) {
-        if (PARAMS.DEBUG) {
+        
 
             ctx.fillStyle = "White";
             var fontsize = 50;
@@ -206,7 +219,7 @@ class HUD {
             offsetx = offsetx - 100;
             ctx.fillText(left_padding + this.minutes + ":" + right_padding + this.seconds, ctx.canvas.width - offsetx,  offsety);
 
-        }
+        
     }   
     drawCoins(ctx) {
         ctx.fillStyle = "White";
@@ -216,9 +229,16 @@ class HUD {
     }
 
     updateDifficulty(ctx) {
+
+        ctx.fillStyle = "White";
+        var fontsize = 50;
+        ctx.font = fontsize + 'px "VT323"'
+
         var offsety = 35;
-        var offsetx = 150
-        ctx.fillText("Round Difficulty", ctx.canvas.width / 2 - offsetx, offsety);
+        var offsetx = 150;
+        var titleOffsetX = 160;
+        ctx.fillText("Round " + this.game.player.stageLevel + " Difficulty", ctx.canvas.width / 2 - titleOffsetX, offsety);
+        
         if (this.currentDifficulty < this.maxDifficulty) {
 
             ctx.fillStyle = rgb(218, 165, 32); // gold
@@ -235,29 +255,61 @@ class HUD {
         ctx.strokeRect(ctx.canvas.width / 2 - offsetx, offsety, 300, 15);
 
     }
+
+    drawMessage(ctx) {
+        if (this.game.stage == "survival") {
+            var offsety = 100;
+            var offsetx = 350;
+            var fontsize = 50;
+            ctx.font = fontsize + 'px "VT323"'
+            if (this.game.player.shardObtained) {
+                ctx.fillStyle = "Blue";
+                ctx.fillText("Shard obtained! Return to the boat!", ctx.canvas.width / 2 - offsetx, offsety);
+            }
+            else if (this.game.camera.shardSpawned) {
+                ctx.fillStyle = "Red";
+                ctx.fillText("The shard has spawned! Go find it!", ctx.canvas.width / 2 - offsetx, offsety);
+            }
+        }
+        
+    }
     
     drawWeapons(ctx) {
         ctx.fillStyle = "White";
         ctx.strokeStyle = "White";
         var fontsize = 20;
         ctx.font = fontsize + 'px "VT323"'
+        let count = 4
         let chosen = this.game.chosenWeapon;
-        for (var i = 0; i < 9; i++) {
-            let size = 50;
+        for (var i = 0; i < count; i++) {
+            let size = this.inventorySize;
             let scale = 1.29
             let extra = scale * size - size
-            let xoffset = ctx.canvas.width / 2 - 8 * size / 2 - extra;
+            let xoffset = ctx.canvas.width / 2 - (count-1) * size / 2 - extra;
             let yoffset = ctx.canvas.height - size - 5;
             
             
             if (i < chosen) {
+                if (this.game.weapons[i].isAvailable) {
+                    this.weapons[i].drawFrame(this.game.clockTick, ctx, xoffset + size * i - extra / 2 + 10, yoffset + 5, 1);
+                }
+                
                 ctx.strokeRect(xoffset + size * i - extra / 2, yoffset, size, size);
-                ctx.fillText(i+1, xoffset + size * i - extra / 2+1, yoffset+13)
+                ctx.fillText(i + 1, xoffset + size * i - extra / 2 + 1, yoffset + 13)
+                
+
             }
             else if (i == chosen) {
-                ctx.strokeRect(xoffset + size * i - size * 0 - extra / 2, yoffset - extra, size * scale, size * scale);
+                if (this.game.weapons[i].isAvailable) {
+                    this.weapons[i].drawFrame(this.game.clockTick, ctx, xoffset + size * i - extra / 2 + 10, yoffset - extra + 5, 1);
+                }
+                ctx.strokeRect(xoffset + size * i - extra / 2, yoffset - extra, size * scale, size * scale);
                 ctx.fillText(i+1, xoffset + size * i - extra / 2 + 1, yoffset - extra + 13)
             } else {
+                if (this.game.weapons[i].isAvailable) {
+                    this.weapons[i].drawFrame(this.game.clockTick, ctx, xoffset + size * i + extra / 2 + 10, yoffset + 5, 1);
+                }
+                
                 ctx.strokeRect(xoffset + size * i + extra / 2, yoffset, size, size);
                 ctx.fillText(i+1, xoffset + size * i + extra / 2 + 1, yoffset + 13)
 

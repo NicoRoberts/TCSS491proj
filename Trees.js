@@ -10,9 +10,9 @@ class Trees extends Terrain{
         
         this.states=[];
 
-		this.positionx = 0;
-        this.positiony = 0;
-        this.visualRadius = 80;
+		this.positionx = this.x - this.game.camera.x;
+        this.positiony = this.y - this.game.camera.y;
+        this.visualRadius = 70;
         
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/TreeSheet.png");

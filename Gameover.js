@@ -34,7 +34,7 @@ class Gameover {
 
         // Coins
         ctx.fillText("Coins: ", this.COINS_POS.X, this.COINS_POS.Y);
-        ctx.fillText(this.game.player.coins, this.COINS_POS.X + 300, this.COINS_POS.Y);
+        ctx.fillText(this.game.player.totalCoinsCollected, this.COINS_POS.X + 300, this.COINS_POS.Y);
 
         // Level player is on
         ctx.fillText("Level: ", this.LEVEL_POS.X, this.LEVEL_POS.Y);

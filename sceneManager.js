@@ -39,24 +39,28 @@ class SceneManager {
 		
 		this.game.entities = [];
 		
-		let bBoundary = new HBoundary(this.game, -600, 2500 - 72, 1000);
-		let tBoundary = new HBoundary(this.game, -600, 1250 - 72, 1000); 
-		let lBoundary = new VBoundary(this.game, -600, 1250 - 72, 1250); 
-		let ruBoundary = new VBoundary(this.game, 400, 1250 - 72, 500);
-		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 500);
+		let bBoundary = new HBoundary(this.game, -600, 2550 - 72, 1000);
+		let tBoundary = new HBoundary(this.game, -600, 1150 - 72, 1000); 
+		let lBoundary = new VBoundary(this.game, -600, 1150 - 72, 1400); 
+		let ruBoundary = new VBoundary(this.game, 400, 1150 - 72, 600);
+		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 550);
 
-		this.gangway = new Gangway(this.game, 400, 1750 - 72);
-	//	this.boatMap = new Boat(this.game, 0, 0);
-	//	this.game.addEntity(this.boatMap);
+		//this.gangway = new Gangway(this.game, 400, 1750 - 72);
+
+		// testing delete later maybe
+		this.timeInYacht = 0; 
+		this.gangwaySpawned = false;
+
+		this.game.addEntity(new YachtMap(this.game, -575, 1065));
+
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);	
 		this.game.addEntity(ruBoundary);
 		this.game.addEntity(rlBoundary);
-		
-		
-		this.game.addEntity(this.gangway);
+
+		//this.game.addEntity(this.gangway);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
@@ -65,21 +69,21 @@ class SceneManager {
 
 		// should we make perks buyable after each stage?
 		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -200, 2250));
+			this.game.addEntity(new HealthPerk(this.game, -235, 2250));
 		}
 		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -300, 2250));
+			this.game.addEntity(new ReloadPerk(this.game, -330, 2250));
 		}
 		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -400, 2250));
+			this.game.addEntity(new SpeedPerk(this.game, -425, 2250));
 		}
 
 		
 		if (!this.shotgun.isAvailable) {
-			this.game.addEntity(new DisplayShotgun(this.game, -400, 1800));
+			this.game.addEntity(new DisplayShotgun(this.game, -325, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
-			this.game.addEntity(new DisplayMachinegun(this.game, -100, 1800));
+			this.game.addEntity(new DisplayMachinegun(this.game, -325, 1880));
 		}
 		this.update();
 	};
@@ -89,8 +93,18 @@ class SceneManager {
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
-		this.marriyacht = new Marriyacht(this.game, 90, 0);
+		this.marriyacht = new Marriyacht(this.game, 90, -300);
 		this.game.addEntity(this.marriyacht);
+
+		//increase enemies per level
+		this.game.enemiesCount = 0;
+		this.game.maxEnemies += 50;
+		this.game.spawnRate = 5;
+		// if (this.game.spawnRate > 3) {
+		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
+        //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+		// 	this.game.spawnRate = 
+		// }
 
 		let dock = new Dock(this.game, 242, 1800);
 
@@ -178,16 +192,16 @@ class SceneManager {
 
 		
 
-		// spawning coins to test shop system
-		//for(var k = 0; k < 50; k++){
-		//	let open = this.grid.getNonClosedGrids();
-		//	if (open.length <= 0) {
-		//		break;
-		//	}
-		//	let randomIndex = randomInt(open.length);
-		//	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
-		//	open[randomIndex].addTerrain(coin);
-		//}
+		//spawning coins to test shop system
+		// for(var k = 0; k < 50; k++){
+		// 	let open = this.grid.getNonClosedGrids();
+		// 	if (open.length <= 0) {
+		// 		break;
+		// 	}
+		// 	let randomIndex = randomInt(open.length);
+		// 	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
+		// 	open[randomIndex].addTerrain(coin);
+		// }
 		
 
 		// testing map generation
@@ -200,8 +214,6 @@ class SceneManager {
 		this.game.addEntity(this.shotgun);
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
-
-		
 		
 		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
@@ -225,31 +237,48 @@ class SceneManager {
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;
 
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
-			this.x = this.marriyacht.x - xmid;
-			this.y = this.marriyacht.y - ymid;
+			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
+			this.y = this.marriyacht.y - ymid + this.game.player.height * PARAMS.PIXELSCALER;
+			if (this.marriyacht.y < ymid - this.game.player.height * PARAMS.PIXELSCALER&& this.game.stage == "arrival") {
+				this.y = 0;
+			}
+			if (this.marriyacht.y > 3593 - PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT/2 - this.game.player.height * PARAMS.PIXELSCALER && this.game.stage == "departure") {
+				this.y = 3593 - PARAMS.CANVAS_HEIGHT;
+			}
+
 		}
 		else {
 			this.x = this.player.x - xmid;
 			this.y = this.player.y - ymid;
-        }
+		}
+
 		
 		
 
 		this.spawnTimer += this.game.clockTick;
 
 		// spawning shard
-		if (this.game.ellapsedShardSpawnTime >= this.shardSpawnTime && !this.shardSpawned) {
+		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned) {
 			this.shardSpawned = true;
 
 			let openGrids = this.game.grid.getSpawnableGrids();
 			let randomGridIndex = randomInt(openGrids.length);
-			//let grid = openGrids[randomGridIndex];
-			let grid = this.game.grid.gridAtIndex(5,37)
+			let grid = openGrids[randomGridIndex];
+			//let grid = this.game.grid.gridAtIndex(5,37);
 			let shard = new Shards(this.game, grid.x, grid.y);
 			if (grid !== null) {
 				grid.addTerrain(shard);
 				//console.log("spawned");
 		   }
+		}
+
+		// spawn gangway .2 seconds after loading yacht level so that player does not get forced into next stage
+		if (this.game.stage == "yacht") {
+			this.timeInYacht += this.game.clockTick;
+			if (this.timeInYacht > .2 && !this.gangwaySpawned) {
+				this.gangwaySpawned = true;
+				this.game.addEntity(new Gangway(this.game, 400, 1750 - 72));
+			}
 		}
 	
 	};

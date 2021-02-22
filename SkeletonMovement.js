@@ -104,31 +104,36 @@ class SkeletonMovement {
 
 
     chaseMovement() {
-        
-     
-        const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
         this.enemy.state = this.enemy.STATE.WALKING;
-
         var dist = distance(this.enemy, this.player);
-        var difX = (this.player.circlex - this.enemy.x) / dist * this.maxSpeed;
-        var difY = ((this.player.circley + this.offset) - this.enemy.y) / dist * this.maxSpeed;
+        var difX = (this.player.circlex - this.enemy.x) / dist;
+        var difY = ((this.player.circley + this.offset) - this.enemy.y) / dist;
+        this.enemy.velocity.x += difX * this.enemy.acceleration / (dist * dist);
+        this.enemy.velocity.y += difY * this.enemy.acceleration / (dist * dist);
+     
+    //     const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
+    //     this.enemy.state = this.enemy.STATE.WALKING;
+
+    //     var dist = distance(this.enemy, this.player);
+    //     var difX = (this.player.circlex - this.enemy.x) / dist * this.maxSpeed;
+    //     var difY = ((this.player.circley + this.offset) - this.enemy.y) / dist * this.maxSpeed;
         
-        // this.enemy.velocity.x = difX;
-        // this.enemy.velocity.y = difY;
-        if (!this.enemy.collideTerrain) {
-            // if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
-            //     this.enemy.velocity.x = difX;
-            //     this.enemy.velocity.y = difY;
-            // }
+    //     // this.enemy.velocity.x = difX;
+    //     // this.enemy.velocity.y = difY;
+    //     //if (!this.enemy.collideTerrain) {
+    //         if (Math.abs(this.enemy.velocity.x) > difX && Math.abs(this.enemy.velocity.y) > difY) {
+    //             this.enemy.velocity.x = difX;
+    //             this.enemy.velocity.y = difY;
+    //         }
             
-            this.enemy.velocity.x = difX;
-            this.enemy.velocity.y = difY;
-        }
+    //         this.enemy.velocity.x = difX;
+    //         this.enemy.velocity.y = difY;
+    //    // }
         
         
         
 
-        var speed = Math.sqrt(this.enemy.velocity.x * this.enemy.velocity.x + this.enemy.velocity.y * this.enemy.velocity.y);
+    //     var speed = Math.sqrt(this.enemy.velocity.x * this.enemy.velocity.x + this.enemy.velocity.y * this.enemy.velocity.y);
        
 
     
@@ -143,6 +148,7 @@ class SkeletonMovement {
         } else if (this.enemy.velocity.x < 0) {
             this.enemy.direction = this.enemy.DIRECTION.LEFT;
         }
+
         
         
     };

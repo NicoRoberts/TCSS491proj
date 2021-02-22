@@ -46,13 +46,14 @@ class Player{
 		this.priority = 3;
 
 		// player game stats
-		this.coins = 0;
+		this.coins = 0; // player's current coins
+		this.totalCoinsCollected = 0;
 		this.killCount = 0;
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 150; // using 25 to test game over scene, originally 150
-		this.hpMax = 150; // using 25 to test game over scene, originally 150
+		this.hpCurrent = 40;
+		this.hpMax = 40;
 		this.hit = false;
 		this.stageLevel = 1;
 
@@ -62,15 +63,9 @@ class Player{
 		this.speedBoost = false;
 
 		// stat buff from each perk
-		this.healthBuff = 50;
+		this.healthBuff = 10;
 		this.reloadBuff = .5;
 		this.speedBuff = 0;
-
-		// // weapon inventory (may not need to implement this way)
-		// this.hasMachete = true;
-		// this.hasPistol = true;
-		// this.hasShotgun = false;
-		// this.hasMachinegun = false;
 
 	}
 
@@ -168,6 +163,7 @@ class Player{
 				}
 				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
 					that.coins += 1;
+					that.totalCoinsCollected += 1;
 					entity.removeFromWorld = true;
 				}
 				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
@@ -252,13 +248,17 @@ class Player{
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
-						that.y -= 25;
+						that.x = 250;
+						that.y = 1775;
 						that.game.camera.loadDeparture();
 					}
 				}
 
 				if (entity instanceof Gangway) {
 					if (that.hitbox.collide(entity.hitbox)) {
+
+						//console.log("Good luck");
+
 						that.shardObtained = false;
 						that.stageLevel++;
 						that.x = 243;
