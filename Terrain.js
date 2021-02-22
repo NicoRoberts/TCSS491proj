@@ -11,7 +11,7 @@ class Terrain{
 
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
-        this.visualRadius = 40;
+        this.visualRadius = 60;
         
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/RockSheet.png");
