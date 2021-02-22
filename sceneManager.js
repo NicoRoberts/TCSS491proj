@@ -192,16 +192,16 @@ class SceneManager {
 
 		
 
-		// spawning coins to test shop system
-		//for(var k = 0; k < 50; k++){
-		//	let open = this.grid.getNonClosedGrids();
-		//	if (open.length <= 0) {
-		//		break;
-		//	}
-		//	let randomIndex = randomInt(open.length);
-		//	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
-		//	open[randomIndex].addTerrain(coin);
-		//}
+		//spawning coins to test shop system
+		// for(var k = 0; k < 50; k++){
+		// 	let open = this.grid.getNonClosedGrids();
+		// 	if (open.length <= 0) {
+		// 		break;
+		// 	}
+		// 	let randomIndex = randomInt(open.length);
+		// 	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
+		// 	open[randomIndex].addTerrain(coin);
+		// }
 		
 
 		// testing map generation
@@ -272,7 +272,7 @@ class SceneManager {
 		   }
 		}
 
-		// gangway testing
+		// spawn gangway .2 seconds after loading yacht level so that player does not get forced into next stage
 		if (this.game.stage == "yacht") {
 			this.timeInYacht += this.game.clockTick;
 			if (this.timeInYacht > .2 && !this.gangwaySpawned) {
