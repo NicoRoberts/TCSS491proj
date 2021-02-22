@@ -96,6 +96,16 @@ class SceneManager {
 		this.marriyacht = new Marriyacht(this.game, 90, -300);
 		this.game.addEntity(this.marriyacht);
 
+		//increase enemies per level
+		this.game.enemiesCount = 0;
+		this.game.maxEnemies += 50;
+		this.game.spawnRate = 5;
+		// if (this.game.spawnRate > 3) {
+		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
+        //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+		// 	this.game.spawnRate = 
+		// }
+
 		let dock = new Dock(this.game, 242, 1800);
 
 
