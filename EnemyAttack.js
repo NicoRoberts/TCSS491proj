@@ -19,10 +19,10 @@ class EnemyAttack {
         //this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Slice.png");
 
        
-        var offset = 5;
+        var offset = 15;
         this.hitbox = new HitBox(this, this.width + offset*2, this.height + offset*2, true,  -1 * offset, -1 * offset);
 
-        this.damage = 25;
+        this.damage = 5;
        
     }
 

@@ -36,7 +36,7 @@ class Skeleton extends AbstractEnemy{
 		this.positiony = this.y - this.game.camera.y;
 
 		this.visualRadius = 300;
-		this.attackRadius = 55;
+		this.attackRadius = 60;
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
@@ -80,8 +80,8 @@ class Skeleton extends AbstractEnemy{
 		this.hit = false;
 		this.attackTime = 0.45;
 		this.restTime = 3;
-		this.maxSpeed = 2;
-		this.acceleration = 50;
+		this.maxSpeed = getRandom(1.4, 2.0);
+		this.acceleration = 80000;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -158,7 +158,8 @@ class Skeleton extends AbstractEnemy{
             this.velocity.x *= ratio;
             this.velocity.y *= ratio;
         }
-    };
+	};
+	
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
@@ -260,19 +261,31 @@ class Skeleton extends AbstractEnemy{
 			}
 			
 			if (entity instanceof Terrain && that.attackCollide(entity)) {
-				that.collideTerrain = true;
-				var dist = distance(that, entity);
-				//that.hitbox.collide(entity.hitbox);
-				if (dist == 0) {
-					dist = 1;
-				}
+				var dist = distance(that, that.player);
 				var difX = (entity.positionx - that.positionx) / dist;
                 var difY = (entity.positiony - that.positiony) / dist;
-                that.velocity.x -= difX * (that.acceleration) / (dist * dist);
-                that.velocity.y -= difY * (that.acceleration * 3) / (dist * dist);
-			} else if (entity instanceof Terrain && !that.attackCollide(entity)) {
-				that.collideTerrain = false;
+                that.velocity.x -= difX * that.acceleration / (dist * dist);
+				that.velocity.y -= difY * that.acceleration / (dist * dist);
+				
+				if (that.velocity.x > 0 && !that.detect) {
+					that.direction = that.DIRECTION.RIGHT;
+				} else if (that.velocity.x < 0 && !that.detect) {
+					that.direction = that.DIRECTION.LEFT;
+				}
 			}
+			// 	that.collideTerrain = true;
+			// 	var dist = distance(that, entity);
+			// 	//that.hitbox.collide(entity.hitbox);
+			// 	if (dist == 0) {
+			// 		dist = 1;
+			// 	}
+			// 	var difX = (entity.positionx - that.positionx) / dist;
+            //     var difY = (entity.positiony - that.positiony) / dist;
+            //     that.velocity.x -= difX * (that.acceleration) / (dist * dist);
+            //     that.velocity.y -= difY * (that.acceleration * 3) / (dist * dist);
+			// } else if (entity instanceof Terrain && !that.attackCollide(entity)) {
+			// 	that.collideTerrain = false;
+			// }
 
 
 		});
