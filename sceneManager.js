@@ -37,6 +37,7 @@ class SceneManager {
 
 		this.game.stage = "yacht";
 
+		this.game.removeAll();
 		this.game.entities = [];
 		
 		let bBoundary = new HBoundary(this.game, -600, 2550 - 72, 1000);
@@ -108,8 +109,8 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
 		let gridblockSize = 49;
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize, 0, 67, 71, gridblockSize);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize * 2, gridblockSize, 66, 70, gridblockSize);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize*2, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
 
