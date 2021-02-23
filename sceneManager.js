@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 10;
+		this.shardSpawnTime = 0;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -21,9 +21,10 @@ class SceneManager {
 		this.rockCount = 100;
 		this.treeCount = 100;
 		
-		
-
-		
+		this.healthPerk = new HealthPerk(this.game, -235, 2250);
+		this.reloadPerk = new ReloadPerk(this.game, -330, 2250);
+		this.speedPerk = new SpeedPerk(this.game, -425, 2250);
+	
 	};
 
 	clearEntities(){
@@ -53,6 +54,8 @@ class SceneManager {
 
 		this.game.addEntity(new YachtMap(this.game, -575, 1065));
 
+		this.player.hpCurrent = this.player.hpMax;
+
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
@@ -67,15 +70,15 @@ class SceneManager {
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
 
-		// should we make perks buyable after each stage?
-		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -235, 2250));
+		// each perk can only be bought up to level 3
+		if (this.player.healthBoostLevel < 3) {
+			this.game.addEntity(this.healthPerk);
 		}
-		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -330, 2250));
+		if (this.player.reloadBoostLevel < 3) {
+			this.game.addEntity(this.reloadPerk);
 		}
-		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -425, 2250));
+		if (this.player.speedBoostLevel < 3) {
+			this.game.addEntity(this.speedPerk);
 		}
 
 		

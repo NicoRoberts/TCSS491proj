@@ -58,13 +58,13 @@ class Player{
 		this.stageLevel = 1;
 
 		// perks
-		this.healthBoost = false;
-		this.reloadBoost = false;
-		this.speedBoost = false;
+		this.healthBoostLevel = 0;
+		this.reloadBoostLevel = 0;
+		this.speedBoostLevel = 0;
 
 		// stat buff from each perk
 		this.healthBuff = 10;
-		this.reloadBuff = .5;
+		this.reloadBuff = .85;
 		this.speedBuff = 0;
 
 	}
@@ -99,12 +99,7 @@ class Player{
 			this.game.camera.loadGameOver();
 		}
 		
-		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
-
-		if (this.speedBoost) {
-			console.log("true");
-			this.speedBuff = 1;
-		}		
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;	
 
 		//Update Velocity
 		var moving = false;
@@ -184,10 +179,11 @@ class Player{
 				if (entity instanceof HealthPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.healthBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.healthBoost = true;
+								that.healthBoostLevel++;
+								entity.level++;
 								that.hpMax += that.healthBuff;
 								that.hpCurrent += that.healthBuff;
 							}
@@ -198,10 +194,11 @@ class Player{
 				if (entity instanceof ReloadPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.reloadBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.reloadBoost = true;
+								that.reloadBoostLevel++;
+								entity.level++;
 								for (var i = 0; i < that.game.weapons.length; i++) {
 									((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
 								}
@@ -213,10 +210,12 @@ class Player{
 				if (entity instanceof SpeedPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.speedBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.speedBoost = true;
+								that.speedBoostLevel++;
+								entity.level++;
+								that.speedBuff += 0.4;
 							}
 						}
 					}
