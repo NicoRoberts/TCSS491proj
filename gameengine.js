@@ -92,7 +92,7 @@ class GameEngine {
                 that.click = true;
                 that.weapon.fire();
             }
-            else if (e.which == 1 && (that.stage == "start menu" || that.stage == "game over")) {
+            else {
                 that.click = true;
             }
         }, false);
