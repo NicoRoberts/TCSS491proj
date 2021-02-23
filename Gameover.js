@@ -6,7 +6,7 @@ class Gameover {
     COINS_POS = { X: 650, Y: 400 };
     LEVEL_POS = { X: 650, Y: 525};
     TIME_POS = { X: 650, Y: 650};
-    constructor(game, x, y) {
+    constructor(game) {
         Object.assign(this, {game});
 
         this.priority = 1;

@@ -96,7 +96,7 @@ class SceneManager {
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
-		this.marriyacht = new Marriyacht(this.game, 90, -300);
+		this.marriyacht = new Marriyacht(this.game, 91, -300);
 		this.game.addEntity(this.marriyacht);
 
 		//increase enemies per level
@@ -186,13 +186,6 @@ class SceneManager {
 		this.game.stage = "survival";
 
 		this.shardSpawned = false;
-
-		//this.enemy2 = new Skeleton(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
-
-		//this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
-
-		//testing rock generation 
-
 		
 
 		//spawning coins to test shop system
@@ -205,10 +198,6 @@ class SceneManager {
 		// 	let coin = new Coin(this.game, open[randomIndex].x, open[randomIndex].y);
 		// 	open[randomIndex].addTerrain(coin);
 		// }
-		
-
-		// testing map generation
-		
 		
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.player);
@@ -231,6 +220,14 @@ class SceneManager {
 		this.game.addEntity(new Gameover(this.game));
 		this.update();
 	};
+
+	loadStartMenu() {
+		this.game.stage = "start menu";
+		this.game.entities = [];
+
+		this.game.addEntity(new StartMenu(this.game));
+		this.update();
+	}
 
 	update() {
 		PARAMS.DEBUG = document.getElementById("debug").checked;
@@ -256,24 +253,26 @@ class SceneManager {
 		}
 
 		
-		
-
 		this.spawnTimer += this.game.clockTick;
 
-		// spawning shard
-		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned) {
-			this.shardSpawned = true;
+		if (this.game.stage == "survival") {
+			// spawning shard
+			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned) {
+				this.shardSpawned = true;
 
-			let openGrids = this.game.grid.getSpawnableGrids();
-			let randomGridIndex = randomInt(openGrids.length);
-			let grid = openGrids[randomGridIndex];
-			//let grid = this.game.grid.gridAtIndex(5,37);
-			let shard = new Shards(this.game, grid.x, grid.y);
-			if (grid !== null) {
-				grid.addTerrain(shard);
-				//console.log("spawned");
-		   }
+				let openGrids = this.game.grid.getSpawnableGrids();
+				let randomGridIndex = randomInt(openGrids.length);
+				//let grid = openGrids[randomGridIndex];
+				let grid = this.game.grid.gridAtIndex(5,37);
+				let shard = new Shards(this.game, grid.x, grid.y);
+				if (grid !== null) {
+					grid.addTerrain(shard);
+					//console.log("spawned");
+				}
+			}
 		}
+
+		
 
 		// spawn gangway .2 seconds after loading yacht level so that player does not get forced into next stage
 		if (this.game.stage == "yacht") {

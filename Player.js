@@ -46,7 +46,7 @@ class Player{
 		this.priority = 3;
 
 		// player game stats
-		this.coins = 0; // player's current coins
+		this.coins = 100; // player's current coins
 		this.totalCoinsCollected = 0;
 		this.killCount = 0;
 		this.shardObtained = false;

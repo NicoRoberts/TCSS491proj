@@ -92,6 +92,9 @@ class GameEngine {
                 that.click = true;
                 that.weapon.fire();
             }
+            else if (e.which == 1 && (that.stage == "start menu" || that.stage == "game over")) {
+                that.click = true;
+            }
         }, false);
 
         this.ctx.canvas.addEventListener("mouseup", function (e) {
@@ -208,14 +211,14 @@ class GameEngine {
 
         for (var i = 0; i < this.entities.length; i++) {
             let entity = this.entities[i];
-            if (!(this.stage == "game over")) {
+            if (!(this.stage == "game over") && !(this.stage == "start menu")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
                     || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
                     || entity instanceof YachtMap) {
                     entity.draw(this.ctx);
                 }
             }
-            else if (entity instanceof Gameover) {
+            else if (entity instanceof Gameover || entity instanceof StartMenu) {
                 entity.draw(this.ctx);
             }
             
@@ -241,7 +244,7 @@ class GameEngine {
 
             for (var i = 0; i < entitiesCount; i++) {
                 var entity = this.entities[i];
-
+                
                 if (entity instanceof AbstractEnemy) {
                     //this.enemiesCount++;
                 }

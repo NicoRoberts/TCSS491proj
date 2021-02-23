@@ -74,6 +74,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	this.scene = new SceneManager(gameEngine);
 	gameEngine.addEntity(scene);
-	this.scene.loadArrival();
+	//this.scene.loadArrival();
+	this.scene.loadStartMenu();
 	gameEngine.start();
 });
