@@ -231,7 +231,7 @@ class GameEngine {
 
     update() {
         //console.log("Stage: " + this.stage);
-        if (!(this.stage == "game over")) {
+        if (!(this.stage == "game over")) { // problem, not allowing game over screen to update
             this.minutes = Math.floor(this.ellapsedTime / 60);
             this.seconds = Math.floor(this.ellapsedTime % 60);
 

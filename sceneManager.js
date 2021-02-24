@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 0;
+		this.shardSpawnTime = 0; // how long before shard spawns
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -46,9 +46,6 @@ class SceneManager {
 		let ruBoundary = new VBoundary(this.game, 400, 1150 - 72, 600);
 		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 550);
 
-		//this.gangway = new Gangway(this.game, 400, 1750 - 72);
-
-		// testing delete later maybe
 		this.timeInYacht = 0; 
 		this.gangwaySpawned = false;
 
@@ -63,7 +60,6 @@ class SceneManager {
 		this.game.addEntity(ruBoundary);
 		this.game.addEntity(rlBoundary);
 
-		//this.game.addEntity(this.gangway);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
@@ -224,6 +220,15 @@ class SceneManager {
 	loadStartMenu() {
 		this.game.stage = "start menu";
 		this.game.entities = [];
+
+		// resets the entities to their initial values/states
+		this.player = new Player(this.game, 243, 1800);
+		this.shotgun = new Shotgun(this.game);
+		this.machinegun = new Machinegun(this.game);
+		this.hud = new HUD(this.game, this.player);
+		this.healthPerk = new HealthPerk(this.game, -235, 2250);
+		this.reloadPerk = new ReloadPerk(this.game, -330, 2250);
+		this.speedPerk = new SpeedPerk(this.game, -425, 2250);
 
 		this.game.addEntity(new StartMenu(this.game));
 		this.update();
