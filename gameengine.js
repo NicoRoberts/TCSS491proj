@@ -236,55 +236,54 @@ class GameEngine {
 
     update() {
         //console.log("Stage: " + this.stage);
-        if (!(this.stage == "game over")) { // problem, not allowing game over screen to update
-            this.minutes = Math.floor(this.ellapsedTime / 60);
-            this.seconds = Math.floor(this.ellapsedTime % 60);
 
-            if (this.seconds >= 60) {
-                this.seconds = 0;
+        this.minutes = Math.floor(this.ellapsedTime / 60);
+        this.seconds = Math.floor(this.ellapsedTime % 60);
+
+        if (this.seconds >= 60) {
+            this.seconds = 0;
+        }
+
+        var entitiesCount = this.entities.length;
+
+
+        for (var i = 0; i < entitiesCount; i++) {
+            var entity = this.entities[i];
+            
+            if (entity instanceof AbstractEnemy) {
+                //this.enemiesCount++;
             }
-
-            var entitiesCount = this.entities.length;
-
-
-            for (var i = 0; i < entitiesCount; i++) {
-                var entity = this.entities[i];
-                
-                if (entity instanceof AbstractEnemy) {
-                    //this.enemiesCount++;
-                }
-                if (!(typeof entity == 'undefined')) {
-                    if (!entity.removeFromWorld) {
-                        entity.update();
-                    }
-                }
-            }
-
-
-
-            this.camera.update();
-
-            for (var i = this.entities.length - 1; i >= 0; --i) {
-                if (this.entities[i].removeFromWorld) {
-                    this.entities.splice(i, 1);
+            if (!(typeof entity == 'undefined')) {
+                if (!entity.removeFromWorld) {
+                    entity.update();
                 }
             }
-            if (this.stage == "survival") {
-                
-                this.spawnTimer += this.clockTick;
-                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-                if (randomEnemy == 0) {
-                    this.spawnSkeletons();
-                } else if (randomEnemy == 1) {
-                    this.spawnBanshees();
-                } else {
-                    this.spawnReapers();
-                } 
-                
-                
-                
+        }
 
+
+
+        this.camera.update();
+
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            if (this.entities[i].removeFromWorld) {
+                this.entities.splice(i, 1);
             }
+        }
+        if (this.stage == "survival") {
+            
+            this.spawnTimer += this.clockTick;
+            var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+            if (randomEnemy == 0) {
+                this.spawnSkeletons();
+            } else if (randomEnemy == 1) {
+                this.spawnBanshees();
+            } else {
+                this.spawnReapers();
+            } 
+            
+            
+            
+
         }
 
     };
@@ -406,13 +405,19 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.ellapsedTime += this.clockTick;
+
+        if (this.stage == "start menu") {
+            this.ellapsedTime = 0;
+            this.timeInSurvival = 0;
+        }
 
         if (this.stage == "survival") {
             this.timeInSurvival += this.clockTick;
+            this.ellapsedTime += this.clockTick;
         }
         else {
             this.timeInSurvival = 0;
+            this.ellapsedTime += this.clockTick;
         }
 
         this.update();

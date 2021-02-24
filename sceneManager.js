@@ -52,7 +52,7 @@ class SceneManager {
 
 		this.game.addEntity(new YachtMap(this.game, -575, 1065));
 
-		this.player.hpCurrent = this.player.hpMax;
+		//this.player.hpCurrent = this.player.hpMax;
 
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
@@ -212,6 +212,7 @@ class SceneManager {
 
 	loadGameOver() {
 		this.game.stage = "game over";
+		this.game.removeAll();
 		this.game.entities = [];
 
 		this.game.addEntity(new Gameover(this.game));
@@ -220,10 +221,13 @@ class SceneManager {
 
 	loadStartMenu() {
 		this.game.stage = "start menu";
+		this.game.removeAll();
 		this.game.entities = [];
 
 		// resets the entities to their initial values/states
 		this.player = new Player(this.game, 243, 1800);
+		this.game.weapon = this.game.weapons[1]; // start with pistol in hand
+		this.game.chosenWeapon = 1;
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);

@@ -52,7 +52,7 @@ class Player{
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 10; // originally 40
+		this.hpCurrent = 5; // originally 40
 		this.hpMax = 40;
 		this.hit = false;
 		this.stageLevel = 1;
