@@ -5,9 +5,8 @@
     "\\Maps",
     "\\Perks",
     "\\Projectiles",
-    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\PriorityQueue.js",
+  "SelectedNode": "\\Enemies\\Banshee.js",
   "PreviewInSolutionExplorer": false
 }
