@@ -216,14 +216,15 @@ class GameEngine {
 
         for (var i = 0; i < this.entities.length; i++) {
             let entity = this.entities[i];
-            if (!(this.stage == "game over") && !(this.stage == "start menu")) {
+            if (!(this.stage == "game over") && !(this.stage == "menu")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
                     || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
-                    || entity instanceof YachtMap) {
+                    || entity instanceof YachtMap || entity instanceof Gangway) {
                     entity.draw(this.ctx);
                 }
             }
-            else if (entity instanceof Gameover || entity instanceof StartMenu) {
+            else if (entity instanceof Gameover || entity instanceof StartMenu || entity instanceof ControlsMenu
+            || entity instanceof GuideMenu) {
                 entity.draw(this.ctx);
             }
             
@@ -406,7 +407,7 @@ class GameEngine {
     loop() {
         this.clockTick = this.timer.tick();
 
-        if (this.stage == "start menu") {
+        if (this.stage == "menu") {
             this.ellapsedTime = 0;
             this.timeInSurvival = 0;
         }

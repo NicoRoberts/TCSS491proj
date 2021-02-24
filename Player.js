@@ -247,7 +247,7 @@ class Player{
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
-						that.x = 250;
+						that.x = 275;
 						that.y = 1775;
 						that.game.camera.loadDeparture();
 					}

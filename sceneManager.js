@@ -21,9 +21,9 @@ class SceneManager {
 		this.rockCount = 100;
 		this.treeCount = 100;
 		
-		this.healthPerk = new HealthPerk(this.game, -235, 2250);
-		this.reloadPerk = new ReloadPerk(this.game, -330, 2250);
-		this.speedPerk = new SpeedPerk(this.game, -425, 2250);
+		this.healthPerk = new HealthPerk(this.game, -190, 2265);
+		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
+		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 	
 	};
 
@@ -41,16 +41,16 @@ class SceneManager {
 		this.game.removeAll();
 		this.game.entities = [];
 		
-		let bBoundary = new HBoundary(this.game, -600, 2550 - 72, 1000);
-		let tBoundary = new HBoundary(this.game, -600, 1150 - 72, 1000); 
-		let lBoundary = new VBoundary(this.game, -600, 1150 - 72, 1400); 
-		let ruBoundary = new VBoundary(this.game, 400, 1150 - 72, 600);
-		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 550);
+		let bBoundary = new HBoundary(this.game, -525, 2545 - 72, 925);
+		let tBoundary = new HBoundary(this.game, -525, 1150 - 72, 925); 
+		let lBoundary = new VBoundary(this.game, -525, 1150 - 72, 1400); 
+		let ruBoundary = new VBoundary(this.game, 390, 1150 - 72, 615);
+		let rlBoundary = new VBoundary(this.game, 390, 2010 - 72, 555);
 
 		this.timeInYacht = 0; 
 		this.gangwaySpawned = false;
 
-		this.game.addEntity(new YachtMap(this.game, -575, 1065));
+		this.game.addEntity(new YachtMap(this.game, -530, 1070));
 
 		//this.player.hpCurrent = this.player.hpMax;
 
@@ -80,10 +80,10 @@ class SceneManager {
 
 		
 		if (!this.shotgun.isAvailable) {
-			this.game.addEntity(new DisplayShotgun(this.game, -325, 1600));
+			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
-			this.game.addEntity(new DisplayMachinegun(this.game, -325, 1880));
+			this.game.addEntity(new DisplayMachinegun(this.game, -300, 1880));
 		}
 		this.update();
 	};
@@ -204,9 +204,6 @@ class SceneManager {
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
 		
-		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
-
-		//this.game.addEntity(new Reaper(this.game, 700, 400));
 		this.update();
 	};
 
@@ -220,24 +217,41 @@ class SceneManager {
 	};
 
 	loadStartMenu() {
-		this.game.stage = "start menu";
+		this.game.stage = "menu";
 		this.game.removeAll();
 		this.game.entities = [];
 
+		this.game.weapon = this.game.weapons[1]; // start with pistol in hand
+		this.game.chosenWeapon = 1; // enlarge corresponding weapon box on the HUD
+
 		// resets the entities to their initial values/states
 		this.player = new Player(this.game, 243, 1800);
-		this.game.weapon = this.game.weapons[1]; // start with pistol in hand
-		this.game.chosenWeapon = 1;
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
-		this.healthPerk = new HealthPerk(this.game, -235, 2250);
-		this.reloadPerk = new ReloadPerk(this.game, -330, 2250);
-		this.speedPerk = new SpeedPerk(this.game, -425, 2250);
+		this.healthPerk = new HealthPerk(this.game, -190, 2265);
+		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
+		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 
 		this.game.addEntity(new StartMenu(this.game));
 		this.update();
-	}
+	};
+
+	loadControlsMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new ControlsMenu(this.game));
+		this.update();
+	};
+
+	loadGuideMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new GuideMenu(this.game));
+		this.update();
+	};
 
 	update() {
 		PARAMS.DEBUG = document.getElementById("debug").checked;
@@ -289,7 +303,7 @@ class SceneManager {
 			this.timeInYacht += this.game.clockTick;
 			if (this.timeInYacht > .2 && !this.gangwaySpawned) {
 				this.gangwaySpawned = true;
-				this.game.addEntity(new Gangway(this.game, 400, 1750 - 72));
+				this.game.addEntity(new Gangway(this.game, 420, 1763 - 72));
 			}
 		}
 	
