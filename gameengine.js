@@ -194,6 +194,11 @@ class GameEngine {
             }
         }
     }
+    removeAll() {
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            this.entities[i].removeFromWorld = true;
+        }
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
