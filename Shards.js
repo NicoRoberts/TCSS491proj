@@ -34,7 +34,7 @@ class Shards {
         if (PARAMS.DEBUG) {
             this.hitbox.draw(ctx);
             ctx.beginPath();
-            ctx.moveTo(this.game.player.x + this.game.player.y);
+            ctx.moveTo(this.game.player.x,this.game.player.y);
             ctx.lineTo(this.x, this.y);
             ctx.stroke();
         }
