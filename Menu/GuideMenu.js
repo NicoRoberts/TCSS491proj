@@ -8,18 +8,30 @@ class GuideMenu {
     constructor(game) {
         Object.assign(this, {game});
 
+        this.selected;
         this.priority = 1;
     };
 
     update() {
 
         if (this.game.mouse != null) {
-            if ((this.game.mouse.x >= 10 && this.game.mouse.x <= 225) && (this.game.mouse.y >= 20 && this.game.mouse.y <= 65)
+            
+            if ((this.game.mouse.x >= 175 && this.game.mouse.x <= 590) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
             && (this.game.click)) {
-
+                this.selected = "Enemies";
+            }
+            else if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1045) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
+            && (this.game.click)) {
+                this.selected = "Perks";
+            }
+            else if ((this.game.mouse.x >= 1205 && this.game.mouse.x <= 1680) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
+            && (this.game.click)) {
+                this.selected = "Gameplay";
+            }
+            else if ((this.game.mouse.x >= 10 && this.game.mouse.x <= 225) && (this.game.mouse.y >= 20 && this.game.mouse.y <= 65)
+            && (this.game.click)) {
                 this.game.camera.loadStartMenu();
             }
-            
         }
     };
 
@@ -43,8 +55,12 @@ class GuideMenu {
 
     drawEnemies(ctx) {
 
-        if ((this.game.mouse.x >= 175 && this.game.mouse.x <= 590) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+        if (this.selected == "Enemies") {
             ctx.fillStyle = "White";
+            ctx.fillText("Enemies", this.ENEMIES_POS.X, this.ENEMIES_POS.Y);
+        }
+        else if ((this.game.mouse.x >= 175 && this.game.mouse.x <= 590) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+            ctx.fillStyle = "lightgray";
             ctx.fillText("Enemies", this.ENEMIES_POS.X, this.ENEMIES_POS.Y);
         }
         else {
@@ -55,8 +71,12 @@ class GuideMenu {
 
     drawPerks(ctx) {
 
-        if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1045) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+        if (this.selected == "Perks") {
             ctx.fillStyle = "White";
+            ctx.fillText("Perks", this.PERKS_POS.X, this.PERKS_POS.Y);
+        }
+        else if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1045) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+            ctx.fillStyle = "lightgray";
             ctx.fillText("Perks", this.PERKS_POS.X, this.PERKS_POS.Y);
         }
         else {
@@ -67,8 +87,12 @@ class GuideMenu {
 
     drawGameplay(ctx) {
 
-        if ((this.game.mouse.x >= 1205 && this.game.mouse.x <= 1680) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+        if (this.selected == "Gameplay") {
             ctx.fillStyle = "White";
+            ctx.fillText("Gameplay", this.GAME_POS.X, this.GAME_POS.Y);
+        }
+        else if ((this.game.mouse.x >= 1205 && this.game.mouse.x <= 1680) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)) {
+            ctx.fillStyle = "lightgray";
             ctx.fillText("Gameplay", this.GAME_POS.X, this.GAME_POS.Y);
         }
         else {

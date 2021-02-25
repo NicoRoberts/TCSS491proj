@@ -16,22 +16,18 @@ class StartMenu {
         if (this.game.mouse != null) {
             if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1040) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
             && (this.game.click)) {
-    
                 this.game.camera.loadArrival();
             }
             else if ((this.game.mouse.x >= 675 && this.game.mouse.x <= 1150) && (this.game.mouse.y >= 365 && this.game.mouse.y <= 450)
             && (this.game.click)) {
-
                 this.game.camera.loadControlsMenu();
             }
             else if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1050) && (this.game.mouse.y >= 515 && this.game.mouse.y <= 600)
             && (this.game.click)) {
-
                 this.game.camera.loadGuideMenu();
             }
             else if ((this.game.mouse.x >= 700 && this.game.mouse.x <= 1110) && (this.game.mouse.y >= 665 && this.game.mouse.y <= 750)
             && (this.game.click)) {
-
                 this.game.camera.loadCreditsMenu();
             }
         }
