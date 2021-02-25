@@ -253,6 +253,14 @@ class SceneManager {
 		this.update();
 	};
 
+	loadCreditsMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new CreditsMenu(this.game));
+		this.update();
+	};
+
 	update() {
 		PARAMS.DEBUG = document.getElementById("debug").checked;
 		PARAMS.GRID = document.getElementById("grid").checked;

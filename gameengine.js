@@ -224,7 +224,7 @@ class GameEngine {
                 }
             }
             else if (entity instanceof Gameover || entity instanceof StartMenu || entity instanceof ControlsMenu
-            || entity instanceof GuideMenu) {
+            || entity instanceof GuideMenu || entity instanceof CreditsMenu) {
                 entity.draw(this.ctx);
             }
             

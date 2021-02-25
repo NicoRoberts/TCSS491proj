@@ -1,8 +1,10 @@
-class ControlsMenu {
+class CreditsMenu {
 
-    TITLE_POS = { X: 650, Y: 150 };
-    MOVEMENT_POS = { X: 125, Y: 275 };
-    ACTION_POS = { X: 950, Y : 275 };
+    TITLE_POS = { X: 750, Y: 150 };
+    TIEN_POS = { X: 737.5, Y: 300 };
+    JAKE_POS = { X: 687.5, Y: 450 };
+    NICO_POS = { X: 675, Y: 600 };
+    ROMI_POS = { X: 662.5, Y: 750 };
     BACK_POS = { X: 10, Y: 65 };
     constructor(game) {
         Object.assign(this, {game});
@@ -28,26 +30,21 @@ class ControlsMenu {
         var fontsize = 150;
         ctx.font = fontsize + 'px "VT323"';
 
-        ctx.fillText("CONTROLS", this.TITLE_POS.X, this.TITLE_POS.Y);
+        ctx.fillText("CREDITS", this.TITLE_POS.X, this.TITLE_POS.Y);
 
         ctx.fillStyle = "White";
         fontsize = 125;
         ctx.font = fontsize + 'px "VT323"';
 
-        ctx.fillText("W : move up", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y, 800);
-        ctx.fillText("A : move left", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 150, 800);
-        ctx.fillText("S : move down", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 300, 800);
-        ctx.fillText("D : move right", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 450, 800);
-
-        ctx.fillText("Click : shoot/slash", this.ACTION_POS.X, this.ACTION_POS.Y, 800);
-        ctx.fillText("1-4 : switch wepons", this.ACTION_POS.X, this.ACTION_POS.Y + 150, 800);
-        ctx.fillText("R : reload weapon", this.ACTION_POS.X, this.ACTION_POS.Y + 300, 800);
-        ctx.fillText("E : purchase item", this.ACTION_POS.X, this.ACTION_POS.Y + 450, 800);
+        ctx.fillText("TIEN TANG", this.TIEN_POS.X, this.TIEN_POS.Y);
+        ctx.fillText("JAKE SOUSIE", this.JAKE_POS.X, this.JAKE_POS.Y);
+        ctx.fillText("NICO ROBERTS", this.NICO_POS.X, this.NICO_POS.Y);
+        ctx.fillText("ROMI TSHIORNY", this.ROMI_POS.X, this.ROMI_POS.Y);
 
         if (this.game.mouse != null) {
             this.drawGoBack(ctx);
         }
-
+    
     };
 
     drawGoBack(ctx) {
@@ -64,4 +61,5 @@ class ControlsMenu {
         }
 
     };
+
 }
