@@ -34,6 +34,7 @@ ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Pistol.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Shotgun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Dock.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKingUnknown.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");

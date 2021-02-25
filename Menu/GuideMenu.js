@@ -18,6 +18,8 @@ class GuideMenu {
         this.banshee = new Animator(this.bansheeSprite, 384, 0, 96, 96, 4, 0.15, 0, true, true);
         this.reaperSprite = ASSET_MANAGER.getAsset("./Sprites/ReaperSheet.png");
         this.reaper = new Animator(this.reaperSprite, 1, 197, 63, 96, 4, 0.15, 2, false, true);
+        this.lichKingSprite = ASSET_MANAGER.getAsset("./Sprites/LichKingUnknown.png");
+        this.lichKing = new Animator(this.lichKingSprite, 0, 0, 176, 196, 1, 1, 0, false, true);
 
         // perk sprites and animtions
         this.perkWidth = 34;
@@ -55,8 +57,8 @@ class GuideMenu {
 
     draw(ctx) {
 
-        // ctx.fillStyle = "silver";
-        // ctx.fillRect(0, 0, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
+        ctx.fillStyle = rgb(20, 20, 20);
+        ctx.fillRect(0, 0, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
 
         ctx.fillStyle = "darkslategray";
         var fontsize = 150;
@@ -111,6 +113,8 @@ class GuideMenu {
         ctx.fillText("Shoots Energy", 1075, 800, 275);
         ctx.fillText("Orbs", 1175, 850, 100);
 
+
+        this.lichKing.drawFrame(this.game.clockTick, this.game.ctx, 1437.5, 300, 2);
         ctx.fillStyle = "maroon";
         fontsize = 300;
         ctx.font = fontsize + 'px "VT323"';
