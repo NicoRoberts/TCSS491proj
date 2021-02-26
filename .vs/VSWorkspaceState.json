@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Enemies",
-    "\\Maps",
     "\\Perks",
     "\\Projectiles",
+    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Enemies\\Banshee.js",
   "PreviewInSolutionExplorer": false
 }

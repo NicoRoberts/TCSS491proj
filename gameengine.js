@@ -257,30 +257,43 @@ class GameEngine {
                 }
             }
 
-
-
             this.camera.update();
+
+            if (this.stage == "survival") {
+                
+                //BOSS LEVEL
+                if (this.player.stageLevel == 5) {
+
+                }
+                else {
+                    this.spawnTimer += this.clockTick;
+                    var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                    if (randomEnemy == 0) {
+                        this.spawnSkeletons();
+                    } else if (randomEnemy == 1) {
+                        this.spawnBanshees();
+                    } else {
+                        this.spawnReapers();
+                    } 
+                    //this.spawnReapers();
+                }
+
+            }
+
 
             for (var i = this.entities.length - 1; i >= 0; --i) {
                 if (this.entities[i].removeFromWorld) {
                     this.entities.splice(i, 1);
                 }
             }
-            if (this.stage == "survival") {
-                
-                this.spawnTimer += this.clockTick;
-                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-                if (randomEnemy == 0) {
-                    this.spawnSkeletons();
-                } else if (randomEnemy == 1) {
-                    this.spawnBanshees();
-                } else {
-                    this.spawnReapers();
-                } 
-                
-                
-                
 
+            //For click off of screen
+            if (document.activeElement != document.getElementById("gameWorld")) {
+                    this.W = false;
+                    this.A = false;
+                    this.S = false;
+                    this.D = false;
+                    this.E = false;
             }
         }
 

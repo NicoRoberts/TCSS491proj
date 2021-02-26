@@ -1,20 +1,23 @@
 class Player{
 
-	SET_VELOCITY = { X: 2, Y: 2 };
+	
 
-	DIRECTION = {
-		RIGHT: 0,
-		LEFT: 1,
-		COUNT: 2
-	};
-	STATE = {
-		IDLE: 0,
-		WALKING: 1,
-		COUNT: 2,
-    };
+	constructor(game, x, y) {
 
-	constructor(game,x,y){
-		Object.assign(this, {game, x, y});
+		Object.assign(this, { game, x, y });
+
+		this.SET_VELOCITY = { X: 2, Y: 2 };
+
+		this.DIRECTION = {
+			RIGHT: 0,
+			LEFT: 1,
+			COUNT: 2
+		};
+		this.STATE = {
+			IDLE: 0,
+			WALKING: 1,
+			COUNT: 2,
+		};
     
     	this.width = 16;
     	this.height = 32;
@@ -55,7 +58,7 @@ class Player{
 		this.hpCurrent = 40;
 		this.hpMax = 40;
 		this.hit = false;
-		this.stageLevel = 1;
+		this.stageLevel = 5;
 
 		// perks
 		this.healthBoost = false;

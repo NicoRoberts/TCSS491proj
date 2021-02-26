@@ -73,10 +73,20 @@ class Slice {
 
         var that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity instanceof AbstractEnemy || entity instanceof Reaper) {
+            if (entity instanceof AbstractEnemy) {
                 if (that.hitbox.collide(entity.hitbox) && (!that.hitdealt)) {
                     that.hitdealt = true;
                     entity.hit = true;
+                    entity.velocity.x = -10 * entity.velocity.x;
+                    entity.velocity.y = -10 * entity.velocity.y;
+                    let originalAcceleration = entity.acceleration;
+                    let originalMaxSpeed = entity.maxSpeed;
+                    entity.acceleration = 0;
+                    entity.maxSpeed = 5;
+                    window.setTimeout(function () {
+                        entity.acceleration = originalAcceleration;
+                        entity.maxSpeed = originalMaxSpeed;
+                    },150)
                     entity.hpCurrent -= that.damage; // slice damage
                 }
             }

@@ -29,6 +29,8 @@ class Reaper extends AbstractEnemy{
 		this.detectionRange = 400;
 		this.safeDistance = 250;
 
+		this.maxSpeed = 1.5;
+
 		this.detected = false;
 
 		this.startingPos = { x: this.x, y: this.y };
@@ -46,6 +48,8 @@ class Reaper extends AbstractEnemy{
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
+		this.acceleration = 8000;
+
 		this.center = { x: this.x + this.width / 2, y: this.y + this.height / 2 }
 
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/ReaperSheet.png");
@@ -53,6 +57,7 @@ class Reaper extends AbstractEnemy{
 
 		this.direction = this.DIRECTION.LEFT;
 		this.state = this.STATE.IDLE;
+
 
 		this.priority = 1;
 
@@ -113,8 +118,20 @@ class Reaper extends AbstractEnemy{
 		}
 	};
 
+	testSpeed() {
+		var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+		if (speed > this.maxSpeed) {
+			var ratio = this.maxSpeed / speed;
+			this.velocity.x *= ratio; 
+			this.velocity.y *= ratio;
+		}
+	};
+
 	approach() {
-		this.velocity = { x: this.SET_VELOCITY * Math.cos(this.angle), y: this.SET_VELOCITY * Math.sin(this.angle) };
+		var difX = (this.game.player.circlex - this.x) / this.distance;
+		var difY = (this.game.player.circley - this.y) / this.distance;
+		this.velocity.x += difX * this.acceleration / Math.pow(this.distance, 2);
+		this.velocity.y += difY * this.acceleration / Math.pow(this.distance, 2);
 	};
 	pause() {
 		this.state = this.STATE.ATTACK;
@@ -133,7 +150,10 @@ class Reaper extends AbstractEnemy{
 		};
 	};
 	flee() {
-		this.velocity = { x: -1 * this.SET_VELOCITY * Math.cos(this.angle), y: -1 * this.SET_VELOCITY * Math.sin(this.angle) };
+		var difX = (this.game.player.circlex - this.x) / this.distance;
+		var difY = (this.game.player.circley - this.y) / this.distance;
+		this.velocity.x -= difX * this.acceleration / Math.pow(this.distance, 2);
+		this.velocity.y -= difY * this.acceleration / Math.pow(this.distance, 2);
 	};
 	chase(dx,dy){
 		if (dx < 0) {
@@ -150,9 +170,6 @@ class Reaper extends AbstractEnemy{
 
 		if (this.distance >= this.safeDistance) {
 			this.approach();
-		}
-		else if (this.safeDistance > this.distance && this.distance > this.safeDistance - this.width) {
-			this.pause();
 		}
 		else {
 			this.flee();
@@ -253,11 +270,55 @@ class Reaper extends AbstractEnemy{
 				}
 				if (!(entity instanceof AbstractEnemy)) {
 					that.hitbox.collide(entity.hitbox);
-                }
+				}
+				if (entity instanceof Terrain || entity instanceof AbstractEnemy) {
+					if (that.state == that.STATE.AGRO || that.state == that.STATE.ATTACK) {
+						var dist = distance(that, that.game.player);
+						var difX = (entity.positionx - that.positionx - that.width/2) / dist;
+						var difY = (entity.positiony - that.positiony - that.height/2) / dist;
+						if (distance(that, entity) < 100) {
+							that.velocity.x -= difX * that.acceleration / (dist * dist);
+							that.velocity.y -= difY * that.acceleration / (dist * dist);
+                        }
+						
+					}
+					if (entity instanceof Terrain) {
+						that.hitbox.collide(entity.hitbox);
+                    }
+					
+					
+				}
+				if (entity instanceof HBoundary) {
+					if (that.state == that.STATE.AGRO || that.state == that.STATE.ATTACK) {
+						var dist = distance(that, that.game.player);
+						var difY = (entity.positiony - that.positiony - that.height / 2) / dist;
+						if (Math.abs(that.y + that.height / 2-entity.y) < 100) {
+							that.velocity.y -= difY * that.acceleration*7/ (dist * dist);
+						}
+
+					}
+					that.hitbox.collide(entity.hitbox);
+
+				}
+				if (entity instanceof VBoundary) {
+					if (that.state == that.STATE.AGRO || that.state == that.STATE.ATTACK) {
+						var dist = distance(that, that.game.player);
+						var difX = (entity.positionx - (that.positionx+that.width/2)) / dist;
+						if (Math.abs(that.x + that.width / 2 - entity.x)< 100) {
+							that.velocity.x -= difX * that.acceleration*7/ (dist * dist);
+						}
+
+					}
+					that.hitbox.collide(entity.hitbox);
+
+				}
+				
 				
 			}
 
 		});
+
+		this.testSpeed();
 
 		this.x += this.velocity.x * TICKSCALE;
 		this.y += this.velocity.y * TICKSCALE;
