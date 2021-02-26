@@ -30,6 +30,20 @@ class GuideMenu {
         this.reloadPerk = new Animator(this.reloadPerkSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
         this.speedPerkSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostSprite.png");
         this.speedPerk = new Animator(this.speedPerkSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
+
+        // gameplay sprites (drops, shard, marriyacht)
+        this.dropWidth = 28;
+        this.dropHeight = 32;
+        this.shardSprite = ASSET_MANAGER.getAsset("./Sprites/Shard.png");
+        this.shard = new Animator(this.shardSprite, 0, 0, 18, 18, 6, 0.2, 0, false, true);
+        this.coinSprite = ASSET_MANAGER.getAsset("./Sprites/CoinSprite.png");
+        this.coin = new Animator(this.coinSprite, 1, 1, this.dropWidth, this.dropHeight, 8, 0.1, 2, false, true);
+        this.healthPackSprite = ASSET_MANAGER.getAsset("./Sprites/HealthSprite.png");
+        this.healthPack = new Animator(this.healthPackSprite, 1, 1, this.dropWidth, this.dropHeight, 8, 0.1, 2, false, true);
+        this.ammoPackSprite = ASSET_MANAGER.getAsset("./Sprites/AmmoSprite.png");
+        this.ammoPack = new Animator(this.ammoPackSprite, 1, 1, this.dropWidth, this.dropHeight, 8, 0.1, 2, false, true);
+        this.marriyachtSprite = ASSET_MANAGER.getAsset("./Sprites/YachtSprite.png");
+        this.marriyacht = new Animator(this.marriyachtSprite, 0, 288, 152, 288, 4, 0.25, 0, false, true);
     };
 
     update() {
@@ -196,6 +210,47 @@ class GuideMenu {
     };
 
     expandGameplay(ctx) {
+
+        ctx.fillStyle = "White";
+        var fontsize = 25;
+        ctx.font = fontsize + 'px "VT323"';
+
+        this.coin.drawFrame(this.game.clockTick, this.game.ctx, 150, 450, 2);
+        ctx.fillText("Coin", 155, 440, 75);
+
+        this.ammoPack.drawFrame(this.game.clockTick, this.game.ctx, 250, 525, 2);
+        ctx.fillText("Ammo Pack", 240, 620, 75);
+
+        this.healthPack.drawFrame(this.game.clockTick, this.game.ctx, 350, 450, 2);
+        ctx.fillText("Health Pack", 340, 440, 75);
+
+        this.shard.drawFrame(this.game.clockTick, this.game.ctx, 850, 475, 5);
+
+        this.marriyacht.drawFrame(this.game.clockTick, this.game.ctx, 1500, 400, .75);
+
+
+        fontsize = 100;
+        ctx.font = fontsize + 'px "VT323"';
+        ctx.fillText("Enemies have Chance to Drop", 75, 700, 450);
+
+        ctx.fillText("Shard", 800, 700, 450);
+
+        ctx.fillText("Marri-Yacht", 1350, 700, 450);
+        
+
+        fontsize = 50;
+        ctx.font = fontsize + 'px "VT323"';
+        ctx.fillText("Collect Coins to Buy/Upgrade Perks and Weapons", 50, 750, 500);
+        ctx.fillText("Collect Health Packs to Replenish Health", 50, 800, 500);
+        ctx.fillText("Collect Ammo Packs to Refill Ammo", 50, 850, 500);
+
+        ctx.fillText("Shards Spawn After A Certain Amount of Time,", 675, 750, 500);
+        ctx.fillText("Collect the Shard of Each Level To Progress", 675, 800, 500);
+        ctx.fillText("Marri-Yacht Accessible After Shard Obtained", 675, 850, 500);
+
+        ctx.fillText("Board the Marri-Yacht to Cruise onto Next Level", 1325, 750, 500);
+        ctx.fillText("Weapons and Perks are Located on Deck", 1325, 800, 500);
+        ctx.fillText("Make It Past Level 5 to Win", 1325, 850, 500);
 
     };
 
