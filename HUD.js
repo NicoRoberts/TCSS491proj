@@ -9,9 +9,9 @@ class HUD {
         this.heartSprite = ASSET_MANAGER.getAsset("./Sprites/Hearts.png");
         this.heartStates = [];
 
-        this.healthBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/HealthBoostSprite.png");
-        this.reloadBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReloadBoostSprite.png");
-        this.speedBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostSprite.png");
+        this.healthBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/HealthBoostLevelSprite.png");
+        this.reloadBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReloadBoostLevelSprite.png");
+        this.speedBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostLevelSprite.png");
 
         this.weaponSprites = [];
         this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Machete.png"));
@@ -36,11 +36,16 @@ class HUD {
 
         this.perkWidth = 34;
         this.perkHeight = 34;
+
         this.minutes = 0;
         this.seconds = 0;
         this.millis = 0;
 
         this.priority = 100; // should be the last thing to be drawn to the screen
+
+        this.healthPerk = [];
+        this.reloadPerk = [];
+        this.speedPerk = [];
 
         //difficulty bar
         this.maxDifficulty = 150; //approx 2 min
@@ -70,13 +75,19 @@ class HUD {
 
     loadPerks() {
 
-        this.healthPerk = new Animator(this.healthBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        this.reloadPerk = new Animator(this.reloadBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        this.speedPerk = new Animator(this.speedBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
+        //this.healthPerk = new Animator(this.healthBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
+        //this.reloadPerk = new Animator(this.reloadBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
+        //this.speedPerk = new Animator(this.speedBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
 
-        this.healthPerkObtained = false;
-        this.reloadPerkObtained = false;
-        this.speedPerkObtained = false;
+        var offset = 0;
+        for (var i = 0; i < 3; i++) {
+
+            this.healthPerk.push(new Animator(this.healthBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            this.reloadPerk.push(new Animator(this.reloadBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            this.speedPerk.push(new Animator(this.speedBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            
+            offset += this.perkWidth;
+        }
 
     };
     
@@ -107,17 +118,15 @@ class HUD {
     }
 
     updatePerks() {
-        if (this.player.healthBoost && !this.healthPerkObtained) {
-            this.healthPerkObtained = true;
-            this.perks.push(this.healthPerk);
+        this.perks = [];
+        if (this.player.healthBoostLevel > 0) {
+            this.perks.push(this.healthPerk[this.player.healthBoostLevel - 1]); // - 1 for indexing
         }
-        if (this.player.reloadBoost && !this.reloadPerkObtained) {
-            this.reloadPerkObtained = true;
-            this.perks.push(this.reloadPerk);
+        if (this.player.reloadBoostLevel > 0) {
+            this.perks.push(this.reloadPerk[this.player.reloadBoostLevel - 1]);
         }
-        if (this.player.speedBoost && !this.speedPerkObtained) {
-            this.speedPerkObtained = true;
-            this.perks.push(this.speedPerk);
+        if (this.player.speedBoostLevel > 0) {
+            this.perks.push(this.speedPerk[this.player.speedBoostLevel - 1]);
         }
     }
 
