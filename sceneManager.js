@@ -6,7 +6,6 @@ class SceneManager {
 		//for camera scrolling
 		this.x = 0;
 		this.y = 0;	
-		
 		this.game.stage;
 		
 		this.shardSpawned = false;
@@ -18,10 +17,7 @@ class SceneManager {
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
-		this.rockCount = 100;
-		this.treeCount = 100;
-		
-		
+		this.terrainCount = 100;	
 
 		
 	};
@@ -127,27 +123,24 @@ class SceneManager {
 		this.grid.update();
 
 
-
-		for (var i = 0; i < this.rockCount; i++) {
-			let open = this.grid.getOpenGrids();
-			if (open.length <= 0) {
-				break;
-			}
-			let randomIndex = randomInt(open.length);
-			let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addTerrain(rock);
-		}
-
-		//testing tree generation
-		for (var j = 0; j < this.treeCount; j++) {
-			let open = this.grid.getOpenGrids();
-			if (open.length <= 0) {
-				break;
-			}
-			let randomIndex = randomInt(open.length);
-			let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
-			open[randomIndex].addTerrain(tree);
-		}
+		if (!(this.game.player.stageLevel == 5)) {
+			for (var j = 0; j < this.terrainCount; j++) {
+				let open = this.grid.getOpenGrids();
+				if (open.length <= 0) {
+					break;
+				}
+				let randomIndex = randomInt(open.length);
+				let tree = new Trees(this.game, open[randomIndex].x, open[randomIndex].y);
+				let rock = new Terrain(this.game, open[randomIndex].x, open[randomIndex].y);
+				if (randomInt(2) == 0) {
+					open[randomIndex].addTerrain(tree);
+				}
+				else {
+					open[randomIndex].addTerrain(rock);
+                }
+			}		
+        }
+		
 
 		this.map = new Map(this.game, -1350, -1645);
 
@@ -157,6 +150,7 @@ class SceneManager {
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);
 		this.game.addEntity(dock);
+		this.game.addEntity(new Darkness(this.game));
 		this.update();
 	}
 	loadDeparture() {
@@ -215,7 +209,12 @@ class SceneManager {
 		this.game.addEntity(this.shotgun);
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
-		
+
+		// BOSS SPAWN
+		if (this.game.player.stageLevel == 5) {
+			//Spawn lich king in the center
+			this.game.addEntity(new LichKing(this.game,2000,2000));
+        }
 		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
 		//this.game.addEntity(new Reaper(this.game, 700, 400));
@@ -259,7 +258,7 @@ class SceneManager {
 		this.spawnTimer += this.game.clockTick;
 
 		// spawning shard
-		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned) {
+		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
 			this.shardSpawned = true;
 
 			let openGrids = this.game.grid.getSpawnableGrids();
@@ -290,12 +289,6 @@ class SceneManager {
 	
 	
 	draw(ctx) {
-		if (PARAMS.DEBUG) {
-			// ctx.fillStyle = "White";
-            // ctx.fillText("TIME", 12.5 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH);
-        	// ctx.fillText(this.game.clockTick, 13 * PARAMS.BLOCKWIDTH, 1.5 * PARAMS.BLOCKWIDTH);
-
-            
-        };
+		//DONOTHING
 	};
 };

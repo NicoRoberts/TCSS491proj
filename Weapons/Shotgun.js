@@ -27,11 +27,14 @@ class Shotgun {
 
         this.game.weapons[2] = this;
 
+        this.cooldown = 500;
+        this.cooldownReady = true;
         this.reloading = false;
-        this.reloadTime = 2;
+        this.reloadTime = 1.8;
         this.timeLeft = 0;
 
-        this.maxAmmo = 10;
+        this.bulletDamage = 30;
+        this.maxAmmo = 6;
         this.maxReserves = 60;
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
@@ -79,13 +82,14 @@ class Shotgun {
     }
 
     fire() {
-        if (this.ammoCount > 0) {
-            
+        if (this.ammoCount > 0 && this.cooldownReady) {
+            let that = this;
+            this.cooldownReady = false;
 
             let maxSpread = Math.PI / 48;
             let spreadCount = 2;
 
-            this.ammoCount -= 1 + spreadCount*2;
+            this.ammoCount -= 1;
 
             let angle = this.game.player.direction == this.game.player.DIRECTION.RIGHT ? this.angle : this.angle - Math.PI;
             this.game.addEntity(new Bullet(this.game, this.source.x + this.angleOffset.x + this.game.camera.x,
@@ -96,7 +100,11 @@ class Shotgun {
                     this.source.y + this.angleOffset.y + this.game.camera.y, angle + maxSpread/i));
                 this.game.addEntity(new Bullet(this.game, this.source.x + this.angleOffset.x + this.game.camera.x,
                     this.source.y + this.angleOffset.y + this.game.camera.y, angle - maxSpread/i));
-			}
+            }
+
+            window.setTimeout(function () {
+                that.cooldownReady = true;
+            }, this.cooldown)
         }
     }
 

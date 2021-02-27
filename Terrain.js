@@ -21,7 +21,7 @@ class Terrain{
         this.circlex = this.x + (this.width / 2);
         this.circley = this.y + (this.height / 2);
 
-        this.priority = 5;
+        this.priority = 2;
         
         this.setupTerrainTypes();
         this.loadStates();
