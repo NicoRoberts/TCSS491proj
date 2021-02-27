@@ -12,7 +12,8 @@ class Map{
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-		this.spritesheet = ASSET_MANAGER.getAsset("./Maps/CastToTheShadowsMapBIG.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./Maps/CastToTheShadowsMapBIG.png");
+        
 
     	this.game.Map= this;
 
@@ -54,7 +55,7 @@ class Map{
 			ctx.closePath();
             
         }
-        this.states[0].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,1);
+        this.states[0].drawFrame(this.game.clockTick, ctx, this.positionx, this.positiony, 1);
         
         //ctx.drawImage(this.spritesheet,this.positionx,this.positiony,this.width,this.height,0,0,this.width,this.height)
 	};

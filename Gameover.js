@@ -52,7 +52,12 @@ class Gameover {
 
         // Time alive
         ctx.fillText("Time: ", this.TIME_POS.X, this.TIME_POS.Y);
-        ctx.fillText(this.minutes + ":" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        if (this.seconds < 10) {
+            ctx.fillText(this.minutes + ":0" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        }
+        else {
+            ctx.fillText(this.minutes + ":" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        }
 
         this.drawPlayAgain(ctx);
     };

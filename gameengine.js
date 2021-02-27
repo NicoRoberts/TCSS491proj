@@ -80,6 +80,11 @@ class GameEngine {
             return { x: x, y: y };
         }
 
+        this.ctx.canvas.addEventListener("mouseout", function (e) {
+            that.click = false;
+            
+        }, false);
+
         this.ctx.canvas.addEventListener("mousemove", function (e) {
             //console.log(getXandY(e));
             that.mouse = getXandY(e);
@@ -219,7 +224,7 @@ class GameEngine {
             if (!(this.stage == "game over") && !(this.stage == "menu")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
                     || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
-                    || entity instanceof YachtMap || entity instanceof Gangway) {
+                    || entity instanceof YachtMap || entity instanceof Gangway || entity instanceof Darkness) {
                     entity.draw(this.ctx);
                 }
             }
@@ -261,31 +266,45 @@ class GameEngine {
             }
         }
 
+            this.camera.update();
 
+            if (this.stage == "survival") {
+                
+                //BOSS LEVEL
+                if (this.player.stageLevel == 5) {
 
-        this.camera.update();
+                }
+                else {
+                    this.spawnTimer += this.clockTick;
+                    var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                    if (randomEnemy == 0) {
+                        this.spawnSkeletons();
+                    } else if (randomEnemy == 1) {
+                        this.spawnBanshees();
+                    } else {
+                        this.spawnReapers();
+                    } 
+                    
+                }
+
+            }
+
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
             }
         }
-        if (this.stage == "survival") {
-            
-            this.spawnTimer += this.clockTick;
-            var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-            if (randomEnemy == 0) {
-                this.spawnSkeletons();
-            } else if (randomEnemy == 1) {
-                this.spawnBanshees();
-            } else {
-                this.spawnReapers();
-            } 
-            
-            
-            
 
+        //For click off of screen
+        if (document.activeElement != document.getElementById("gameWorld")) {
+            this.W = false;
+            this.A = false;
+            this.S = false;
+            this.D = false;
+            this.E = false;
         }
+        
 
     };
 
