@@ -24,6 +24,7 @@ class SceneManager {
 		this.healthPerk = new HealthPerk(this.game, -190, 2265);
 		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
+		this.revivePerk = new RevivePerk(this.game, 125, 1175);
 	
 	};
 
@@ -78,6 +79,10 @@ class SceneManager {
 			this.game.addEntity(this.speedPerk);
 		}
 
+		if (this.player.healthBoostLevel == 3 && this.player.reloadBoostLevel == 3
+			&& this.player.speedBoostLevel == 3 && !this.revivePerk.purchased) {
+			this.game.addEntity(this.revivePerk);
+		}
 		
 		if (!this.shotgun.isAvailable) {
 			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
@@ -232,6 +237,7 @@ class SceneManager {
 		this.healthPerk = new HealthPerk(this.game, -190, 2265);
 		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
+		this.revivePerk = new RevivePerk(this.game, 125, 1175);
 
 		this.game.addEntity(new StartMenu(this.game));
 		this.update();

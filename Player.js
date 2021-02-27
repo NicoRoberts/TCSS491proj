@@ -61,6 +61,7 @@ class Player{
 		this.healthBoostLevel = 0;
 		this.reloadBoostLevel = 0;
 		this.speedBoostLevel = 0;
+		this.secondChance = false;
 
 		// stat buff from each perk
 		this.healthBuff = 10;
@@ -95,7 +96,11 @@ class Player{
 
 	update() {
 		
-		if (this.hpCurrent <= 0) {
+		if (this.hpCurrent <= 0 && this.secondChance) {
+			this.hpCurrent = this.hpMax / 2;
+			this.secondChance = false;
+		}
+		if (this.hpCurrent <= 0 && !this.secondChance) {
 			this.game.camera.loadGameOver();
 		}
 		
@@ -216,6 +221,19 @@ class Player{
 								that.speedBoostLevel++;
 								entity.level++;
 								that.speedBuff += 0.4;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof RevivePerk) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost && !(entity.purchased)) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.secondChance = true;
+								entity.purchased = true;
 							}
 						}
 					}
