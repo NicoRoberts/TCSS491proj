@@ -97,7 +97,7 @@ class Player{
     }
 
 	update() {
-		this.hpCurrent = this.hpMax;
+		//this.hpCurrent = this.hpMax;
 		if (this.hpCurrent <= 0) {
 			this.game.camera.loadGameOver();
 		}

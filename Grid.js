@@ -33,7 +33,7 @@ class Grid{
 			j += 1;
 		}
 
-		let finish = this.gridAt(x + width, y + height);
+		let finish = null;
 		i = 0;
 		j = 0;
 		while (finish == null && i < width) {
