@@ -20,7 +20,7 @@ class SceneManager {
 		this.hud = new HUD(this.game, this.player);
 		this.rockCount = 100;
 		this.treeCount = 100;
-		
+		this.firstlevel = true;
 		
 
 		
@@ -98,8 +98,13 @@ class SceneManager {
 
 		//increase enemies per level
 		this.game.enemiesCount = 0;
-		this.game.maxEnemies += 50;
-		this.game.spawnRate = 5;
+		if (this.firstlevel) {
+			this.game.maxEnemies += 25;
+			this.firstlevel = false;
+		} else {
+			this.game.maxEnemies += 10;
+		}
+		this.game.spawnRate = 3;
 		// if (this.game.spawnRate > 3) {
 		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
         //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
