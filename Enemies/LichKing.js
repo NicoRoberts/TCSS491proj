@@ -61,7 +61,7 @@ class LichKing extends AbstractEnemy {
 
 		this.priority = 1;
 
-		this.hpMax = 5000;
+		this.hpMax = 4500;
 		this.hpCurrent = this.hpMax;
 
 		this.animations = [];
@@ -190,8 +190,8 @@ class LichKing extends AbstractEnemy {
 		if (!this.firing) {
 			this.firing = true;
 			let attackType = randomInt(100)
-			let summonThreshold = 33;
-			if (attackType <= summonThreshold && this.game.enemiesCount < 9/*max enemy spawns*/) {
+			let summonThreshold = 25;
+			if (attackType <= summonThreshold && this.game.enemiesCount < 8/*max enemy spawns (buffer of 1-3)*/) {
 				this.staffSummon();
 			}
 			else {

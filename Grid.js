@@ -21,30 +21,8 @@ class Grid{
 		}
 	}
 	gridArea(x, y, width = 1, height = 1) {
-		let start = null;
-		let i = 0;
-		let j = 0;
-		while (start == null && i < width){
-			start = this.gridAt(x + i, y + j);
-			i += 1;
-		}
-		while (start == null && i < height) {
-			start = this.gridAt(x + i, y + j);
-			j += 1;
-		}
-
-		let finish = null;
-		i = 0;
-		j = 0;
-		while (finish == null && i < width) {
-			finish = this.gridAt(x + width-i, y + height-j);
-			i += 1;
-		}
-		while (finish == null && i < height) {
-			finish = this.gridAt(x + width-i, y + height-j);
-			j += 1;
-		}
-
+		let start = this.bestGridAt(x, y);
+		let finish = this.bestGridAt(x + width, y + height);
 		let blocks = [];
 		if (start == null || finish == null) {
 			throw 'Parameters out of grid bounds!';
@@ -69,6 +47,27 @@ class Grid{
 		return this.grid[col][row];
 
 	}
+	bestGridAt(x, y) {
+		let col = Math.floor((x - this.x) / this.blockSize);
+		let row = Math.floor((y - this.y) / this.blockSize);
+		if (col < 0) {
+			col = 0
+		}
+		else if (col >= this.width) {
+			col = this.width - 1;
+		}
+
+		if (row < 0) {
+			row = 0
+		}
+		else if (row >= this.height) {
+			row = this.height - 1;
+		}
+	
+		return this.grid[col][row];
+
+	}
+
 	gridAtIndex(col, row) {
 		if (col < 0 || row < 0 || col >= this.width || row > this.height) {
 			return null;
