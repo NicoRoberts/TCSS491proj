@@ -27,7 +27,9 @@ class Machete {
         this.game.weapons[0] = this;
 
         this.swinging = false;
-
+        this.swingRange = 50;
+        
+        //reduntant
         this.maxAmmo = 18;
         this.maxReserves = 96;
         this.ammoCount = this.maxAmmo;
@@ -50,14 +52,16 @@ class Machete {
     fire() {
         let swingSpeed = Math.PI / 24;
         swingSpeed = this.game.player.direction == this.DIRECTION.RIGHT ? 1 * swingSpeed : -1 * swingSpeed;
-        let swingDistance = Math.PI*2;
-        let startingAngle = this.angle;
+        let swingDistance = 3*Math.PI/2;
+        let startingAngle = this.game.player.direction == this.DIRECTION.RIGHT ? this.angle + Math.PI / 2 : this.angle - Math.PI / 2;
 
        
 
         if (!this.swinging) {
-            this.slice = new Slice(this.game, this.source.x + this.angleOffset.x,
-                this.source.y + this.angleOffset.y, this.angle);
+            this.slice = new Slice(this.game,
+                this.game.player.positionx + this.game.player.width * PARAMS.PIXELSCALER / 2 + this.swingRange * Math.cos(this.game.player.direction == this.DIRECTION.RIGHT ? this.angle : this.angle + Math.PI),
+                this.game.player.positiony + this.game.player.height * PARAMS.PIXELSCALER / 2 + this.swingRange * Math.sin(this.game.player.direction == this.DIRECTION.RIGHT ? this.angle :this.angle + Math.PI),
+                this.angle);
             this.swinging = true;
             this.game.addEntity(this.slice);
 

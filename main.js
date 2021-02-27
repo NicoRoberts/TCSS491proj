@@ -13,6 +13,9 @@ ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
 ASSET_MANAGER.queueDownload("./Sprites/ChargeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Banshee.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKing.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKingDeath.png");
+ASSET_MANAGER.queueDownload("./Sprites/Darkness.png");
 ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/TreeSheet.png");
@@ -20,8 +23,11 @@ ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/YachtSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/GameOverSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");
@@ -31,6 +37,7 @@ ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Pistol.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Shotgun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Dock.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKingUnknown.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
@@ -71,6 +78,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	this.scene = new SceneManager(gameEngine);
 	gameEngine.addEntity(scene);
-	this.scene.loadArrival();
+	//this.scene.loadArrival();
+	this.scene.loadStartMenu();
 	gameEngine.start();
 });

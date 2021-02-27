@@ -20,6 +20,24 @@ class Grid{
 			}
 		}
 	}
+	gridArea(x, y, width = 1, height = 1) {
+		let start = this.bestGridAt(x, y);
+		let finish = this.bestGridAt(x + width, y + height);
+		let blocks = [];
+		if (start == null || finish == null) {
+			throw 'Parameters out of grid bounds!';
+			return;
+		}
+		else {
+			for (var c = start.column; c < finish.column; c++) {
+				for (var r = start.row; r < finish.row; r++) {
+					blocks.push(this.gridAtIndex(c, r));
+				}
+			}
+		}
+		return blocks;
+
+	}
 	gridAt(x, y) {
 		let col = Math.floor((x - this.x) / this.blockSize);
 		let row = Math.floor((y - this.y) / this.blockSize);
@@ -29,6 +47,27 @@ class Grid{
 		return this.grid[col][row];
 
 	}
+	bestGridAt(x, y) {
+		let col = Math.floor((x - this.x) / this.blockSize);
+		let row = Math.floor((y - this.y) / this.blockSize);
+		if (col < 0) {
+			col = 0
+		}
+		else if (col >= this.width) {
+			col = this.width - 1;
+		}
+
+		if (row < 0) {
+			row = 0
+		}
+		else if (row >= this.height) {
+			row = this.height - 1;
+		}
+	
+		return this.grid[col][row];
+
+	}
+
 	gridAtIndex(col, row) {
 		if (col < 0 || row < 0 || col >= this.width || row > this.height) {
 			return null;

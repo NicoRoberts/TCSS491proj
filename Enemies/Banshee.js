@@ -334,6 +334,7 @@ class Banshee extends AbstractEnemy {
 		
 		// death
 		if (this.hpCurrent <= 0) {
+			this.game.enemiesCount--;
 			this.removeFromWorld = true;
 			this.game.player.killCount++;
 		}

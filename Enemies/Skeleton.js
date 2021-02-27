@@ -18,7 +18,7 @@ class Skeleton extends AbstractEnemy{
 			COUNT: 3,
 		};
 
-		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
+		this.dropchance = .4; //Drop chance of an item (between 0 and 1)
 
 		this.width = 75;
 		this.height = 93;
@@ -167,7 +167,7 @@ class Skeleton extends AbstractEnemy{
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
-			let itemCount = 2;
+			let itemCount = 3;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
@@ -330,6 +330,7 @@ class Skeleton extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
+			this.game.enemiesCount--;
 			this.player.killCount++;
 			this.dropItem();
 		};

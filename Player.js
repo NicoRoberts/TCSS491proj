@@ -1,20 +1,23 @@
 class Player{
 
-	SET_VELOCITY = { X: 2, Y: 2 };
+	
 
-	DIRECTION = {
-		RIGHT: 0,
-		LEFT: 1,
-		COUNT: 2
-	};
-	STATE = {
-		IDLE: 0,
-		WALKING: 1,
-		COUNT: 2,
-    };
+	constructor(game, x, y) {
 
-	constructor(game,x,y){
-		Object.assign(this, {game, x, y});
+		Object.assign(this, { game, x, y });
+
+		this.SET_VELOCITY = { X: 2, Y: 2 };
+
+		this.DIRECTION = {
+			RIGHT: 0,
+			LEFT: 1,
+			COUNT: 2
+		};
+		this.STATE = {
+			IDLE: 0,
+			WALKING: 1,
+			COUNT: 2,
+		};
     
     	this.width = 16;
     	this.height = 32;
@@ -52,19 +55,20 @@ class Player{
 		this.shardObtained = false;
 
 		// player stats
-		this.hpCurrent = 40;
+		this.hpCurrent = 40; // originally 40
 		this.hpMax = 40;
 		this.hit = false;
 		this.stageLevel = 1;
 
 		// perks
-		this.healthBoost = false;
-		this.reloadBoost = false;
-		this.speedBoost = false;
+		this.healthBoostLevel = 0;
+		this.reloadBoostLevel = 0;
+		this.speedBoostLevel = 0;
+		this.secondChance = false;
 
 		// stat buff from each perk
 		this.healthBuff = 10;
-		this.reloadBuff = .5;
+		this.reloadBuff = .85;
 		this.speedBuff = 0;
 
 	}
@@ -95,16 +99,15 @@ class Player{
 
 	update() {
 		
-		if (this.hpCurrent <= 0) {
+		if (this.hpCurrent <= 0 && this.secondChance) {
+			this.hpCurrent = this.hpMax / 2;
+			this.secondChance = false;
+		}
+		if (this.hpCurrent <= 0 && !this.secondChance) {
 			this.game.camera.loadGameOver();
 		}
 		
-		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
-
-		if (this.speedBoost) {
-			console.log("true");
-			this.speedBuff = 1;
-		}		
+		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;	
 
 		//Update Velocity
 		var moving = false;
@@ -184,10 +187,11 @@ class Player{
 				if (entity instanceof HealthPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.healthBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.healthBoost = true;
+								that.healthBoostLevel++;
+								entity.level++;
 								that.hpMax += that.healthBuff;
 								that.hpCurrent += that.healthBuff;
 							}
@@ -198,10 +202,11 @@ class Player{
 				if (entity instanceof ReloadPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.reloadBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.reloadBoost = true;
+								that.reloadBoostLevel++;
+								entity.level++;
 								for (var i = 0; i < that.game.weapons.length; i++) {
 									((that.game.weapons)[i]).reloadTime *= that.reloadBuff;
 								}
@@ -213,10 +218,25 @@ class Player{
 				if (entity instanceof SpeedPerk) {
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
-							if (that.coins >= entity.cost) {
+							if (that.coins >= entity.cost && that.speedBoostLevel < 3) {
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
-								that.speedBoost = true;
+								that.speedBoostLevel++;
+								entity.level++;
+								that.speedBuff += 0.4;
+							}
+						}
+					}
+				}
+
+				if (entity instanceof RevivePerk) {
+					if (that.hitbox.collide(entity.hitbox)) {
+						if (that.game.E) {
+							if (that.coins >= entity.cost && !(entity.purchased)) {
+								entity.removeFromWorld = true;
+								that.coins -= entity.cost;
+								that.secondChance = true;
+								entity.purchased = true;
 							}
 						}
 					}
@@ -248,7 +268,7 @@ class Player{
 
 				if (entity instanceof Marriyacht) {
 					if (that.hitbox.collide(entity.hitbox) && that.shardObtained) {
-						that.x = 250;
+						that.x = 275;
 						that.y = 1775;
 						that.game.camera.loadDeparture();
 					}

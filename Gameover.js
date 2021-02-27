@@ -4,9 +4,10 @@ class Gameover {
     GAMEOVER_POS = { X: 600, Y: 150 };
     KILLS_POS = { X: 650, Y: 275 };
     COINS_POS = { X: 650, Y: 400 };
-    LEVEL_POS = { X: 650, Y: 525};
-    TIME_POS = { X: 650, Y: 650};
-    constructor(game, x, y) {
+    LEVEL_POS = { X: 650, Y: 525 };
+    TIME_POS = { X: 650, Y: 650 };
+    PLAY_POS = { X: 675, Y: 775 };
+    constructor(game) {
         Object.assign(this, {game});
 
         this.priority = 1;
@@ -16,6 +17,14 @@ class Gameover {
     };
 
     update() {
+        console.log(this.game.click);
+        if (this.game.mouse != null) {
+            if ((this.game.mouse.x >= 675 && this.game.mouse.x <= 1110) && (this.game.mouse.y >= 715 && this.game.mouse.y <= 785)
+            && (this.game.click)) {
+
+                this.game.camera.loadStartMenu();
+            }
+        }
 
     };
 
@@ -26,6 +35,7 @@ class Gameover {
         // GAME OVER
         ctx.fillText("GAME OVER", this.GAMEOVER_POS.X, this.GAMEOVER_POS.Y);
 
+        ctx.fillStyle = "darkslategray";
         fontsize = 100;
         ctx.font = fontsize + 'px "VT323"';
         // Kill count
@@ -42,6 +52,27 @@ class Gameover {
 
         // Time alive
         ctx.fillText("Time: ", this.TIME_POS.X, this.TIME_POS.Y);
-        ctx.fillText(this.minutes + ":" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        if (this.seconds < 10) {
+            ctx.fillText(this.minutes + ":0" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        }
+        else {
+            ctx.fillText(this.minutes + ":" + this.seconds, this.TIME_POS.X + 300, this.TIME_POS.Y);
+        }
+
+        this.drawPlayAgain(ctx);
+    };
+
+    drawPlayAgain(ctx) {
+
+        if (this.game != null) {
+            if ((this.game.mouse.x >= 675 && this.game.mouse.x <= 1110) && (this.game.mouse.y >= 715 && this.game.mouse.y <= 785)) {
+                ctx.fillStyle = "darkred";
+                ctx.fillText("Play Again!", this.PLAY_POS.X, this.PLAY_POS.Y);
+            }
+            else {
+                ctx.fillStyle = "Gray";
+                ctx.fillText("Play Again?", this.PLAY_POS.X, this.PLAY_POS.Y);
+            }
+        }
     };
 }
