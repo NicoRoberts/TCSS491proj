@@ -234,6 +234,14 @@ class SceneManager {
 		this.update();
 	};
 
+	updateAudio() {
+		var mute = document.getElementById("mute").checked;
+		var volume = document.getElementById("volume").nodeValue;
+
+		ASSET_MANAGER.muteAudio(mute);
+		ASSET_MANAGER.adjustVolume(volume);
+	}
+
 	update() {
 		PARAMS.DEBUG = document.getElementById("debug").checked;
 		PARAMS.GRID = document.getElementById("grid").checked;
