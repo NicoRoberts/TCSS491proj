@@ -20,6 +20,46 @@ class Grid{
 			}
 		}
 	}
+	gridArea(x, y, width = 1, height = 1) {
+		let start = null;
+		let i = 0;
+		let j = 0;
+		while (start == null && i < width){
+			start = this.gridAt(x + i, y + j);
+			i += 1;
+		}
+		while (start == null && i < height) {
+			start = this.gridAt(x + i, y + j);
+			j += 1;
+		}
+
+		let finish = this.gridAt(x + width, y + height);
+		i = 0;
+		j = 0;
+		while (finish == null && i < width) {
+			finish = this.gridAt(x + width-i, y + height-j);
+			i += 1;
+		}
+		while (finish == null && i < height) {
+			finish = this.gridAt(x + width-i, y + height-j);
+			j += 1;
+		}
+
+		let blocks = [];
+		if (start == null || finish == null) {
+			throw 'Parameters out of grid bounds!';
+			return;
+		}
+		else {
+			for (var c = start.column; c < finish.column; c++) {
+				for (var r = start.row; r < finish.row; r++) {
+					blocks.push(this.gridAtIndex(c, r));
+				}
+			}
+		}
+		return blocks;
+
+	}
 	gridAt(x, y) {
 		let col = Math.floor((x - this.x) / this.blockSize);
 		let row = Math.floor((y - this.y) / this.blockSize);

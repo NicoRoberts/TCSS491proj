@@ -39,7 +39,7 @@ class Shotgun {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
-        this.isAvailable = false;
+        this.isAvailable = true;
         
     }
 
@@ -87,7 +87,7 @@ class Shotgun {
             this.cooldownReady = false;
 
             let maxSpread = Math.PI / 48;
-            let spreadCount = 1;
+            let spreadCount = 2;
 
             this.ammoCount -= 1;
 

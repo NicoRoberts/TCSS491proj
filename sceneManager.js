@@ -6,7 +6,6 @@ class SceneManager {
 		//for camera scrolling
 		this.x = 0;
 		this.y = 0;	
-		
 		this.game.stage;
 		
 		this.shardSpawned = false;
@@ -18,9 +17,7 @@ class SceneManager {
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
-		this.terrainCount = 100;
-		
-		
+		this.terrainCount = 100;	
 
 		
 	};
@@ -153,6 +150,7 @@ class SceneManager {
 		this.game.addEntity(tBoundary);
 		this.game.addEntity(bBoundary);
 		this.game.addEntity(dock);
+		this.game.addEntity(new Darkness(this.game));
 		this.update();
 	}
 	loadDeparture() {
@@ -291,12 +289,6 @@ class SceneManager {
 	
 	
 	draw(ctx) {
-		if (PARAMS.DEBUG) {
-			// ctx.fillStyle = "White";
-            // ctx.fillText("TIME", 12.5 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH);
-        	// ctx.fillText(this.game.clockTick, 13 * PARAMS.BLOCKWIDTH, 1.5 * PARAMS.BLOCKWIDTH);
-
-            
-        };
+		//DONOTHING
 	};
 };

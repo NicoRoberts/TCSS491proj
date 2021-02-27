@@ -312,6 +312,7 @@ class Skeleton extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
+			this.game.enemiesCount--;
 			this.player.killCount++;
 			this.dropItem();
 		};

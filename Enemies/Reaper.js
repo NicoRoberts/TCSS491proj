@@ -331,6 +331,7 @@ class Reaper extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
+			this.game.enemiesCount--;
 			this.game.player.killCount++;
 			this.dropItem();
 		}

@@ -58,7 +58,7 @@ class Player{
 		this.hpCurrent = 40;
 		this.hpMax = 40;
 		this.hit = false;
-		this.stageLevel = 1;
+		this.stageLevel = 5;
 
 		// perks
 		this.healthBoost = false;
@@ -97,7 +97,7 @@ class Player{
     }
 
 	update() {
-		
+		this.hpCurrent = this.hpMax;
 		if (this.hpCurrent <= 0) {
 			this.game.camera.loadGameOver();
 		}
