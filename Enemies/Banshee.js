@@ -33,7 +33,7 @@ class Banshee extends AbstractEnemy {
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
-		this.visualRadius = 100;
+		this.visualRadius = 300;
 		this.attackRadius = 55;
 		this.circlex = this.x + (this.width / 2);
 		this.circley = this.y + (this.height / 2);
@@ -51,6 +51,7 @@ class Banshee extends AbstractEnemy {
 		this.attackCooldown = 0;
 		this.damageInterval = 0;
 		this.damage = 25;
+		this.finishedAttack = true;
 
 		this.velocity = {x:2, y:2};
 
@@ -59,6 +60,7 @@ class Banshee extends AbstractEnemy {
 		this.game.Enemy = this;
 
 		this.hitbox = new HitBox(this, this.width, this.height);
+		this.attackHitbox = new HitBox(this, this.width - 20, this.height - 20, false, 10, 10);
 
 		this.priority = 6;
 
@@ -78,8 +80,9 @@ class Banshee extends AbstractEnemy {
 		this.timeLeft = 0;
 		this.hit = false;
 		this.attackTime = 0.45;
-		this.restTime = 3;
+		this.restTime = 1.0;
 		this.maxSpeed = 2;
+		this.despawnTime = 0.3;
 		this.acceleration = 20;
 
 		//For banshee idle movement
@@ -192,11 +195,13 @@ class Banshee extends AbstractEnemy {
 			
 			that.timeLeft = that.attackTime * 1000;
 			that.timeLeft2 = that.restTime * 1000;
+			that.timeLeft3 = that.despawnTime * 1000;
 			
 			let interval_id = window.setInterval(function () {
 				that.timeLeft -= 10;
 				that.state = that.STATE.ATTACK;
-				that.enemyAttack.removeFromWorld = true;
+				that.finishedAttack = false;
+				
 				
 				if (that.timeLeft <= 0) {
 					
@@ -205,15 +210,26 @@ class Banshee extends AbstractEnemy {
 					//that.state = that.STATE.IDLE;
 					window.clearInterval(interval_id);
 					
+					that.finishedAttack = true;
+
+					let interval_id3 = window.setInterval(function () {						
+						that.timeLeft3 -= 10;				
+						if (that.timeLeft3 <= 0) {
+							that.enemyAttack.removeFromWorld = true;				
+							window.clearInterval(interval_id3);
+						}
+					}, 10);
 
 					let interval_id2 = window.setInterval(function () {
 						
 						that.timeLeft2 -= 10;
 						that.state = that.STATE.IDLE;
+						
 						if (that.timeLeft2 <= 0) {
+							
 							that.timeLeft2 = 0;
 							that.swinging = false;
-							that.enemyAttack.removeFromWorld = true;
+							
 							window.clearInterval(interval_id2);
 						}
 					}, 10);
@@ -233,14 +249,14 @@ class Banshee extends AbstractEnemy {
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) {
+			if (entity instanceof Player && that.attackHitbox.willCollide(entity.hitbox)) { //change to circle
 				that.doAttack(entity);
 
 			}
 		
-			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
+			else if (entity instanceof Player && !that.attackHitbox.willCollide(entity.hitbox) && that.finishedAttack) {
 				that.attack = false;
-			} 
+			}
 
 			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy)  && !(entity instanceof Player) ) {
 
@@ -313,6 +329,7 @@ class Banshee extends AbstractEnemy {
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
+		this.attackHitbox.update();
 		this.hitbox.update();
 		
 		// death
@@ -330,7 +347,7 @@ class Banshee extends AbstractEnemy {
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
-			
+			this.attackHitbox.draw(ctx);
 			this.hitbox.draw(ctx);
 
 			ctx.beginPath();

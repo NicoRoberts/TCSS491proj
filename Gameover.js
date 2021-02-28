@@ -23,6 +23,7 @@ class Gameover {
             && (this.game.click)) {
 
                 this.game.camera.loadStartMenu();
+                this.game.menuMusicPlayed = false;
             }
         }
 
