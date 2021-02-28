@@ -43,12 +43,23 @@ ASSET_MANAGER.queueDownload("./Sprites/LichKingUnknown.png");
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
 
-
+//music
+ASSET_MANAGER.queueDownload("./Music/BoatMusic.wav");
+ASSET_MANAGER.queueDownload("./Music/BossBattleVersion1.wav");
+ASSET_MANAGER.queueDownload("./Music/DeathScreen.wav");
+ASSET_MANAGER.queueDownload("./Music/MainGame.wav");
+ASSET_MANAGER.queueDownload("./Music/TitleScreen.wav");
+ASSET_MANAGER.queueDownload("./Music/Arrival.wav");
 
 ASSET_MANAGER.downloadAll(function () {
 
+	ASSET_MANAGER.autoRepeat("./Music/BoatMusic.wav");
+	ASSET_MANAGER.autoRepeat("./Music/BossBattleVersion1.wav");
+	ASSET_MANAGER.autoRepeat("./Music/MainGame.wav");
+	ASSET_MANAGER.autoRepeat("./Music/TitleScreen.wav");
 	//Constants
-
+	var test;
+	
 	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 because tile is 32x32 which is double the Bitwidth
 	PARAMS.TILEHEIGHT = PARAMS.BITWIDTH * PARAMS.SCALE * 2; 
 

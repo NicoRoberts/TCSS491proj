@@ -14,7 +14,7 @@ class GameEngine {
 
         this.grid = null;
 
-
+        this.interact = false;
         // this.maxEnemies = 2;
         // //this.spawnRate = 5;
         // this.timeLeft = 0;
@@ -36,9 +36,11 @@ class GameEngine {
         this.spawnTimer = 0;
         this.maxEnemies = 0;
         this.enemiesCount = 0;
-		this.spawnRate = 5; //  enemy / spawnRate (sec)
+        this.spawnRate = 3; //  enemy / spawnRate (sec)
+        this.adjustmentPercentage = 0;
         
-
+        //music
+        this.menuMusicPlayed = false;
 
         this.W = false;
         this.A = false;
@@ -98,6 +100,7 @@ class GameEngine {
                 that.weapon.fire();
             }
             else {
+                that.interact = true;
                 that.click = true;
             }
         }, false);
@@ -318,8 +321,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -356,8 +359,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -394,8 +397,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate; //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate; //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
