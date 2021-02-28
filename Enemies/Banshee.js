@@ -19,7 +19,7 @@ class Banshee extends AbstractEnemy {
 		Object.assign(this, {player, game, x,y});
 		
 
-		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
+		this.dropchance = 0.4; //Drop chance of an item (between 0 and 1)
 
 		this.width = 86;
 		this.height = 85;
