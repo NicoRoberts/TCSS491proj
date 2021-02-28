@@ -3,13 +3,14 @@ class SceneManager {
 		this.game = game;
 		this.game.camera = this;
 
+		
 		//for camera scrolling
 		this.x = 0;
 		this.y = 0;	
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 10;
+		this.shardSpawnTime = 10; // how long before shard spawns
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -17,6 +18,17 @@ class SceneManager {
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
 		this.hud = new HUD(this.game, this.player);
+
+		
+		this.rockCount = 100;
+		this.treeCount = 100;
+		this.firstlevel = true;
+		
+		this.healthPerk = new HealthPerk(this.game, -190, 2265);
+		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
+		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
+		this.revivePerk = new RevivePerk(this.game, 125, 1175);
+	
 		this.terrainCount = 100;	
 
 		
@@ -36,19 +48,26 @@ class SceneManager {
 		this.game.removeAll();
 		this.game.entities = [];
 		
-		let bBoundary = new HBoundary(this.game, -600, 2550 - 72, 1000);
-		let tBoundary = new HBoundary(this.game, -600, 1150 - 72, 1000); 
-		let lBoundary = new VBoundary(this.game, -600, 1150 - 72, 1400); 
-		let ruBoundary = new VBoundary(this.game, 400, 1150 - 72, 600);
-		let rlBoundary = new VBoundary(this.game, 400, 2000 - 72, 550);
+		let bBoundary = new HBoundary(this.game, -525, 2545 - 72, 925);
+		let tBoundary = new HBoundary(this.game, -525, 1150 - 72, 925); 
+		let lBoundary = new VBoundary(this.game, -525, 1150 - 72, 1400); 
+		let ruBoundary = new VBoundary(this.game, 390, 1150 - 72, 615);
+		let rlBoundary = new VBoundary(this.game, 390, 2010 - 72, 555);
 
-		//this.gangway = new Gangway(this.game, 400, 1750 - 72);
-
-		// testing delete later maybe
 		this.timeInYacht = 0; 
 		this.gangwaySpawned = false;
 
-		this.game.addEntity(new YachtMap(this.game, -575, 1065));
+		this.game.addEntity(new YachtMap(this.game, -530, 1070));
+
+		//music
+		if (this.game.stage == "yacht") {
+			var music = "./Music/BoatMusic.wav";
+			if (music && this.game.interact) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+			}
+		}
+		//this.player.hpCurrent = this.player.hpMax;
 
 
 		this.player.hpCurrent = this.player.hpMax;
@@ -59,30 +78,34 @@ class SceneManager {
 		this.game.addEntity(ruBoundary);
 		this.game.addEntity(rlBoundary);
 
-		//this.game.addEntity(this.gangway);
 		this.game.addEntity(this.machete);
 		this.game.addEntity(this.pistol)
 		this.game.addEntity(this.shotgun);
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
 
-		// should we make perks buyable after each stage?
-		if (!this.player.healthBoost) {
-			this.game.addEntity(new HealthPerk(this.game, -235, 2250));
+		// each perk can only be bought up to level 3
+		if (this.player.healthBoostLevel < 3) {
+			this.game.addEntity(this.healthPerk);
 		}
-		if (!this.player.reloadBoost) {
-			this.game.addEntity(new ReloadPerk(this.game, -330, 2250));
+		if (this.player.reloadBoostLevel < 3) {
+			this.game.addEntity(this.reloadPerk);
 		}
-		if (!this.player.speedBoost) {
-			this.game.addEntity(new SpeedPerk(this.game, -425, 2250));
+		if (this.player.speedBoostLevel < 3) {
+			this.game.addEntity(this.speedPerk);
 		}
 
+		if (this.player.healthBoostLevel == 3 && this.player.reloadBoostLevel == 3
+			&& this.player.speedBoostLevel == 3 && !this.revivePerk.purchased) {
+			this.game.addEntity(this.revivePerk);
+		}
+		
 		
 		if (!this.shotgun.isAvailable) {
-			this.game.addEntity(new DisplayShotgun(this.game, -325, 1600));
+			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
-			this.game.addEntity(new DisplayMachinegun(this.game, -325, 1880));
+			this.game.addEntity(new DisplayMachinegun(this.game, -300, 1880));
 		}
 		this.update();
 	};
@@ -92,13 +115,26 @@ class SceneManager {
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
-		this.marriyacht = new Marriyacht(this.game, 90, -300);
+		this.marriyacht = new Marriyacht(this.game, 91, -300);
 		this.game.addEntity(this.marriyacht);
+
+		if (this.game.stage == "arrival") {
+			var music = "./Music/Arrival.wav";
+			if (music && this.game.interact) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+			}
+		}
 
 		//increase enemies per level
 		this.game.enemiesCount = 0;
-		this.game.maxEnemies += 50;
-		this.game.spawnRate = 5;
+		if (this.firstlevel) {
+			this.game.maxEnemies += 25;
+			this.firstlevel = false;
+		} else {
+			this.game.maxEnemies += 10;
+		}
+		this.game.spawnRate = 3;
 		// if (this.game.spawnRate > 3) {
 		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
         //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
@@ -180,13 +216,6 @@ class SceneManager {
 		this.game.stage = "survival";
 
 		this.shardSpawned = false;
-
-		//this.enemy2 = new Skeleton(this.player, this.game, PARAMS.CANVAS_WIDTH/2, PARAMS.CANVAS_HEIGHT/2);
-
-		//this.banshee2 = new Banshee(this.player, this.game, PARAMS.CANVAS_WIDTH/2 + 100, PARAMS.CANVAS_HEIGHT/2 + 100);
-
-		//testing rock generation 
-
 		
 
 		//spawning coins to test shop system
@@ -200,10 +229,6 @@ class SceneManager {
 		// 	open[randomIndex].addTerrain(coin);
 		// }
 		
-
-		// testing map generation
-		
-		
 		// testing to see if entities can be added in any order
 		this.game.addEntity(this.player);
 		this.game.addEntity(this.machete);
@@ -212,31 +237,112 @@ class SceneManager {
 		this.game.addEntity(this.machinegun);
 		this.game.addEntity(this.hud);
 
+		//music
+		if (this.game.stage == "survival") {
+			var music = "./Music/MainGame.wav";
+			if (music && this.game.interact) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+			}
+		}
+
 		// BOSS SPAWN
 		if (this.game.player.stageLevel == 5) {
 			//Spawn lich king in the center
 			this.game.addEntity(new LichKing(this.game,2000,2000));
+			var music = "./Music/BossBattleVersion1.wav";
+			if (music && this.game.interact) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+			}
+			
         }
-		//this.game.addEntity(new AmmoPack(this.game, 800, 500));	
 
-		//this.game.addEntity(new Reaper(this.game, 700, 400));
 		this.update();
 	};
 
 	loadGameOver() {
 		this.game.stage = "game over";
+		this.game.removeAll();
 		this.game.entities = [];
 
 		this.game.addEntity(new Gameover(this.game));
+
+		//music
+		if (this.game.stage == "game over") {
+			var music = "./Music/DeathScreen.wav";
+			if (music && this.game.interact) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+			}
+		}
+		this.update();
+	};
+
+	updateAudio() {
+		var mute = document.getElementById("mute").checked;
+		var volume = document.getElementById("volume").value;
+
+		ASSET_MANAGER.muteAudio(mute);
+		ASSET_MANAGER.adjustVolume(volume);
+	}
+
+	loadStartMenu() {
+		this.game.stage = "menu";
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.weapon = this.game.weapons[1]; // start with pistol in hand
+		this.game.chosenWeapon = 1; // enlarge corresponding weapon box on the HUD
+
+		// resets the entities to their initial values/states
+		this.player = new Player(this.game, 243, 1800);
+		this.shotgun = new Shotgun(this.game);
+		this.machinegun = new Machinegun(this.game);
+		this.hud = new HUD(this.game, this.player);
+		this.healthPerk = new HealthPerk(this.game, -190, 2265);
+		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
+		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
+		this.revivePerk = new RevivePerk(this.game, 125, 1175);
+
+		this.game.addEntity(new StartMenu(this.game));
+		
+		this.update();
+	};
+
+	loadControlsMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new ControlsMenu(this.game));
+		this.update();
+	};
+
+	loadGuideMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new GuideMenu(this.game));
+		this.update();
+	};
+
+	loadCreditsMenu() {
+		this.game.removeAll();
+		this.game.entities = [];
+
+		this.game.addEntity(new CreditsMenu(this.game));
 		this.update();
 	};
 
 	update() {
+		
 		PARAMS.DEBUG = document.getElementById("debug").checked;
 		PARAMS.GRID = document.getElementById("grid").checked;
 		
 		let xmid = PARAMS.CANVAS_WIDTH / 2 - PARAMS.TILEWIDTH / 2;
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;
+
+		this.updateAudio();
 
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
 			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
@@ -255,33 +361,48 @@ class SceneManager {
 		}
 
 		
-		
-
 		this.spawnTimer += this.game.clockTick;
 
-		// spawning shard
-		if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
-			this.shardSpawned = true;
+		if (this.game.stage == "survival") {
+			
 
-			let openGrids = this.game.grid.getSpawnableGrids();
-			let randomGridIndex = randomInt(openGrids.length);
-			let grid = openGrids[randomGridIndex];
-			//let grid = this.game.grid.gridAtIndex(5,37);
-			let shard = new Shards(this.game, grid.x, grid.y);
-			if (grid !== null) {
-				grid.addTerrain(shard);
-				//console.log("spawned");
-		   }
+			// spawning shard
+			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
+				this.shardSpawned = true;
+
+				let openGrids = this.game.grid.getSpawnableGrids();
+				let randomGridIndex = randomInt(openGrids.length);
+				let grid = openGrids[randomGridIndex];
+				//let grid = this.game.grid.gridAtIndex(5,37);
+				let shard = new Shards(this.game, grid.x, grid.y);
+				if (grid !== null) {
+					grid.addTerrain(shard);
+					//console.log("spawned");
+				}
+			}
 		}
+
+		
 
 		// spawn gangway .2 seconds after loading yacht level so that player does not get forced into next stage
 		if (this.game.stage == "yacht") {
 			this.timeInYacht += this.game.clockTick;
 			if (this.timeInYacht > .2 && !this.gangwaySpawned) {
 				this.gangwaySpawned = true;
-				this.game.addEntity(new Gangway(this.game, 400, 1750 - 72));
+				this.game.addEntity(new Gangway(this.game, 420, 1763 - 72));
 			}
 		}
+
+		if (this.game.stage == "menu") {
+			var music = "./Music/TitleScreen.wav";
+			if (music && this.game.interact && !this.game.menuMusicPlayed) {
+				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset(music);
+				this.game.menuMusicPlayed = true;
+			}
+		}
+
+		
 	
 	};
 

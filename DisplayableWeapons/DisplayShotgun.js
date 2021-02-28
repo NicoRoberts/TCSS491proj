@@ -12,7 +12,7 @@ class DisplayShotgun {
         this.positiony = this.y - this.game.camera.y;
 
         this.priority = 5;
-        this.cost = 2;
+        this.cost = 5;
 
         this.shotgun = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 0, false, true);
         
