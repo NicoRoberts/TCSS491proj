@@ -57,7 +57,8 @@ ASSET_MANAGER.downloadAll(function () {
 	ASSET_MANAGER.autoRepeat("./Music/MainGame.wav");
 	ASSET_MANAGER.autoRepeat("./Music/TitleScreen.wav");
 	//Constants
-
+	var test;
+	
 	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 because tile is 32x32 which is double the Bitwidth
 	PARAMS.TILEHEIGHT = PARAMS.BITWIDTH * PARAMS.SCALE * 2; 
 
