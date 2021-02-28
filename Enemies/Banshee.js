@@ -79,7 +79,7 @@ class Banshee extends AbstractEnemy {
 		this.hit = false;
 		this.attackTime = 0.45;
 		this.restTime = 3;
-		this.maxSpeed = 2;
+		this.maxSpeed = 1.5;
 		this.acceleration = 20;
 
 		//For banshee idle movement

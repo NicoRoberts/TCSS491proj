@@ -50,6 +50,8 @@ class SceneManager {
 
 		this.game.addEntity(new YachtMap(this.game, -575, 1065));
 
+
+		this.player.hpCurrent = this.player.hpMax;
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
