@@ -28,6 +28,7 @@ ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostLevelSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReviveSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/YachtSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/GameOverSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");

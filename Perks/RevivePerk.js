@@ -3,7 +3,7 @@ class RevivePerk {
     constructor(game, x, y) {
         Object.assign(this, {game, x, y});
 
-        //this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReviveSprite.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReviveSprite.png");
 
         this.width = 34;
         this.height = 34;
@@ -16,7 +16,7 @@ class RevivePerk {
         this.cost = this.initialCost;
         this.purchased = false;
 
-        //this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        
+        this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 5, 0.15, 0, false, true);        
 
         this.hitbox = new HitBox(this, this.width, this.height, true);
     };
@@ -33,7 +33,7 @@ class RevivePerk {
         if (PARAMS.DEBUG) {
             this.hitbox.draw(ctx);
         }
-        //this.perk.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+        this.perk.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
 
         // prints description when player hovers on item
         if (this.game.player.hitbox.collide(this.hitbox)) {
