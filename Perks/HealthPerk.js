@@ -29,11 +29,11 @@ class HealthPerk {
         this.hitbox.update();
 
         if (this.level == 2) {
-            this.cost = this.initialCost * 2;
+            this.cost = this.initialCost + 2;
         }
 
         if (this.level == 3) {
-            this.cost = this.initialCost * 3;
+            this.cost = this.initialCost + 4;
         }
 
     };

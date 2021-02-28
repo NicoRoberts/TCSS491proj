@@ -12,7 +12,7 @@ class RevivePerk {
         this.positiony = this.y - this.game.camera.y;
         
         this.priority = 5;
-        this.initialCost = 15;
+        this.initialCost = 12;
         this.cost = this.initialCost;
         this.purchased = false;
 
