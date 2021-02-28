@@ -303,6 +303,10 @@ class SceneManager {
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 		this.revivePerk = new RevivePerk(this.game, 125, 1175);
 
+		// resets ammo
+		this.pistol.ammoCount = this.pistol.maxAmmo;
+        this.pistol.reservesCount = this.pistol.maxReserves;
+
 		this.game.addEntity(new StartMenu(this.game));
 		
 		this.update();
