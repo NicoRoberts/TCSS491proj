@@ -2,11 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\Enemies",
+    "\\Maps",
     "\\Perks",
     "\\Projectiles",
     "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\sceneManager.js",
   "PreviewInSolutionExplorer": false
 }

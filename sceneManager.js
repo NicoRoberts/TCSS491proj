@@ -70,6 +70,8 @@ class SceneManager {
 		
 		this.player.hpCurrent = this.player.hpMax;
 
+
+		this.player.hpCurrent = this.player.hpMax;
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);

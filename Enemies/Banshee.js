@@ -19,7 +19,7 @@ class Banshee extends AbstractEnemy {
 		Object.assign(this, {player, game, x,y});
 		
 
-		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
+		this.dropchance = 0.4; //Drop chance of an item (between 0 and 1)
 
 		this.width = 86;
 		this.height = 85;
@@ -80,9 +80,10 @@ class Banshee extends AbstractEnemy {
 		this.timeLeft = 0;
 		this.hit = false;
 		this.attackTime = 0.45;
-		this.restTime = 1.0;
-		this.maxSpeed = 2;
-		this.despawnTime = 0.3;
+
+		this.restTime = 1.2;
+		this.maxSpeed = 1.5;
+    this.despawnTime = 0.3;
 		this.acceleration = 20;
 
 		//For banshee idle movement
