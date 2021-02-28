@@ -1,4 +1,4 @@
-var gameEngine = new GameEngine();
+ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
