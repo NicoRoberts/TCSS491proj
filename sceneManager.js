@@ -84,6 +84,7 @@ class SceneManager {
 			this.game.addEntity(this.revivePerk);
 		}
 		
+		
 		if (!this.shotgun.isAvailable) {
 			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
 		}

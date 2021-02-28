@@ -46,6 +46,8 @@ class HUD {
         this.healthPerk = [];
         this.reloadPerk = [];
         this.speedPerk = [];
+        this.reviveSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReviveSprite.png");
+        this.revivePerk = new Animator(this.reviveSprite, 0, 0, this.perkWidth, this.perkHeight, 5, .15, 0, false, true);
 
         //difficulty bar
         this.maxDifficulty = 150; //approx 2 min
@@ -74,10 +76,6 @@ class HUD {
     }
 
     loadPerks() {
-
-        //this.healthPerk = new Animator(this.healthBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        //this.reloadPerk = new Animator(this.reloadBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        //this.speedPerk = new Animator(this.speedBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
 
         var offset = 0;
         for (var i = 0; i < 3; i++) {
@@ -127,6 +125,9 @@ class HUD {
         }
         if (this.player.speedBoostLevel > 0) {
             this.perks.push(this.speedPerk[this.player.speedBoostLevel - 1]);
+        }
+        if (this.player.secondChance) {
+            this.perks.push(this.revivePerk);
         }
     }
 
