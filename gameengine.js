@@ -14,7 +14,7 @@ class GameEngine {
 
         this.grid = null;
 
-
+        this.interact = false;
         // this.maxEnemies = 2;
         // //this.spawnRate = 5;
         // this.timeLeft = 0;
@@ -39,7 +39,8 @@ class GameEngine {
         this.spawnRate = 3; //  enemy / spawnRate (sec)
         this.adjustmentPercentage = 0;
         
-
+        //music
+        this.menuMusicPlayed = false;
 
         this.W = false;
         this.A = false;
@@ -99,6 +100,7 @@ class GameEngine {
                 that.weapon.fire();
             }
             else {
+                that.interact = true;
                 that.click = true;
             }
         }, false);
