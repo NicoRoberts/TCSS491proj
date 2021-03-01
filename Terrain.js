@@ -3,12 +3,13 @@ class Terrain{
     constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
+       
+
     	this.width = 48;
         this.height = 48;
         this.rockState = Math.floor(Math.random()*6);
         
         this.states=[];
-
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         this.visualRadius = 60;
