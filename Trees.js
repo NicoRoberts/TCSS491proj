@@ -9,13 +9,14 @@ class Trees extends Terrain{
         this.treeState = Math.floor(Math.random()*6);
         
         this.states=[];
+        this.trees=["./Sprites/TreeSheet.png","./Sprites/FireTreeSheet.png","./Sprites/SnowTreeSheet.png"];
 
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         this.visualRadius = 70;
         
 
-		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/TreeSheet.png");
+		this.spritesheet = ASSET_MANAGER.getAsset(this.trees[this.game.Map.mapState]);
 
     	this.game.Terrain = this;
  

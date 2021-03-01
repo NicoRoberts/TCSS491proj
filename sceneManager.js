@@ -126,7 +126,7 @@ class SceneManager {
 		this.grid.update();
 
 
-
+		this.map = new Map(this.game, -1350, -1645);
 		for (var i = 0; i < this.rockCount; i++) {
 			let open = this.grid.getOpenGrids();
 			if (open.length <= 0) {
@@ -137,6 +137,7 @@ class SceneManager {
 			open[randomIndex].addTerrain(rock);
 		}
 
+		
 		//testing tree generation
 		for (var j = 0; j < this.treeCount; j++) {
 			let open = this.grid.getOpenGrids();
@@ -148,7 +149,7 @@ class SceneManager {
 			open[randomIndex].addTerrain(tree);
 		}
 
-		this.map = new Map(this.game, -1350, -1645);
+		
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);

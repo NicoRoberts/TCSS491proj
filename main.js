@@ -3,6 +3,8 @@ var gameEngine = new GameEngine();
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/Boat.png");
 ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
+ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIGFire.png");
+ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIGSnow.png");
 ASSET_MANAGER.queueDownload("./Maps/YachtMap.png")
 ASSET_MANAGER.queueDownload("./Sprites/PlayerSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hand_Pistol2.png");
@@ -17,6 +19,8 @@ ASSET_MANAGER.queueDownload("./Sprites/Banshee.png");
 ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/TreeSheet.png");
+ASSET_MANAGER.queueDownload("./Sprites/FireTreeSheet.png");
+ASSET_MANAGER.queueDownload("./Sprites/SnowTreeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
