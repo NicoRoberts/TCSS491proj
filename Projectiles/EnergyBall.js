@@ -48,9 +48,8 @@ class EnergyBall{
                 if (entity instanceof Player) {
                     if (that.hitbox.willCollide(entity.hitbox)) {
                         that.hitdealt = true;
-                        entity.hit = true;
                         that.removeFromWorld = true;
-                        entity.hpCurrent -= that.damage; // bullet damage
+                        entity.takeDamage(that.damage);
                     }
                 }
             }

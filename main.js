@@ -1,4 +1,4 @@
-var gameEngine = new GameEngine();
+ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/CastToTheShadowsMapBIG.png");
@@ -68,7 +68,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	PARAMS.ENEMYWIDTH = 50;
 	PARAMS.ENEMYHEIGHT = 50;
-
+	
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;

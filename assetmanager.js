@@ -4,6 +4,8 @@ class AssetManager {
         this.errorCount = 0;
         this.cache = [];
         this.downloadQueue = [];
+        this.canvas = document.getElementById('gameWorld');
+        //this.ctx = canvas.getContext('2d');
     };
 
     queueDownload(path) {

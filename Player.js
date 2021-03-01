@@ -71,6 +71,10 @@ class Player{
 		this.reloadBuff = .85;
 		this.speedBuff = 0;
 
+		//i-frames
+		this.invincibilityDuration = 1000;
+		this.drawInvis = false;
+
 	}
 
 	setupCategories() {
@@ -95,6 +99,22 @@ class Player{
 		this.animations[this.STATE.WALKING][this.DIRECTION.LEFT]
 			= new Animator(this.spritesheet, 1, 197, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, 4, 0.1, 2, false, true);
 
+	}
+	takeDamage(damage) {
+		if (!this.hit) {
+			let that = this;
+			this.hit = true;
+			this.hpCurrent -= damage;
+			let id = window.setInterval(function () {
+				that.drawInvis = !that.drawInvis;
+			}, 75);
+			window.setTimeout(function () {
+				that.hit = false;
+				window.clearInterval(id);
+				that.drawInvis = false;
+			}, this.invincibilityDuration);
+        }
+		
     }
 
 	update() {
@@ -335,7 +355,10 @@ class Player{
 			
 			
 		}
-		this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+		if (!this.drawInvis) {
+			this.animations[this.state][this.direction].drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1);
+        }
+		
 
 	}
 

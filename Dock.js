@@ -12,7 +12,7 @@ class Dock {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
 
-        this.priority = 2;
+        this.priority = 1;
 
         this.dock = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 0, false, true);
 
