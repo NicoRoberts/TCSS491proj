@@ -37,9 +37,7 @@ class EnemyAttack {
             if (entity instanceof Player) {
                 if (that.hitbox.collide(entity.hitbox) && (!that.hitdealt)) {
                     that.hitdealt = true;
-                    entity.hit = true;
-                    //entity.hpCurrent -= 0;
-                    entity.hpCurrent -= that.damage; // slice damage
+                    entity.takeDamage(that.damage);
                 }
             }
         }, false);

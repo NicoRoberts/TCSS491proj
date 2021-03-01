@@ -1,10 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Projectiles",
-    "\\Sprites",
+    "\\Enemies",
     "\\Weapons"
   ],
-  "SelectedNode": "\\sceneManager.js",
+  "SelectedNode": "\\Weapons\\Pistol.js",
   "PreviewInSolutionExplorer": false
 }

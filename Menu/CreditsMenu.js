@@ -1,9 +1,9 @@
 class CreditsMenu {
 
     TITLE_POS = { X: 750, Y: 150 };
-    TIEN_POS = { X: 737.5, Y: 300 };
+    NICO_POS = { X: 675, Y: 300 };
     JAKE_POS = { X: 687.5, Y: 450 };
-    NICO_POS = { X: 675, Y: 600 };
+    TIEN_POS = { X: 737.5, Y: 600 };
     ROMI_POS = { X: 662.5, Y: 750 };
     BACK_POS = { X: 10, Y: 65 };
     constructor(game) {
@@ -36,9 +36,9 @@ class CreditsMenu {
         fontsize = 125;
         ctx.font = fontsize + 'px "VT323"';
 
-        ctx.fillText("TIEN TANG", this.TIEN_POS.X, this.TIEN_POS.Y);
-        ctx.fillText("JAKE SOUSIE", this.JAKE_POS.X, this.JAKE_POS.Y);
         ctx.fillText("NICO ROBERTS", this.NICO_POS.X, this.NICO_POS.Y);
+        ctx.fillText("JAKE SOUSIE", this.JAKE_POS.X, this.JAKE_POS.Y);
+        ctx.fillText("TIEN TANG", this.TIEN_POS.X, this.TIEN_POS.Y);
         ctx.fillText("ROMI TSHIORNY", this.ROMI_POS.X, this.ROMI_POS.Y);
 
         if (this.game.mouse != null) {

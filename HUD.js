@@ -203,10 +203,12 @@ class HUD {
 
             if (this.game.weapon.reservesCount == 0 && this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Red";
-                ctx.fillText("NO AMMO", ctx.canvas.width + this.AMMO_POS.X + 25, this.AMMO_POS.Y + 12);
+                ctx.fillText("NO AMMO", this.game.player.positionx - 10, this.game.player.positiony - 20);
+                ctx.fillText("NO AMMO", ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + 12);
             }
             else if (this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Orange";
+                ctx.fillText("R TO RELOAD", this.game.player.positionx -22, this.game.player.positiony-20);
                 ctx.fillText("R TO RELOAD", ctx.canvas.width + this.AMMO_POS.X + 5, this.AMMO_POS.Y + 12);
             }
             
