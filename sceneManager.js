@@ -158,7 +158,7 @@ class SceneManager {
 
 		this.grid.update();
 
-
+		this.map = new Map(this.game, -1350, -1645);
 		if (!(this.game.player.stageLevel == 5)) {
 			for (var j = 0; j < this.terrainCount; j++) {
 				let open = this.grid.getOpenGrids();
@@ -178,7 +178,7 @@ class SceneManager {
         }
 		
 
-		this.map = new Map(this.game, -1350, -1645);
+		
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
