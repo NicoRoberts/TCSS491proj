@@ -12,7 +12,9 @@ class SpeedPerk {
         this.positiony = this.y - this.game.camera.y;
         
         this.priority = 5;
+        this.initialCost = 4;
         this.cost = 4;
+        this.level = 1;
 
         this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        
 
@@ -25,6 +27,14 @@ class SpeedPerk {
         this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         this.hitbox.update();
+
+        if (this.level == 2) {
+            this.cost = this.initialCost + 2;
+        }
+
+        if (this.level == 3) {
+            this.cost = this.initialCost + 4;
+        }
 
     };
 
@@ -39,6 +49,8 @@ class SpeedPerk {
             ctx.fillStyle = "White";
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"';
+
+            ctx.fillText("Level: " + this.level, this.game.player.positionx, this.game.player.positiony - 125);
 
             ctx.fillText("Increases Movement Speed: " + this.cost + " Coins", this.game.player.positionx, this.game.player.positiony - 75);  // - 25 for offset
             let message;

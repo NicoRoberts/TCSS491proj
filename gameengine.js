@@ -14,7 +14,7 @@ class GameEngine {
 
         this.grid = null;
 
-
+        this.interact = false;
         // this.maxEnemies = 2;
         // //this.spawnRate = 5;
         // this.timeLeft = 0;
@@ -36,9 +36,11 @@ class GameEngine {
         this.spawnTimer = 0;
         this.maxEnemies = 0;
         this.enemiesCount = 0;
-		this.spawnRate = 5; //  enemy / spawnRate (sec)
+        this.spawnRate = 3; //  enemy / spawnRate (sec)
+        this.adjustmentPercentage = 0;
         
-
+        //music
+        this.menuMusicPlayed = false;
 
         this.W = false;
         this.A = false;
@@ -80,6 +82,11 @@ class GameEngine {
             return { x: x, y: y };
         }
 
+        this.ctx.canvas.addEventListener("mouseout", function (e) {
+            that.click = false;
+            
+        }, false);
+
         this.ctx.canvas.addEventListener("mousemove", function (e) {
             //console.log(getXandY(e));
             that.mouse = getXandY(e);
@@ -91,6 +98,10 @@ class GameEngine {
             if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht")) {
                 that.click = true;
                 that.weapon.fire();
+            }
+            else {
+                that.interact = true;
+                that.click = true;
             }
         }, false);
 
@@ -194,6 +205,11 @@ class GameEngine {
             }
         }
     }
+    removeAll() {
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            this.entities[i].removeFromWorld = true;
+        }
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -208,14 +224,15 @@ class GameEngine {
 
         for (var i = 0; i < this.entities.length; i++) {
             let entity = this.entities[i];
-            if (!(this.stage == "game over")) {
+            if (!(this.stage == "game over") && !(this.stage == "menu")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
                     || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
-                    || entity instanceof YachtMap) {
+                    || entity instanceof YachtMap || entity instanceof Gangway || entity instanceof Darkness) {
                     entity.draw(this.ctx);
                 }
             }
-            else if (entity instanceof Gameover) {
+            else if (entity instanceof Gameover || entity instanceof StartMenu || entity instanceof ControlsMenu
+            || entity instanceof GuideMenu || entity instanceof CreditsMenu) {
                 entity.draw(this.ctx);
             }
             
@@ -228,56 +245,69 @@ class GameEngine {
 
     update() {
         //console.log("Stage: " + this.stage);
-        if (!(this.stage == "game over")) {
-            this.minutes = Math.floor(this.ellapsedTime / 60);
-            this.seconds = Math.floor(this.ellapsedTime % 60);
 
-            if (this.seconds >= 60) {
-                this.seconds = 0;
+        this.minutes = Math.floor(this.ellapsedTime / 60);
+        this.seconds = Math.floor(this.ellapsedTime % 60);
+
+        if (this.seconds >= 60) {
+            this.seconds = 0;
+        }
+
+        var entitiesCount = this.entities.length;
+
+
+        for (var i = 0; i < entitiesCount; i++) {
+            var entity = this.entities[i];
+            
+            if (entity instanceof AbstractEnemy) {
+                //this.enemiesCount++;
             }
-
-            var entitiesCount = this.entities.length;
-
-
-            for (var i = 0; i < entitiesCount; i++) {
-                var entity = this.entities[i];
-
-                if (entity instanceof AbstractEnemy) {
-                    //this.enemiesCount++;
-                }
-                if (!(typeof entity == 'undefined')) {
-                    if (!entity.removeFromWorld) {
-                        entity.update();
-                    }
+            if (!(typeof entity == 'undefined')) {
+                if (!entity.removeFromWorld) {
+                    entity.update();
                 }
             }
-
-
+        }
 
             this.camera.update();
 
-            for (var i = this.entities.length - 1; i >= 0; --i) {
-                if (this.entities[i].removeFromWorld) {
-                    this.entities.splice(i, 1);
-                }
-            }
             if (this.stage == "survival") {
                 
-                this.spawnTimer += this.clockTick;
-                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-                if (randomEnemy == 0) {
-                    this.spawnSkeletons();
-                } else if (randomEnemy == 1) {
-                    this.spawnBanshees();
-                } else {
-                    this.spawnReapers();
-                } 
-                
-                
-                
+                //BOSS LEVEL
+                if (this.player.stageLevel == 5) {
+
+                }
+                else {
+                    this.spawnTimer += this.clockTick;
+                    var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                    if (randomEnemy == 0) {
+                        this.spawnSkeletons();
+                    } else if (randomEnemy == 1) {
+                        this.spawnBanshees();
+                    } else {
+                        this.spawnReapers();
+                    } 
+                    
+                }
 
             }
+
+
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            if (this.entities[i].removeFromWorld) {
+                this.entities.splice(i, 1);
+            }
         }
+
+        //For click off of screen
+        if (document.activeElement != document.getElementById("gameWorld")) {
+            this.W = false;
+            this.A = false;
+            this.S = false;
+            this.D = false;
+            this.E = false;
+        }
+        
 
     };
 
@@ -291,8 +321,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -329,8 +359,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -367,8 +397,8 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            var adjustmentPercentage = (0.2 / 10) * this.spawnRate; //increase by numerator % per denominator in seconds
-            this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
+            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate; //increase by numerator % per denominator in seconds
+            this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
             
@@ -398,13 +428,19 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.ellapsedTime += this.clockTick;
+
+        if (this.stage == "menu") {
+            this.ellapsedTime = 0;
+            this.timeInSurvival = 0;
+        }
 
         if (this.stage == "survival") {
             this.timeInSurvival += this.clockTick;
+            this.ellapsedTime += this.clockTick;
         }
         else {
             this.timeInSurvival = 0;
+            this.ellapsedTime += this.clockTick;
         }
 
         this.update();

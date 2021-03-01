@@ -33,6 +33,10 @@ class Shards {
     draw(ctx) {
         if (PARAMS.DEBUG) {
             this.hitbox.draw(ctx);
+            ctx.beginPath();
+            ctx.moveTo(this.game.player.x,this.game.player.y);
+            ctx.lineTo(this.x, this.y);
+            ctx.stroke();
         }
         this.shard.drawFrame(this.game.clockTick, this.game.ctx, this.positionx, this.positiony, 1 * this.scale);
 

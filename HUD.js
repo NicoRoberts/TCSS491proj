@@ -9,9 +9,9 @@ class HUD {
         this.heartSprite = ASSET_MANAGER.getAsset("./Sprites/Hearts.png");
         this.heartStates = [];
 
-        this.healthBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/HealthBoostSprite.png");
-        this.reloadBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReloadBoostSprite.png");
-        this.speedBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostSprite.png");
+        this.healthBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/HealthBoostLevelSprite.png");
+        this.reloadBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReloadBoostLevelSprite.png");
+        this.speedBoostSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/SpeedBoostLevelSprite.png");
 
         this.weaponSprites = [];
         this.weaponSprites.push(ASSET_MANAGER.getAsset("./Sprites/WeaponsNoArm/Machete.png"));
@@ -36,11 +36,18 @@ class HUD {
 
         this.perkWidth = 34;
         this.perkHeight = 34;
+
         this.minutes = 0;
         this.seconds = 0;
         this.millis = 0;
 
         this.priority = 100; // should be the last thing to be drawn to the screen
+
+        this.healthPerk = [];
+        this.reloadPerk = [];
+        this.speedPerk = [];
+        this.reviveSprite = ASSET_MANAGER.getAsset("./Sprites/Boosts/ReviveSprite.png");
+        this.revivePerk = new Animator(this.reviveSprite, 0, 0, this.perkWidth, this.perkHeight, 5, .15, 0, false, true);
 
         //difficulty bar
         this.maxDifficulty = 150; //approx 2 min
@@ -70,13 +77,15 @@ class HUD {
 
     loadPerks() {
 
-        this.healthPerk = new Animator(this.healthBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        this.reloadPerk = new Animator(this.reloadBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
-        this.speedPerk = new Animator(this.speedBoostSprite, 0, 0, this.perkWidth, this.perkHeight, 4, 0.25, 0, false, true);
+        var offset = 0;
+        for (var i = 0; i < 3; i++) {
 
-        this.healthPerkObtained = false;
-        this.reloadPerkObtained = false;
-        this.speedPerkObtained = false;
+            this.healthPerk.push(new Animator(this.healthBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            this.reloadPerk.push(new Animator(this.reloadBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            this.speedPerk.push(new Animator(this.speedBoostSprite, 0 + offset, 0, this.perkWidth, this.perkHeight, 1, 1, 0, false, true));
+            
+            offset += this.perkWidth;
+        }
 
     };
     
@@ -107,17 +116,18 @@ class HUD {
     }
 
     updatePerks() {
-        if (this.player.healthBoost && !this.healthPerkObtained) {
-            this.healthPerkObtained = true;
-            this.perks.push(this.healthPerk);
+        this.perks = [];
+        if (this.player.healthBoostLevel > 0) {
+            this.perks.push(this.healthPerk[this.player.healthBoostLevel - 1]); // - 1 for indexing
         }
-        if (this.player.reloadBoost && !this.reloadPerkObtained) {
-            this.reloadPerkObtained = true;
-            this.perks.push(this.reloadPerk);
+        if (this.player.reloadBoostLevel > 0) {
+            this.perks.push(this.reloadPerk[this.player.reloadBoostLevel - 1]);
         }
-        if (this.player.speedBoost && !this.speedPerkObtained) {
-            this.speedPerkObtained = true;
-            this.perks.push(this.speedPerk);
+        if (this.player.speedBoostLevel > 0) {
+            this.perks.push(this.speedPerk[this.player.speedBoostLevel - 1]);
+        }
+        if (this.player.secondChance) {
+            this.perks.push(this.revivePerk);
         }
     }
 
@@ -193,10 +203,12 @@ class HUD {
 
             if (this.game.weapon.reservesCount == 0 && this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Red";
-                ctx.fillText("NO AMMO", ctx.canvas.width + this.AMMO_POS.X + 25, this.AMMO_POS.Y + 12);
+                ctx.fillText("NO AMMO", this.game.player.positionx - 10, this.game.player.positiony - 20);
+                ctx.fillText("NO AMMO", ctx.canvas.width + this.AMMO_POS.X, this.AMMO_POS.Y + 12);
             }
             else if (this.game.weapon.ammoCount == 0) {
                 ctx.fillStyle = "Orange";
+                ctx.fillText("R TO RELOAD", this.game.player.positionx -22, this.game.player.positiony-20);
                 ctx.fillText("R TO RELOAD", ctx.canvas.width + this.AMMO_POS.X + 5, this.AMMO_POS.Y + 12);
             }
             

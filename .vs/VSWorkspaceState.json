@@ -2,12 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\Enemies",
-    "\\Maps",
-    "\\Perks",
-    "\\Projectiles",
-    "\\Sprites",
     "\\Weapons"
   ],
-  "SelectedNode": "\\PriorityQueue.js",
+  "SelectedNode": "\\Weapons\\Pistol.js",
   "PreviewInSolutionExplorer": false
 }

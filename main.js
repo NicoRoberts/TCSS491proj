@@ -1,4 +1,4 @@
-var gameEngine = new GameEngine();
+ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./Maps/Boat.png");
@@ -16,6 +16,9 @@ ASSET_MANAGER.queueDownload("./Sprites/Bullet.png");
 ASSET_MANAGER.queueDownload("./Sprites/ChargeSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/SkeletonSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/Banshee.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKing.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKingDeath.png");
+ASSET_MANAGER.queueDownload("./Sprites/Darkness.png");
 ASSET_MANAGER.queueDownload("./Sprites/ReaperSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/RockSheet.png");
 ASSET_MANAGER.queueDownload("./Sprites/TreeSheet.png");
@@ -25,8 +28,12 @@ ASSET_MANAGER.queueDownload("./Sprites/Hearts.png");
 ASSET_MANAGER.queueDownload("./Sprites/Shard.png");
 ASSET_MANAGER.queueDownload("./Sprites/AmmoSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/HealthBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReloadBoostLevelSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/SpeedBoostLevelSprite.png");
+ASSET_MANAGER.queueDownload("./Sprites/Boosts/ReviveSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/YachtSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/GameOverSprite.png");
 ASSET_MANAGER.queueDownload("./Sprites/CoinSprite.png");
@@ -36,16 +43,28 @@ ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Machinegun.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Pistol.png");
 ASSET_MANAGER.queueDownload("./Sprites/WeaponsNoArm/Shotgun.png");
 ASSET_MANAGER.queueDownload("./Sprites/Dock.png");
+ASSET_MANAGER.queueDownload("./Sprites/LichKingUnknown.png");
 
 // Black #3 Download Assets
 ASSET_MANAGER.queueDownload("./images/tile.png");
 
-
+//music
+ASSET_MANAGER.queueDownload("./Music/BoatMusic.wav");
+ASSET_MANAGER.queueDownload("./Music/BossBattleVersion1.wav");
+ASSET_MANAGER.queueDownload("./Music/DeathScreen.wav");
+ASSET_MANAGER.queueDownload("./Music/MainGame.wav");
+ASSET_MANAGER.queueDownload("./Music/TitleScreen.wav");
+ASSET_MANAGER.queueDownload("./Music/Arrival.wav");
 
 ASSET_MANAGER.downloadAll(function () {
 
+	ASSET_MANAGER.autoRepeat("./Music/BoatMusic.wav");
+	ASSET_MANAGER.autoRepeat("./Music/BossBattleVersion1.wav");
+	ASSET_MANAGER.autoRepeat("./Music/MainGame.wav");
+	ASSET_MANAGER.autoRepeat("./Music/TitleScreen.wav");
 	//Constants
-
+	var test;
+	
 	PARAMS.TILEWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE * 2; //* 2 because tile is 32x32 which is double the Bitwidth
 	PARAMS.TILEHEIGHT = PARAMS.BITWIDTH * PARAMS.SCALE * 2; 
 
@@ -54,7 +73,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	PARAMS.ENEMYWIDTH = 50;
 	PARAMS.ENEMYHEIGHT = 50;
-
+	
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
@@ -76,6 +95,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	this.scene = new SceneManager(gameEngine);
 	gameEngine.addEntity(scene);
-	this.scene.loadArrival();
+	//this.scene.loadArrival();
+	this.scene.loadStartMenu();
 	gameEngine.start();
 });

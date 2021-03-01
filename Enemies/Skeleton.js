@@ -18,7 +18,7 @@ class Skeleton extends AbstractEnemy{
 			COUNT: 3,
 		};
 
-		this.dropchance = 0.25; //Drop chance of an item (between 0 and 1)
+		this.dropchance = .4; //Drop chance of an item (between 0 and 1)
 
 		this.width = 75;
 		this.height = 93;
@@ -41,6 +41,8 @@ class Skeleton extends AbstractEnemy{
 		this.circley = this.y + (this.height / 2);
 		this.detect = false;
 		this.attack = false;
+		this.finishedAttack = true;
+
 
 		var chance = getRandomInt(0, 10);
 		if (chance == 1) {
@@ -60,6 +62,7 @@ class Skeleton extends AbstractEnemy{
 		this.game.Enemy = this;
 
 		this.hitbox = new HitBox(this, this.width, this.height);
+		this.attackHitbox = new HitBox(this, this.width - 20, this.height - 20, false, 10, 10);
 
 		this.priority = 1;
 
@@ -78,8 +81,9 @@ class Skeleton extends AbstractEnemy{
 		this.collideTerrain = false;
 		this.timeLeft = 0;
 		this.hit = false;
-		this.attackTime = 0.45;
+		this.attackTime = 0.3; //0.45
 		this.restTime = 3;
+		this.despawnTime = 0.3;
 		this.maxSpeed = getRandom(1.4, 2.0);
 		this.acceleration = 80000;
 		
@@ -125,10 +129,10 @@ class Skeleton extends AbstractEnemy{
 			= new Animator(this.spritesheet, 104, 8, this.width, this.height, 4, 0.15, 21, false, true);
 		//Skeleton is attacking and facing left	
 		this.animations[this.STATE.ATTACK][this.DIRECTION.LEFT]
-			= new Animator(this.spritesheet, 968, 5, this.attackWidth, this.attackHeight, 3, 0.15, 7, false, true);
+			= new Animator(this.spritesheet, 968, 5, this.attackWidth, this.attackHeight, 3, 0.1, 7, false, true);
 		//Skeleton is attacking and facing right	
 		this.animations[this.STATE.ATTACK][this.DIRECTION.RIGHT]
-			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.15, 13, false, true);
+			= new Animator(this.spritesheet, 1259, 5, this.attackWidth, this.attackHeight, 3, 0.1, 13, false, true);
 
 		//ATTACK ANIMATION GOES HERE. sprite sheet might need reorder of frames.
 	};
@@ -163,7 +167,7 @@ class Skeleton extends AbstractEnemy{
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
-			let itemCount = 2;
+			let itemCount = 3;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
@@ -197,11 +201,13 @@ class Skeleton extends AbstractEnemy{
 			
 			that.timeLeft = that.attackTime * 1000;
 			that.timeLeft2 = that.restTime * 1000;
+			that.timeLeft3 = that.despawnTime * 1000;
 			
 			let interval_id = window.setInterval(function () {
 				that.timeLeft -= 10;
 				that.state = that.STATE.ATTACK;
-				that.enemyAttack.removeFromWorld = true;
+				that.finishedAttack = false;
+				
 				
 				if (that.timeLeft <= 0) {
 					
@@ -210,15 +216,26 @@ class Skeleton extends AbstractEnemy{
 					//that.state = that.STATE.IDLE;
 					window.clearInterval(interval_id);
 					
+					that.finishedAttack = true;
+
+					let interval_id3 = window.setInterval(function () {						
+						that.timeLeft3 -= 10;				
+						if (that.timeLeft3 <= 0) {
+							that.enemyAttack.removeFromWorld = true;				
+							window.clearInterval(interval_id3);
+						}
+					}, 10);
 
 					let interval_id2 = window.setInterval(function () {
 						
 						that.timeLeft2 -= 10;
 						that.state = that.STATE.IDLE;
+						
 						if (that.timeLeft2 <= 0) {
+							
 							that.timeLeft2 = 0;
 							that.swinging = false;
-							that.enemyAttack.removeFromWorld = true;
+							
 							window.clearInterval(interval_id2);
 						}
 					}, 10);
@@ -227,7 +244,7 @@ class Skeleton extends AbstractEnemy{
 		}
 	}
 
-
+	
 	
 	update() {
 		var that = this;
@@ -242,12 +259,12 @@ class Skeleton extends AbstractEnemy{
 		//collision
 		this.game.entities.forEach(function (entity) {
 
-			if (entity instanceof Player && that.hitbox.willCollide(entity.hitbox)) { //change to circle
+			if (entity instanceof Player && that.attackHitbox.willCollide(entity.hitbox)) { //change to circle
 				that.doAttack(entity);
 
 			}
 		
-			else if (entity instanceof Player && !that.hitbox.willCollide(entity.hitbox)) {
+			else if (entity instanceof Player && !that.attackHitbox.willCollide(entity.hitbox) && that.finishedAttack) {
 				that.attack = false;
 			} 
 
@@ -307,11 +324,13 @@ class Skeleton extends AbstractEnemy{
 		this.positionx = this.x - this.game.camera.x;
 		this.positiony = this.y - this.game.camera.y;
 
+		this.attackHitbox.update();
 		this.hitbox.update();
 		
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
+			this.game.enemiesCount--;
 			this.player.killCount++;
 			this.dropItem();
 		};
@@ -352,7 +371,7 @@ class Skeleton extends AbstractEnemy{
 		//ctx.fillStyle = "Red";
 		//ctx.strokeStyle = "Red";
 		if (PARAMS.DEBUG) {
-			
+			this.attackHitbox.draw(ctx);
 			this.hitbox.draw(ctx);
 
 			ctx.fillStyle = "White";

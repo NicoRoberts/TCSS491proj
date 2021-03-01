@@ -12,7 +12,7 @@ class Healthbar {
 
     draw(ctx) {
 
-        if (this.agent.hpCurrent < this.agent.hpMax) {
+        if (this.agent.hpCurrent < this.agent.hpMax && this.agent.hpCurrent > 0 ) {
 
             ctx.fillStyle = rgb(166, 16, 30); // blood red
             var ratio = this.agent.hpCurrent / this.agent.hpMax;
