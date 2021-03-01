@@ -13,7 +13,7 @@ class SpeedPerk {
         
         this.priority = 5;
         this.initialCost = 4;
-        this.cost = this.initialCost;
+        this.cost = 4;
         this.level = 1;
 
         this.perk = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.25, 0, false, true);        
@@ -29,11 +29,11 @@ class SpeedPerk {
         this.hitbox.update();
 
         if (this.level == 2) {
-            this.cost = this.initialCost * 2;
+            this.cost = this.initialCost + 2;
         }
 
         if (this.level == 3) {
-            this.cost = this.initialCost * 3;
+            this.cost = this.initialCost + 4;
         }
 
     };
