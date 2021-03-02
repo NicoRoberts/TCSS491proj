@@ -224,7 +224,7 @@ class GameEngine {
 
         for (var i = 0; i < this.entities.length; i++) {
             let entity = this.entities[i];
-            if (!(this.stage == "game over") && !(this.stage == "menu")) {
+            if (!(this.stage == "game over") && !(this.stage == "menu") && !(this.stage == "pause")) {
                 if ((entity.positionx + entity.width > 0 && entity.positiony + entity.height > 0 && entity.positionx < this.ctx.canvas.width && entity.positiony - entity.height * 4 < this.ctx.canvas.height)
                     || entity instanceof HUD || entity instanceof Map || entity instanceof Grid || entity instanceof HBoundary || entity instanceof VBoundary
                     || entity instanceof YachtMap || entity instanceof Gangway || entity instanceof Darkness) {
@@ -232,7 +232,7 @@ class GameEngine {
                 }
             }
             else if (entity instanceof Gameover || entity instanceof StartMenu || entity instanceof ControlsMenu
-            || entity instanceof GuideMenu || entity instanceof CreditsMenu) {
+            || entity instanceof GuideMenu || entity instanceof CreditsMenu || entity instanceof Pause) {
                 entity.draw(this.ctx);
             }
             
@@ -259,38 +259,38 @@ class GameEngine {
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
             
-            if (entity instanceof AbstractEnemy) {
-                //this.enemiesCount++;
-            }
-            if (!(typeof entity == 'undefined')) {
+            if (!(typeof entity == 'undefined') && this.stage != "pause") {
                 if (!entity.removeFromWorld) {
                     entity.update();
                 }
             }
+            else if (entity instanceof Pause) {
+                entity.update();
+            }
         }
 
-            this.camera.update();
+        this.camera.update();
 
-            if (this.stage == "survival") {
-                
-                //BOSS LEVEL
-                if (this.player.stageLevel == 5) {
-
-                }
-                else {
-                    this.spawnTimer += this.clockTick;
-                    var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-                    if (randomEnemy == 0) {
-                        this.spawnSkeletons();
-                    } else if (randomEnemy == 1) {
-                        this.spawnBanshees();
-                    } else {
-                        this.spawnReapers();
-                    } 
-                    
-                }
+        if (this.stage == "survival") {
+            
+            //BOSS LEVEL
+            if (this.player.stageLevel == 5) {
 
             }
+            else {
+                this.spawnTimer += this.clockTick;
+                var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+                if (randomEnemy == 0) {
+                    this.spawnSkeletons();
+                } else if (randomEnemy == 1) {
+                    this.spawnBanshees();
+                } else {
+                    this.spawnReapers();
+                } 
+                
+            }
+
+        }
 
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
@@ -300,12 +300,13 @@ class GameEngine {
         }
 
         //For click off of screen
-        if (document.activeElement != document.getElementById("gameWorld")) {
+        if ((document.activeElement != document.getElementById("gameWorld")) && !(this.stage == "pause") && !(this.stage == "menu")) {
             this.W = false;
             this.A = false;
             this.S = false;
             this.D = false;
             this.E = false;
+            this.camera.loadPause();
         }
         
 
@@ -434,7 +435,11 @@ class GameEngine {
             this.timeInSurvival = 0;
         }
 
-        if (this.stage == "survival") {
+        else if (this.stage == "pause") {
+            // do nothing, don't increment time
+        }
+
+        else if (this.stage == "survival") {
             this.timeInSurvival += this.clockTick;
             this.ellapsedTime += this.clockTick;
         }

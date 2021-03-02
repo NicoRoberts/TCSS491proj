@@ -336,6 +336,14 @@ class SceneManager {
 		this.update();
 	};
 
+	loadPause() {
+
+		this.pause = new Pause(this.game);
+		this.game.addEntity(this.pause);
+		this.game.stage = "pause";
+		this.update();
+	}
+
 	update() {
 		
 		PARAMS.DEBUG = document.getElementById("debug").checked;
