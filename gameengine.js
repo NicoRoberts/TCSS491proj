@@ -59,7 +59,7 @@ class GameEngine {
         this.startInput();
         this.timer = new Timer();
         this.ellapsedTime = 0;
-
+        
         this.timeInSurvival = 0;
     };
 

@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 10; // how long before shard spawns
+		this.shardSpawnTime = 0; // how long before shard spawns
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -68,7 +68,7 @@ class SceneManager {
 			}
 		}
 
-		this.player.hpCurrent = this.player.hpMax;
+		//this.player.hpCurrent = this.player.hpMax;
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
@@ -97,14 +97,19 @@ class SceneManager {
 			&& this.player.speedBoostLevel == 3 && !this.revivePerk.purchased) {
 			this.game.addEntity(this.revivePerk);
 		}
-		
-		
+
+		// buyable weapons
 		if (!this.shotgun.isAvailable) {
 			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
 			this.game.addEntity(new DisplayMachinegun(this.game, -300, 1880));
 		}
+
+		// buyable drops
+		this.game.addEntity(new AmmoPack(this.game, 325, 1125));
+		this.game.addEntity(new HealthPack(this.game, 237.5, 1125));
+
 		this.update();
 	};
 	loadArrival() {
@@ -382,8 +387,8 @@ class SceneManager {
 
 				let openGrids = this.game.grid.getSpawnableGrids();
 				let randomGridIndex = randomInt(openGrids.length);
-				let grid = openGrids[randomGridIndex];
-				//let grid = this.game.grid.gridAtIndex(5,37);
+				//let grid = openGrids[randomGridIndex];
+				let grid = this.game.grid.gridAtIndex(5,37);
 				let shard = new Shards(this.game, grid.x, grid.y);
 				if (grid !== null) {
 					grid.addTerrain(shard);
