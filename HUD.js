@@ -102,7 +102,7 @@ class HUD {
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
         
         if (!this.shardSpawned) {
-            if (this.shardTimer <= 0) {
+            if (this.shardTimer < -0.99) {
                 this.shardTimer = this.timer;
             }
         }
