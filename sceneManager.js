@@ -9,15 +9,17 @@ class SceneManager {
 		this.y = 0;	
 		this.game.stage;
 		
-		this.shardSpawned = false;
-		this.shardSpawnTime = 10; // how long before shard spawns
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
 		this.pistol = new Pistol(this.game);
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
-		this.hud = new HUD(this.game, this.player);
+
+		this.shardSpawned = false;
+		this.shardSpawnTime = 5 + (this.player.stageLevel * 5); // how long before shard spawns
+
+		this.hud = new HUD(this.game, this.player, this.shardSpawnTime, this.shardSpawned);
 
 		
 		this.rockCount = 100;
@@ -29,8 +31,7 @@ class SceneManager {
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 		this.revivePerk = new RevivePerk(this.game, 125, 1175);
 	
-		this.terrainCount = 100;	
-
+		this.terrainCount = 100;
 		
 	};
 
@@ -222,6 +223,7 @@ class SceneManager {
 		this.game.stage = "survival";
 
 		this.shardSpawned = false;
+		this.hud.shardSpawned = false;
 		
 
 		//spawning coins to test shop system
@@ -305,7 +307,7 @@ class SceneManager {
 		this.player = new Player(this.game, 243, 1800);
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
-		this.hud = new HUD(this.game, this.player);
+		this.hud = new HUD(this.game, this.player, this.shardSpawnTime, this.shardSpawned);
 		this.healthPerk = new HealthPerk(this.game, -190, 2265);
 		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
@@ -368,6 +370,9 @@ class SceneManager {
 
 		this.updateAudio();
 
+		this.shardSpawnTime = 5 + (this.player.stageLevel * 5); // increment 5 seconds every level, level 1 = 10 seconds
+		this.hud.timer = this.shardSpawnTime; // to show time til shard spawn on hud
+
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
 			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
 			this.y = this.marriyacht.y - ymid + this.game.player.height * PARAMS.PIXELSCALER;
@@ -393,11 +398,12 @@ class SceneManager {
 			// spawning shard
 			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
 				this.shardSpawned = true;
+				this.hud.shardSpawned = true;
 
 				let openGrids = this.game.grid.getSpawnableGrids();
 				let randomGridIndex = randomInt(openGrids.length);
-				let grid = openGrids[randomGridIndex];
-				//let grid = this.game.grid.gridAtIndex(5,37);
+				//let grid = openGrids[randomGridIndex];
+				let grid = this.game.grid.gridAtIndex(5,37);
 				let shard = new Shards(this.game, grid.x, grid.y);
 				if (grid !== null) {
 					grid.addTerrain(shard);
