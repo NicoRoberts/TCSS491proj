@@ -10,7 +10,7 @@ class SceneManager {
 		this.game.stage;
 		
 		this.shardSpawned = false;
-		this.shardSpawnTime = 0; // how long before shard spawns
+		this.shardSpawnTime = 10; // how long before shard spawns
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -66,6 +66,10 @@ class SceneManager {
 				ASSET_MANAGER.pauseBackgroundMusic();
 				ASSET_MANAGER.playAsset(music);
 			}
+		}
+
+		if (this.player.stageLevel == 5) {
+			this.loadWinScreen();
 		}
 
 		//this.player.hpCurrent = this.player.hpMax;
@@ -183,7 +187,6 @@ class SceneManager {
         }
 		
 
-		
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
@@ -342,12 +345,18 @@ class SceneManager {
 	};
 
 	loadPause() {
-
 		this.pause = new Pause(this.game);
 		this.game.addEntity(this.pause);
 		this.game.stage = "pause";
 		this.update();
-	}
+	};
+
+	loadWinScreen() {
+		this.winScreen = new WinScreen(this.game);
+		this.game.addEntity(this.winScreen);
+		this.game.stage = "pause";
+		this.update();
+	};
 
 	update() {
 		
@@ -387,8 +396,8 @@ class SceneManager {
 
 				let openGrids = this.game.grid.getSpawnableGrids();
 				let randomGridIndex = randomInt(openGrids.length);
-				//let grid = openGrids[randomGridIndex];
-				let grid = this.game.grid.gridAtIndex(5,37);
+				let grid = openGrids[randomGridIndex];
+				//let grid = this.game.grid.gridAtIndex(5,37);
 				let shard = new Shards(this.game, grid.x, grid.y);
 				if (grid !== null) {
 					grid.addTerrain(shard);

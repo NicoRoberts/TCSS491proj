@@ -58,7 +58,7 @@ class Player{
 		this.hpCurrent = 40; // originally 40
 		this.hpMax = 40;
 		this.hit = false;
-		this.stageLevel = 1;
+		this.stageLevel = 1; // start at 1
 
 		// perks
 		this.healthBoostLevel = 0;

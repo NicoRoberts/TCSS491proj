@@ -17,7 +17,6 @@ class Gameover {
     };
 
     update() {
-        console.log(this.game.click);
         if (this.game.mouse != null) {
             if ((this.game.mouse.x >= 675 && this.game.mouse.x <= 1110) && (this.game.mouse.y >= 715 && this.game.mouse.y <= 785)
             && (this.game.click)) {

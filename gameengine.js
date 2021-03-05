@@ -232,7 +232,8 @@ class GameEngine {
                 }
             }
             else if (entity instanceof Gameover || entity instanceof StartMenu || entity instanceof ControlsMenu
-            || entity instanceof GuideMenu || entity instanceof CreditsMenu || entity instanceof Pause) {
+            || entity instanceof GuideMenu || entity instanceof CreditsMenu || entity instanceof Pause
+            || entity instanceof WinScreen) {
                 entity.draw(this.ctx);
             }
             
@@ -264,7 +265,7 @@ class GameEngine {
                     entity.update();
                 }
             }
-            else if (entity instanceof Pause) {
+            else if (entity instanceof Pause || entity instanceof WinScreen) {
                 entity.update();
             }
         }
