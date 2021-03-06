@@ -1,23 +1,41 @@
-class Map{
+class Boat{
 
     constructor(game,x,y){
 		Object.assign(this, {game, x, y});
     
-    	this.width = 6684;
-        this.height = 6360;
-        this.mapState = randomInt(3);
-        this.maps=["./Maps/CastToTheShadowsMapBIG.png","./Maps/CastToTheShadowsMapBIGFire.png","./Maps/CastToTheShadowsMapBIGSnow.png"];
+    	this.width = 960;
+        this.height = 1440;
+        this.mapState = 0
+        
+        this.states=[];
+
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         
-		this.spritesheet = ASSET_MANAGER.getAsset(this.maps[this.mapState]);
-        this.map = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 1, false, true);
-    	this.game.Map= this;
+		this.spritesheet = ASSET_MANAGER.getAsset("./Maps/Boat.png");
+
+    	this.game.boatMap= this;
 
         this.priority = 0;
+        
+        this.setupMapType();
+        this.loadStates();
 
     }
+   
+    // 6 possible Maps
+    setupMapType() {
+	//	for (var i = 0; i < 6; i++) {
+			this.states.push([0]);
+		//}
+    }
+    
+    loadStates() {
 
+		
+		this.states[0] = new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 1, 1, false, true);
+		
+    }
     
     update() {
 
@@ -36,9 +54,9 @@ class Map{
 			ctx.closePath();
             
         }
-        this.map.drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,1);
+        this.states[0].drawFrame(this.game.clockTick,ctx,this.positionx,this.positiony,1);
         
         //ctx.drawImage(this.spritesheet,this.positionx,this.positiony,this.width,this.height,0,0,this.width,this.height)
-	};
+	}
 
 }

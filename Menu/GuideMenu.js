@@ -248,13 +248,13 @@ class GuideMenu {
         ctx.fillText("Collect Health Packs to Replenish Health", 50, 800, 500);
         ctx.fillText("Collect Ammo Packs to Refill Ammo", 50, 850, 500);
 
-        ctx.fillText("Shards Spawn After A Certain Amount of Time,", 675, 750, 500);
-        ctx.fillText("Collect the Shard of Each Level To Progress", 675, 800, 500);
+        ctx.fillText("Shards Spawn After a Certain Amount of Time", 675, 750, 500);
+        ctx.fillText("Collect the Shard of Each Level to Progress", 675, 800, 500);
         ctx.fillText("Marri-Yacht Accessible After Shard Obtained", 675, 850, 500);
 
         ctx.fillText("Board the Marri-Yacht to Cruise onto Next Level", 1325, 750, 500);
         ctx.fillText("Weapons and Perks are Located on Deck", 1325, 800, 500);
-        ctx.fillText("Make It Past Level 5 to Win", 1325, 850, 500);
+        ctx.fillText("Make it Past Level 5 to Win", 1325, 850, 500);
 
     };
 

@@ -67,8 +67,6 @@ class SceneManager {
 				ASSET_MANAGER.playAsset(music);
 			}
 		}
-		//this.player.hpCurrent = this.player.hpMax;
-
 
 		this.player.hpCurrent = this.player.hpMax;
 		this.game.addEntity(this.player);
@@ -162,7 +160,7 @@ class SceneManager {
 
 		this.grid.update();
 
-
+		this.map = new Map(this.game, -1350, -1645);
 		if (!(this.game.player.stageLevel == 5)) {
 			for (var j = 0; j < this.terrainCount; j++) {
 				let open = this.grid.getOpenGrids();
@@ -182,7 +180,7 @@ class SceneManager {
         }
 		
 
-		this.map = new Map(this.game, -1350, -1645);
+		
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
@@ -307,6 +305,10 @@ class SceneManager {
 		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 		this.revivePerk = new RevivePerk(this.game, 125, 1175);
+
+		// resets ammo
+		this.pistol.ammoCount = this.pistol.maxAmmo;
+        this.pistol.reservesCount = this.pistol.maxReserves;
 
 		this.game.addEntity(new StartMenu(this.game));
 		
