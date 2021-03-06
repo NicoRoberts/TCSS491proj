@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Enemies",
+    "\\Menu",
+    "\\Projectiles",
+    "\\Sounds",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Weapons\\Pistol.js",
+  "SelectedNode": "\\Sounds\\Walking.wav",
   "PreviewInSolutionExplorer": false
 }

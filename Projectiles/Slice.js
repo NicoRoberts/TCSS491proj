@@ -13,10 +13,9 @@ class Slice {
         this.center = { x: this.reach * Math.cos(this.angle), y: this.reach * Math.sin(this.angle) }
         this.positionx = (this.x + this.center.x) - (this.width/2);
         this.positiony = (this.y + this.center.y) - (this.height / 2);
-        this.hitdealt = false;
+        this.hitCount = 0;
 
-        
-
+        ASSET_MANAGER.playAsset("./Sounds/slice.wav");
         this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/Slice.png");
 
         let sprite_offset = this.getSwipeState();
@@ -74,9 +73,11 @@ class Slice {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (entity instanceof AbstractEnemy) {
-                if (that.hitbox.collide(entity.hitbox) && (!that.hitdealt)) {
-                    that.hitdealt = true;
+                if (that.hitbox.collide(entity.hitbox) && (that.hitCount < 3) && entity.hitbyslice != that) {
+                    ASSET_MANAGER.playAsset("./Sounds/flesh.wav");
+                    that.hitCount++;
                     entity.hit = true;
+                    entity.hitbyslice = that;
                     entity.velocity.x = -10 * entity.velocity.x;
                     entity.velocity.y = -10 * entity.velocity.y;
                     let originalAcceleration = entity.acceleration;

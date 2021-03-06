@@ -95,7 +95,7 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener("mousedown", function (e) {
             //Left mouse button
-            if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht")) {
+            if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht") && !that.shift) {
                 that.click = true;
                 that.weapon.fire();
             }
@@ -157,6 +157,9 @@ class GameEngine {
                         that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
+                case "ShiftLeft":
+                    if (!that.weapon.reloading && !that.weapon.firing)
+                    that.shift = true;
             }
     
         }, false);
@@ -179,6 +182,8 @@ class GameEngine {
                 case "KeyE":
                     that.E = false;
                     break;
+                case "ShiftLeft":
+                    that.shift = false;
             }
     
         }, false);

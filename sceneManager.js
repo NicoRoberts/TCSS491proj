@@ -110,11 +110,13 @@ class SceneManager {
 		this.update();
 	};
 	loadArrival() {
+		
 		this.x = 0;
 		this.y = 0;
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
+		
 		this.marriyacht = new Marriyacht(this.game, 91, -300);
 		this.game.addEntity(this.marriyacht);
 
@@ -153,8 +155,8 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
 		let gridblockSize = 49;
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize * 2, gridblockSize, 64, 70, gridblockSize);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize*2, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize * 3, gridblockSize, 61, 69, gridblockSize);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize*3, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
 
@@ -192,6 +194,7 @@ class SceneManager {
 		this.update();
 	}
 	loadDeparture() {
+		ASSET_MANAGER.playAsset("./Sounds/boat.wav");
 		this.x = 0;
 		this.y = 0;
 		this.game.stage = "departure";
