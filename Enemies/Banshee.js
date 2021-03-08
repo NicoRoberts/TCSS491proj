@@ -84,7 +84,7 @@ class Banshee extends AbstractEnemy {
 		this.restTime = 1.2;
 		this.maxSpeed = 1.5;
     this.despawnTime = 0.3;
-		this.acceleration = 20;
+		this.acceleration = 160000;
 
 		//For banshee idle movement
 		this.collideRight = false;
@@ -248,6 +248,9 @@ class Banshee extends AbstractEnemy {
 		var that = this;
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;
 
+		if (that.detect && !that.attack) { //chase the player
+			that.movement.chaseMovement();	
+		}
 		
 		
 		//collision
@@ -262,7 +265,7 @@ class Banshee extends AbstractEnemy {
 				that.attack = false;
 			}
 
-			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy)  && !(entity instanceof Player) ) {
+			if (entity != that && entity.hitbox && !(entity instanceof AbstractEnemy) && !(entity instanceof Terrain) && !(entity instanceof Trees) && !(entity instanceof Player) ) {
 
 				that.hitbox.collide(entity.hitbox);
 			}
@@ -313,9 +316,8 @@ class Banshee extends AbstractEnemy {
 		this.testSpeed();
 
 		
-		if (that.detect && !that.attack) { //chase the player
-			that.movement.chaseMovement();	
-		} else if (!that.detect) { //idle movement
+		
+		 if (!that.detect) { //idle movement
 			that.movement.idleMovement();
 		}
 

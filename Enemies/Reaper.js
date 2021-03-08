@@ -11,6 +11,7 @@ class Reaper extends AbstractEnemy{
 			RIGHT: 0,
 			LEFT: 1,
 			COUNT: 2
+
 		};
 
 		this.STATE = {
@@ -335,7 +336,7 @@ class Reaper extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
-			this.game.enemiesCount--;
+			//this.game.enemiesCount--;
 			this.game.player.killCount++;
 			this.dropItem();
 		}

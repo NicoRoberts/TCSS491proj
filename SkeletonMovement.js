@@ -100,6 +100,8 @@ class SkeletonMovement {
             this.changeState = true;
             this.timer = 0;
         }
+
+        
     };
 
 

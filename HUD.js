@@ -3,8 +3,8 @@ class HUD {
     HEART_POS = { X: 2.5, Y: 785 }
     PERK_POS = { X: 2.5, Y: 735 }
     AMMO_POS = { X: -145, Y:785}
-    constructor(game, player, timer) {
-        Object.assign(this, {game, player, timer});
+    constructor(game, player, timer, shardSpawned) {
+        Object.assign(this, {game, player, timer, shardSpawned});
 
         this.heartSprite = ASSET_MANAGER.getAsset("./Sprites/Hearts.png");
         this.heartStates = [];
@@ -40,6 +40,7 @@ class HUD {
         this.minutes = 0;
         this.seconds = 0;
         this.millis = 0;
+        this.shardTimer = this.timer;
 
         this.priority = 100; // should be the last thing to be drawn to the screen
 
@@ -99,10 +100,17 @@ class HUD {
 
         this.currentDifficulty = this.game.timeInSurvival;
         //this.millis = Math.floor((this.game.ellapsedTime % 1) * 1000);
+        
+        if (!this.shardSpawned) {
+            if (this.shardTimer < -0.99) {
+                this.shardTimer = this.timer;
+            }
+        }
+
+        this.shardTimer -=  this.game.clockTick;
 
         this.updateHearts();
         this.updatePerks();
-        
 
     };
 
@@ -274,13 +282,19 @@ class HUD {
             var offsetx = 350;
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"'
-            if (this.game.player.shardObtained) {
-                ctx.fillStyle = "Blue";
-                ctx.fillText("Shard obtained! Return to the boat!", ctx.canvas.width / 2 - offsetx, offsety);
+            if ((this.shardTimer > 0) && (this.player.stageLevel != 5)) {
+                ctx.fillStyle = "darkred";
+                ctx.fillText(Math.ceil(this.shardTimer) + " seconds until the shard spawns.", ctx.canvas.width / 2 - offsetx, offsety);
             }
-            else if (this.game.camera.shardSpawned) {
-                ctx.fillStyle = "Red";
-                ctx.fillText("The shard has spawned! Go find it!", ctx.canvas.width / 2 - offsetx, offsety);
+            else {
+                if (this.game.player.shardObtained) {
+                    ctx.fillStyle = "Blue";
+                    ctx.fillText("Shard obtained! Return to the boat!", ctx.canvas.width / 2 - offsetx, offsety);
+                }
+                else if (this.game.camera.shardSpawned) {
+                    ctx.fillStyle = "Red";
+                    ctx.fillText("The shard has spawned! Go find it!", ctx.canvas.width / 2 - offsetx, offsety);
+                }
             }
         }
         
