@@ -16,7 +16,7 @@ class Marriyacht {
         this.positiony = this.y - this.game.camera.y;
 
         this.priority = 2;
-        this.speed = 2.15; // original speed is 2.5
+        this.speed = 2.5; // original speed is 2.5
 
         this.docked = new Animator(this.spritesheet, 0, this.height, this.width, this.height, 4, 0.25, 0, false, true);
         this.moving = new Animator(this.spritesheet, 0, 0, this.width, this.height, 4, 0.1, 0, false, true);

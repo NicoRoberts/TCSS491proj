@@ -61,7 +61,7 @@ class LichKing extends AbstractEnemy {
 
 		this.priority = 1;
 
-		this.hpMax = 4500;
+		this.hpMax = 4500; // originally 4500
 		this.hpCurrent = this.hpMax;
 
 		this.animations = [];
