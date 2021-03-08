@@ -11,6 +11,7 @@ class SceneManager {
 		
 		this.shardSpawned = false;
 		this.shardSpawnTime = 10; // how long before shard spawns
+		this.resetRoundSpawnRate = 3;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -129,13 +130,18 @@ class SceneManager {
 
 		//increase enemies per level
 		this.game.enemiesCount = 0;
-		if (this.firstlevel) {
-			this.game.maxEnemies += 25;
-			this.firstlevel = false;
+		if (this.game.player.stageLevel == 1) {
+			this.game.maxEnemies = 25;
 		} else {
 			this.game.maxEnemies += 10;
+			if (this.resetRoundSpawnRate > 1) {
+				this.resetRoundSpawnRate = this.resetRoundSpawnRate  - (this.resetRoundSpawnRate * 0.15);
+				this.game.spawnRate = this.resetRoundSpawnRate; // minus 15 percent each level for spawnRate as long as greater than 1
+			} else {
+				this.resetRoundSpawnRate == 1;
+			}
 		}
-		this.game.spawnRate = 3;
+		
 		// if (this.game.spawnRate > 3) {
 		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
         //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
