@@ -17,7 +17,7 @@ class SceneManager {
 		this.machinegun = new Machinegun(this.game);
 
 		this.shardSpawned = false;
-		this.shardSpawnTime = 5 + (this.player.stageLevel * 5); // how long before shard spawns
+		this.shardSpawnTime = 8 + (this.player.stageLevel * 2); // how long before shard spawns
 
 		this.hud = new HUD(this.game, this.player, this.shardSpawnTime, this.shardSpawned);
 
@@ -370,7 +370,7 @@ class SceneManager {
 
 		this.updateAudio();
 
-		this.shardSpawnTime = 5 + (this.player.stageLevel * 5); // increment 5 seconds every level, level 1 = 10 seconds
+		this.shardSpawnTime = 8 + (this.player.stageLevel * 2); // increment 2 seconds every level, level 1 = 10 seconds
 		this.hud.timer = this.shardSpawnTime; // to show time til shard spawn on hud
 
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
@@ -402,8 +402,8 @@ class SceneManager {
 
 				let openGrids = this.game.grid.getSpawnableGrids();
 				let randomGridIndex = randomInt(openGrids.length);
-				//let grid = openGrids[randomGridIndex];
-				let grid = this.game.grid.gridAtIndex(5,37);
+				let grid = openGrids[randomGridIndex];
+				//let grid = this.game.grid.gridAtIndex(5,37);
 				let shard = new Shards(this.game, grid.x, grid.y);
 				if (grid !== null) {
 					grid.addTerrain(shard);
