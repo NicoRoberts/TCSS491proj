@@ -13,7 +13,7 @@ class EnemiesMenu {
         if (this.game.mouse != null) {
             if ((this.game.mouse.x >= 10 && this.game.mouse.x <= 225) && (this.game.mouse.y >= 20 && this.game.mouse.y <= 65)
             && (this.game.click)) {
-
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadGuideMenu();
             }
         }

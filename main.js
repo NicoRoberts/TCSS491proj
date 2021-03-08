@@ -56,6 +56,26 @@ ASSET_MANAGER.queueDownload("./Music/MainGame.wav");
 ASSET_MANAGER.queueDownload("./Music/TitleScreen.wav");
 ASSET_MANAGER.queueDownload("./Music/Arrival.wav");
 
+//Sound Effects
+ASSET_MANAGER.queueDownload("./Sounds/Walking.wav");
+ASSET_MANAGER.queueDownload("./Sounds/click.wav");
+ASSET_MANAGER.queueDownload("./Sounds/slice.wav");
+ASSET_MANAGER.queueDownload("./Sounds/flesh.wav");
+ASSET_MANAGER.queueDownload("./Sounds/coin.wav");
+ASSET_MANAGER.queueDownload("./Sounds/reload.wav");
+ASSET_MANAGER.queueDownload("./Sounds/startreload.wav");
+ASSET_MANAGER.queueDownload("./Sounds/finishreload.wav");
+ASSET_MANAGER.queueDownload("./Sounds/shot.wav");
+ASSET_MANAGER.queueDownload("./Sounds/shotgun_shot.wav");
+ASSET_MANAGER.queueDownload("./Sounds/emptymag.wav");
+ASSET_MANAGER.queueDownload("./Sounds/heal.wav");
+ASSET_MANAGER.queueDownload("./Sounds/pickup.wav");
+ASSET_MANAGER.queueDownload("./Sounds/boat.wav");
+ASSET_MANAGER.queueDownload("./Sounds/buy.wav");
+ASSET_MANAGER.queueDownload("./Sounds/energyattack.wav");
+ASSET_MANAGER.queueDownload("./Sounds/summon.wav");
+
+
 ASSET_MANAGER.downloadAll(function () {
 
 	ASSET_MANAGER.autoRepeat("./Music/BoatMusic.wav");
