@@ -9,15 +9,18 @@ class SceneManager {
 		this.y = 0;	
 		this.game.stage;
 		
-		this.shardSpawned = false;
-		this.shardSpawnTime = 10; // how long before shard spawns
+		this.resetRoundSpawnRate = 3;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
 		this.pistol = new Pistol(this.game);
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
-		this.hud = new HUD(this.game, this.player);
+
+		this.shardSpawned = false;
+		this.shardSpawnTime = 8 + (this.player.stageLevel * 2); // how long before shard spawns
+
+		this.hud = new HUD(this.game, this.player, this.shardSpawnTime, this.shardSpawned);
 
 		
 		this.rockCount = 100;
@@ -29,8 +32,7 @@ class SceneManager {
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
 		this.revivePerk = new RevivePerk(this.game, 125, 1175);
 	
-		this.terrainCount = 100;	
-
+		this.terrainCount = 100;
 		
 	};
 
@@ -68,7 +70,11 @@ class SceneManager {
 			}
 		}
 
-		this.player.hpCurrent = this.player.hpMax;
+		if (this.player.stageLevel == 5) {
+			this.loadWinScreen();
+		}
+
+		//this.player.hpCurrent = this.player.hpMax;
 		this.game.addEntity(this.player);
 		this.game.addEntity(lBoundary);
 		this.game.addEntity(tBoundary);
@@ -97,14 +103,19 @@ class SceneManager {
 			&& this.player.speedBoostLevel == 3 && !this.revivePerk.purchased) {
 			this.game.addEntity(this.revivePerk);
 		}
-		
-		
+
+		// buyable weapons
 		if (!this.shotgun.isAvailable) {
 			this.game.addEntity(new DisplayShotgun(this.game, -300, 1600));
 		}
 		if (!this.machinegun.isAvailable) {
 			this.game.addEntity(new DisplayMachinegun(this.game, -300, 1880));
 		}
+
+		// buyable drops
+		this.game.addEntity(new AmmoPack(this.game, 325, 1125));
+		this.game.addEntity(new HealthPack(this.game, 237.5, 1125));
+
 		this.update();
 	};
 	loadArrival() {
@@ -129,13 +140,18 @@ class SceneManager {
 
 		//increase enemies per level
 		this.game.enemiesCount = 0;
-		if (this.firstlevel) {
-			this.game.maxEnemies += 25;
-			this.firstlevel = false;
+		if (this.game.player.stageLevel == 1) {
+			this.game.maxEnemies = 25;
 		} else {
 			this.game.maxEnemies += 10;
+			if (this.resetRoundSpawnRate > 1) {
+				this.resetRoundSpawnRate = this.resetRoundSpawnRate  - (this.resetRoundSpawnRate * 0.15);
+				this.game.spawnRate = this.resetRoundSpawnRate; // minus 15 percent each level for spawnRate as long as greater than 1
+			} else {
+				this.resetRoundSpawnRate == 1;
+			}
 		}
-		this.game.spawnRate = 3;
+		
 		// if (this.game.spawnRate > 3) {
 		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
         //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
@@ -181,7 +197,6 @@ class SceneManager {
         }
 		
 
-		
 
 		this.game.addEntity(this.map);
 		this.game.addEntity(rBoundary);
@@ -218,6 +233,7 @@ class SceneManager {
 		this.game.stage = "survival";
 
 		this.shardSpawned = false;
+		this.hud.shardSpawned = false;
 		
 
 		//spawning coins to test shop system
@@ -301,7 +317,7 @@ class SceneManager {
 		this.player = new Player(this.game, 243, 1800);
 		this.shotgun = new Shotgun(this.game);
 		this.machinegun = new Machinegun(this.game);
-		this.hud = new HUD(this.game, this.player);
+		this.hud = new HUD(this.game, this.player, this.shardSpawnTime, this.shardSpawned);
 		this.healthPerk = new HealthPerk(this.game, -190, 2265);
 		this.reloadPerk = new ReloadPerk(this.game, -285, 2265);
 		this.speedPerk = new SpeedPerk(this.game, -380, 2265);
@@ -340,6 +356,20 @@ class SceneManager {
 		this.update();
 	};
 
+	loadPause() {
+		this.pause = new Pause(this.game);
+		this.game.addEntity(this.pause);
+		this.game.stage = "pause";
+		this.update();
+	};
+
+	loadWinScreen() {
+		this.winScreen = new WinScreen(this.game);
+		this.game.addEntity(this.winScreen);
+		this.game.stage = "pause";
+		this.update();
+	};
+
 	update() {
 		
 		PARAMS.DEBUG = document.getElementById("debug").checked;
@@ -349,6 +379,9 @@ class SceneManager {
 		let ymid = PARAMS.CANVAS_HEIGHT / 2 - PARAMS.TILEHEIGHT / 2;
 
 		this.updateAudio();
+
+		this.shardSpawnTime = 8 + (this.player.stageLevel * 2); // increment 2 seconds every level, level 1 = 10 seconds
+		this.hud.timer = this.shardSpawnTime; // to show time til shard spawn on hud
 
 		if (this.game.stage == "arrival" || this.game.stage == "departure") {
 			this.x = this.marriyacht.x - xmid + this.game.player.width * PARAMS.PIXELSCALER;
@@ -375,6 +408,7 @@ class SceneManager {
 			// spawning shard
 			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel%5 != 0) {
 				this.shardSpawned = true;
+				this.hud.shardSpawned = true;
 
 				let openGrids = this.game.grid.getSpawnableGrids();
 				let randomGridIndex = randomInt(openGrids.length);
