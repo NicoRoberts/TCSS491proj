@@ -39,7 +39,7 @@ class Machinegun {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
-        this.isAvailable = false;
+        this.isAvailable = true;
 
     }
 
@@ -51,6 +51,7 @@ class Machinegun {
     reload() {
 
         if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading && !this.firing) {
+            ASSET_MANAGER.playAsset("./Sounds/startreload.wav");
             this.reloading = true;
             let that = this;
             this.timeLeft = this.reloadTime * 1000;
@@ -71,6 +72,7 @@ class Machinegun {
                     //window.clearInterval(interval_id)
                     that.timeLeft = 0;
                     that.reloading = false;
+                    ASSET_MANAGER.playAsset("./Sounds/finishreload.wav");
                     window.clearInterval(interval_id);
                 }
 
@@ -82,15 +84,18 @@ class Machinegun {
     }
 
     fire() {
-        
-        if (this.ammoCount > 0 && !this.reloading && !this.firing) {
+       if (this.ammoCount <= 0) {
+            ASSET_MANAGER.playAsset("./Sounds/emptymag.wav");
+        }
+        else if(!this.reloading && !this.firing) {
             
             this.firing = true;
             let that = this;
 
             let interval_id = window.setInterval(function () {
 
-                if (that.firing && that.ammoCount>0) {
+                if (that.firing && that.ammoCount > 0) {
+                    ASSET_MANAGER.playAsset("./Sounds/shot.wav");
                     that.ammoCount--;
                     let angle = that.game.player.direction == that.game.player.DIRECTION.RIGHT ? that.angle : that.angle - Math.PI;
                     that.game.addEntity(new Bullet(that.game, that.source.x + that.angleOffset.x + that.game.camera.x,

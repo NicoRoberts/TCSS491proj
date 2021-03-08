@@ -21,6 +21,7 @@ class Gameover {
             if ((this.game.mouse.x >= 675 && this.game.mouse.x <= 1110) && (this.game.mouse.y >= 715 && this.game.mouse.y <= 785)
             && (this.game.click)) {
 
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadStartMenu();
                 this.game.menuMusicPlayed = false;
             }

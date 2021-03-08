@@ -204,15 +204,17 @@ class LichKing extends AbstractEnemy {
 		this.state = this.STATE.ORB;
 		let wpos = that.direction == that.DIRECTION.LEFT ? 0.8 : 0.2;
 		
-
+		
 		window.setTimeout(function () {
 			that.state = that.STATE.BASE;
+			
 			for (let theta = that.angle; theta < that.angle + Math.PI * 2; theta += Math.PI / 6) {
 				if (!that.removeFromWorld) {
 					that.game.addEntity(new EnergyBall(that.game, that.x + that.width * wpos, that.y + that.height * .2, theta));
                 }
 				
 			}
+			ASSET_MANAGER.playAsset("./Sounds/energyattack.wav");
 		}, 4*0.15*1000);
 
 		window.setTimeout(function () {
@@ -225,6 +227,7 @@ class LichKing extends AbstractEnemy {
 
 		window.setTimeout(function () {
 			that.state = that.STATE.BASE;
+			ASSET_MANAGER.playAsset("./Sounds/summon.wav");
 			if (!that.removeFromWorld) {
 				that.summonEnemies();
 			}

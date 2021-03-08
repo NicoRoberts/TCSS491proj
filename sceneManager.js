@@ -9,6 +9,7 @@ class SceneManager {
 		this.y = 0;	
 		this.game.stage;
 		
+		this.resetRoundSpawnRate = 3;
 
 		this.player = new Player(this.game, 243, 1800);
 		this.machete = new Machete(this.game);
@@ -118,11 +119,13 @@ class SceneManager {
 		this.update();
 	};
 	loadArrival() {
+		
 		this.x = 0;
 		this.y = 0;
 		this.game.stage = "arrival";
 		this.game.entities = [];
 
+		
 		this.marriyacht = new Marriyacht(this.game, 91, -300);
 		this.game.addEntity(this.marriyacht);
 
@@ -130,19 +133,25 @@ class SceneManager {
 			var music = "./Music/Arrival.wav";
 			if (music && this.game.interact) {
 				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset("./Sounds/click.wav");
 				ASSET_MANAGER.playAsset(music);
 			}
 		}
 
 		//increase enemies per level
 		this.game.enemiesCount = 0;
-		if (this.firstlevel) {
-			this.game.maxEnemies += 25;
-			this.firstlevel = false;
+		if (this.game.player.stageLevel == 1) {
+			this.game.maxEnemies = 25;
 		} else {
 			this.game.maxEnemies += 10;
+			if (this.resetRoundSpawnRate > 1) {
+				this.resetRoundSpawnRate = this.resetRoundSpawnRate  - (this.resetRoundSpawnRate * 0.15);
+				this.game.spawnRate = this.resetRoundSpawnRate; // minus 15 percent each level for spawnRate as long as greater than 1
+			} else {
+				this.resetRoundSpawnRate == 1;
+			}
 		}
-		this.game.spawnRate = 3;
+		
 		// if (this.game.spawnRate > 3) {
 		// 	var adjustmentPercentage = (0.2 / 10) * this.game.spawnRate //increase by numerator % per denominator in seconds
         //     this.spawnRate = this.spawnRate - (this.spawnRate * adjustmentPercentage);
@@ -161,15 +170,15 @@ class SceneManager {
 		let rBoundary = new VBoundary(this.game, 3600, 0, 3590, "right"); 
 
 		let gridblockSize = 49;
-		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize * 2, gridblockSize, 64, 70, gridblockSize);
-		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize*2, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
+		this.grid = new Grid(this.game, lBoundary.x + PARAMS.TILEWIDTH + gridblockSize * 3, gridblockSize, 61, 69, gridblockSize);
+		this.grid.closeGrid(this.marriyacht.x + this.marriyacht.width + gridblockSize*3, this.marriyacht.destinationy, this.marriyacht.width * 2, this.marriyacht.height);
 		this.game.grid = this.grid;
 		this.game.addEntity(this.grid);
 
 		this.grid.update();
 
 		this.map = new Map(this.game, -1350, -1645);
-		if (!(this.game.player.stageLevel == 5)) {
+		if (!(this.game.player.stageLevel%5 ==0)) {
 			for (var j = 0; j < this.terrainCount; j++) {
 				let open = this.grid.getOpenGrids();
 				if (open.length <= 0) {
@@ -199,6 +208,7 @@ class SceneManager {
 		this.update();
 	}
 	loadDeparture() {
+		ASSET_MANAGER.playAsset("./Sounds/boat.wav");
 		this.x = 0;
 		this.y = 0;
 		this.game.stage = "departure";
@@ -255,7 +265,7 @@ class SceneManager {
 		}
 
 		// BOSS SPAWN
-		if (this.game.player.stageLevel == 5) {
+		if (this.game.player.stageLevel%5 == 0) {
 			//Spawn lich king in the center
 			this.game.addEntity(new LichKing(this.game,2000,2000));
 			var music = "./Music/BossBattleVersion1.wav";
@@ -325,7 +335,7 @@ class SceneManager {
 	loadControlsMenu() {
 		this.game.removeAll();
 		this.game.entities = [];
-
+		ASSET_MANAGER.playAsset("./Sounds/click.wav");
 		this.game.addEntity(new ControlsMenu(this.game));
 		this.update();
 	};
@@ -396,7 +406,7 @@ class SceneManager {
 			
 
 			// spawning shard
-			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
+			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel%5 != 0) {
 				this.shardSpawned = true;
 				this.hud.shardSpawned = true;
 

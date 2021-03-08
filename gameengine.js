@@ -95,7 +95,7 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener("mousedown", function (e) {
             //Left mouse button
-            if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht")) {
+            if (e.which == 1 && (that.stage == "survival" || that.stage == "yacht") && !that.shift) {
                 that.click = true;
                 that.weapon.fire();
             }
@@ -131,7 +131,10 @@ class GameEngine {
                     that.E = true;
                     break;
                 case "KeyR":
-                    that.weapon.reload();
+                    if (!that.shift) {
+                        that.weapon.reload();
+                    }
+                    
                     break;
                 case "Digit1":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){
@@ -157,6 +160,9 @@ class GameEngine {
                         that.weapon = that.weapons[that.chosenWeapon];
                     }
                     break;
+                case "ShiftLeft":
+                    if (!that.weapon.reloading && !that.weapon.firing)
+                    that.shift = true;
             }
     
         }, false);
@@ -179,6 +185,8 @@ class GameEngine {
                 case "KeyE":
                     that.E = false;
                     break;
+                case "ShiftLeft":
+                    that.shift = false;
             }
     
         }, false);
@@ -275,7 +283,7 @@ class GameEngine {
         if (this.stage == "survival") {
             
             //BOSS LEVEL
-            if (this.player.stageLevel == 5) {
+            if (this.player.stageLevel%5 == 0) {
 
             }
             else {
@@ -291,6 +299,18 @@ class GameEngine {
                 
             }
 
+        }
+        else {
+            this.spawnTimer += this.clockTick;
+            var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
+            if (randomEnemy == 0) {
+                this.spawnSkeletons();
+            } else if (randomEnemy == 1) {
+                this.spawnBanshees();
+            } else {
+                this.spawnReapers();
+            } 
+            
         }
 
 
@@ -323,7 +343,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
@@ -361,7 +381,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
@@ -399,7 +419,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate; //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate; //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             

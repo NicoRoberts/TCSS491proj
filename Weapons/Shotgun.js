@@ -39,7 +39,7 @@ class Shotgun {
         this.ammoCount = this.maxAmmo;
         this.reservesCount = this.maxReserves;
 
-        this.isAvailable = false;
+        this.isAvailable = true;
         
     }
 
@@ -51,6 +51,7 @@ class Shotgun {
     reload() {
 
         if (this.reservesCount > 0 && this.ammoCount < this.maxAmmo && !this.reloading) {
+            ASSET_MANAGER.playAsset("./Sounds/startreload.wav");
             this.reloading = true;
             let that = this;
             this.timeLeft = this.reloadTime * 1000;
@@ -71,6 +72,7 @@ class Shotgun {
                     //window.clearInterval(interval_id)
                     that.timeLeft = 0;
                     that.reloading = false;
+                    ASSET_MANAGER.playAsset("./Sounds/finishreload.wav");
                     window.clearInterval(interval_id);
                 }
 
@@ -82,7 +84,11 @@ class Shotgun {
     }
 
     fire() {
-        if (this.ammoCount > 0 && this.cooldownReady) {
+        if (this.ammoCount <= 0) {
+            ASSET_MANAGER.playAsset("./Sounds/emptymag.wav");
+        }
+        else if (this.cooldownReady && !this.reloading) {
+            ASSET_MANAGER.playAsset("./Sounds/shotgun_shot.wav");
             let that = this;
             this.cooldownReady = false;
 

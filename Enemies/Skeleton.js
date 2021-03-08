@@ -85,7 +85,7 @@ class Skeleton extends AbstractEnemy{
 		this.restTime = 3;
 		this.despawnTime = 0.3;
 		this.maxSpeed = getRandom(1.4, 2.0);
-		this.acceleration = 80000;
+		this.acceleration = 160000;
 		
 		this.healthbar = new Healthbar(this);
 
@@ -167,7 +167,7 @@ class Skeleton extends AbstractEnemy{
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
-			let itemCount = 3;
+			let itemCount = 4;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
@@ -179,9 +179,13 @@ class Skeleton extends AbstractEnemy{
 				case 2:
 					this.game.addEntity(new HealthPack(this.game, this.x, this.y));
 					break;
-            }
-        }
-    }
+				case 3:
+					//Double coin chance
+					this.game.addEntity(new Coin(this.game, this.x, this.y));
+					break;
+			}
+		}
+	};
 
 	doAttack(entity) {
 
@@ -253,9 +257,7 @@ class Skeleton extends AbstractEnemy{
 		
 		if (that.detect && !that.attack) { //chase the player
 			that.movement.chaseMovement();	
-		} else if (!that.detect) { //idle movement
-			that.movement.idleMovement();
-		}
+		} 
 		//collision
 		this.game.entities.forEach(function (entity) {
 
@@ -308,7 +310,9 @@ class Skeleton extends AbstractEnemy{
 		});
 		this.testSpeed();
 
-		
+		if (!that.detect) { //idle movement
+			that.movement.idleMovement();
+		}
 
 		//Update Position
 		if(!this.attack){	
@@ -330,7 +334,7 @@ class Skeleton extends AbstractEnemy{
 		// death
 		if (this.hpCurrent <= 0) {
 			this.removeFromWorld = true;
-			this.game.enemiesCount--;
+			//this.game.enemiesCount--;
 			this.player.killCount++;
 			this.dropItem();
 		};

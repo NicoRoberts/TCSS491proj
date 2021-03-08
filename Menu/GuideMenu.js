@@ -51,19 +51,23 @@ class GuideMenu {
         if (this.game.mouse != null) {
             
             if ((this.game.mouse.x >= 175 && this.game.mouse.x <= 590) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
-            && (this.game.click)) {
+                && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.selected = "Enemies";
             }
             else if ((this.game.mouse.x >= 750 && this.game.mouse.x <= 1045) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
-            && (this.game.click)) {
+                && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.selected = "Perks";
             }
             else if ((this.game.mouse.x >= 1205 && this.game.mouse.x <= 1680) && (this.game.mouse.y >= 215 && this.game.mouse.y <= 300)
-            && (this.game.click)) {
+                && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.selected = "Gameplay";
             }
             else if ((this.game.mouse.x >= 10 && this.game.mouse.x <= 225) && (this.game.mouse.y >= 20 && this.game.mouse.y <= 65)
-            && (this.game.click)) {
+                && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadStartMenu();
             }
         }

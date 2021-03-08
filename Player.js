@@ -6,6 +6,7 @@ class Player{
 
 		Object.assign(this, { game, x, y });
 
+		this.sprintBonus = 1.3;
 		this.SET_VELOCITY = { X: 2, Y: 2 };
 
 		this.DIRECTION = {
@@ -16,7 +17,8 @@ class Player{
 		this.STATE = {
 			IDLE: 0,
 			WALKING: 1,
-			COUNT: 2,
+			SPRINTING: 2,
+			COUNT: 3,
 		};
     
     	this.width = 16;
@@ -33,6 +35,7 @@ class Player{
 		this.circlex = this.x + ((this.width * PARAMS.PIXELSCALER) / 2);
 		this.circley = this.y + ((this.height * PARAMS.PIXELSCALER) / 2);
 
+		this.play = true;
 		this.spritesheet = ASSET_MANAGER.getAsset("./Sprites/PlayerSheet.png");
 
 		this.game.player = this;
@@ -99,6 +102,11 @@ class Player{
 		this.animations[this.STATE.WALKING][this.DIRECTION.LEFT]
 			= new Animator(this.spritesheet, 1, 197, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, 4, 0.1, 2, false, true);
 
+		this.animations[this.STATE.SPRINTING][this.DIRECTION.RIGHT]
+			= new Animator(this.spritesheet, 1, 99, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, 4, 0.1 / this.sprintBonus, 2, false, true);
+		this.animations[this.STATE.SPRINTING][this.DIRECTION.LEFT]
+			= new Animator(this.spritesheet, 1, 197, this.width * PARAMS.PIXELSCALER, this.height * PARAMS.PIXELSCALER, 4, 0.1 / this.sprintBonus, 2, false, true);
+
 	}
 	takeDamage(damage) {
 		if (!this.hit) {
@@ -129,14 +137,20 @@ class Player{
 		
 		const TICKSCALE = this.game.clockTick * PARAMS.TIMESCALE;	
 
+
+		//Sprint speed
+		let bonus = 1;
+		if (this.game.shift) {
+			bonus = this.sprintBonus;
+		}
 		//Update Velocity
 		var moving = false;
 		
-		if(this.game.W){
-			this.velocity.y = -1 * (this.SET_VELOCITY.Y + this.speedBuff) * TICKSCALE;
+		if (this.game.W) {
+			this.velocity.y = -1 * (this.SET_VELOCITY.Y * bonus + this.speedBuff) * TICKSCALE;
 			moving = true;
 		} else if(this.game.S){
-			this.velocity.y = (this.SET_VELOCITY.Y + this.speedBuff) * TICKSCALE;
+			this.velocity.y = (this.SET_VELOCITY.Y * bonus + this.speedBuff) * TICKSCALE;
 			moving = true;
 		}else {
 			this.velocity.y = 0;
@@ -147,19 +161,20 @@ class Player{
 			}
 			moving = true;
 
-			this.velocity.x = -1 * (this.SET_VELOCITY.X + this.speedBuff) * TICKSCALE;
+			this.velocity.x = -1 * (this.SET_VELOCITY.X * bonus + this.speedBuff) * TICKSCALE;
 		} else if (this.game.D) {
 			if (!this.game.weapon.swinging) {
 				this.direction = this.DIRECTION.RIGHT;
 			}
 			moving = true;
-			this.velocity.x = (this.SET_VELOCITY.X + this.speedBuff) * TICKSCALE;
+			this.velocity.x = (this.SET_VELOCITY.X * bonus + this.speedBuff) * TICKSCALE;
 		}
 		else {
 			this.velocity.x = 0;
 		}
 
-		this.state = (moving) ? this.STATE.WALKING : this.STATE.IDLE;
+		let movementState = this.game.shift ? this.STATE.SPRINTING : this.STATE.WALKING;
+		this.state = (moving) ? movementState : this.STATE.IDLE;
 
 		//fix velocity for diagonal movement
 
@@ -168,7 +183,18 @@ class Player{
 			this.velocity.x = (this.velocity.x / 2) * Math.sqrt(2);
 			this.velocity.y = (this.velocity.y / 2) * Math.sqrt(2);
 			diagonal = true;
-        }
+		}
+
+		/*Footsteps*/
+		if (moving && this.play) {
+			let that = this;
+			this.play = false;
+			ASSET_MANAGER.playAsset("./Sounds/Walking.wav");
+			window.setTimeout(function () {
+				that.play = true;
+			}, 250*1/bonus)
+		}
+		/**/ 
 
 		
 
@@ -179,11 +205,10 @@ class Player{
 
 				
 				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
-					if (that.game.stage == "survival") {
-						if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
-							that.game.weapon.fill();
-							entity.removeFromWorld = true;
-						}
+					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
+						ASSET_MANAGER.playAsset("./Sounds/reload.wav");
+						that.game.weapon.fill();
+						entity.removeFromWorld = true;
 					}
 					else {  // buyable drop on yacht
 						if ((that.game.weapon.reservesCount != that.game.weapon.maxReserves) && (that.game.E)
@@ -195,6 +220,7 @@ class Player{
 					
 				}
 				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
+					ASSET_MANAGER.playAsset("./Sounds/coin.wav");
 					that.coins += 1;
 					that.totalCoinsCollected += 1;
 					entity.removeFromWorld = true;
@@ -202,6 +228,7 @@ class Player{
 				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
 					if (that.game.stage == "survival") {
 						if (that.hpCurrent != that.hpMax) {
+							ASSET_MANAGER.playAsset("./Sounds/heal.wav");
 							that.hpCurrent = that.hpMax;
 							entity.removeFromWorld = true;
 						}
@@ -218,6 +245,7 @@ class Player{
 
 				if (entity instanceof Shards) {
 					if (that.hitbox.collide(entity.hitbox)) {
+						ASSET_MANAGER.playAsset("./Sounds/pickup.wav");
 						entity.removeFromWorld = true;
 						that.shardObtained = true;
 					}
@@ -227,6 +255,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost && that.healthBoostLevel < 3) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.healthBoostLevel++;
@@ -242,6 +271,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost && that.reloadBoostLevel < 3) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.reloadBoostLevel++;
@@ -258,6 +288,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost && that.speedBoostLevel < 3) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.speedBoostLevel++;
@@ -272,6 +303,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost && !(entity.purchased)) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.secondChance = true;
@@ -285,6 +317,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.game.weapons[2].isAvailable = true;
@@ -297,6 +330,7 @@ class Player{
 					if (that.hitbox.collide(entity.hitbox)) {
 						if (that.game.E) {
 							if (that.coins >= entity.cost) {
+								ASSET_MANAGER.playAsset("./Sounds/buy.wav");
 								entity.removeFromWorld = true;
 								that.coins -= entity.cost;
 								that.game.weapons[3].isAvailable = true;
@@ -330,6 +364,7 @@ class Player{
 			}
 		});
 
+		
 		//Update Position
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
