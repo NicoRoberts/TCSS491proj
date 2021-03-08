@@ -61,7 +61,7 @@ class Player{
 		this.hpCurrent = 40; // originally 40
 		this.hpMax = 40;
 		this.hit = false;
-		this.stageLevel = 1;
+		this.stageLevel = 1; // start at 1
 
 		// perks
 		this.healthBoostLevel = 0;
@@ -210,6 +210,14 @@ class Player{
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
 					}
+					else {  // buyable drop on yacht
+						if ((that.game.weapon.reservesCount != that.game.weapon.maxReserves) && (that.game.E)
+						&& (that.coins >= entity.cost)) {
+							that.game.weapon.fill();
+							that.coins -= entity.cost;
+						}
+					}
+					
 				}
 				else if (entity instanceof Coin && that.hitbox.collide(entity.hitbox)) {
 					ASSET_MANAGER.playAsset("./Sounds/coin.wav");
@@ -218,11 +226,20 @@ class Player{
 					entity.removeFromWorld = true;
 				}
 				else if (entity instanceof HealthPack && that.hitbox.collide(entity.hitbox)) {
-					if (that.hpCurrent != that.hpMax) {
-						ASSET_MANAGER.playAsset("./Sounds/heal.wav");
-						that.hpCurrent = that.hpMax;
-						entity.removeFromWorld = true;
-                    }
+					if (that.game.stage == "survival") {
+						if (that.hpCurrent != that.hpMax) {
+							ASSET_MANAGER.playAsset("./Sounds/heal.wav");
+							that.hpCurrent = that.hpMax;
+							entity.removeFromWorld = true;
+						}
+					}
+					else {
+						if ((that.hpCurrent != that.hpMax) && (that.game.E)
+						&& (that.coins >= entity.cost)) {
+							that.hpCurrent = that.hpMax;
+							that.coins -= entity.cost;
+						}
+					}
 					
 				}
 
@@ -343,12 +360,8 @@ class Player{
 					}
 				}
 
-				that.hitbox.collide(entity.hitbox)
-
-				
+				that.hitbox.collide(entity.hitbox)				
 			}
-			
-
 		});
 
 		
