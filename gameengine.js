@@ -321,7 +321,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
@@ -359,7 +359,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
@@ -397,7 +397,7 @@ class GameEngine {
         var entitiesCount = this.entities.length;
 
 		if (this.spawnTimer >= this.spawnRate  && (this.enemiesCount < this.maxEnemies)) {
-            this.adjustmentPercentage = (0.2 / 5) * this.spawnRate; //increase by numerator % per denominator in seconds
+            this.adjustmentPercentage = (0.04) * this.spawnRate; //increase by numerator % per denominator in seconds
             this.spawnRate = this.spawnRate - (this.spawnRate * this.adjustmentPercentage);
             this.spawnTimer = 0;
             
