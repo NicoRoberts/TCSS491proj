@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Drops",
     "\\Enemies",
+    "\\Menu",
+    "\\Projectiles",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Weapons\\Pistol.js",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }

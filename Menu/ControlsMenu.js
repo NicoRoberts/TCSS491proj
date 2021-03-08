@@ -6,7 +6,6 @@ class ControlsMenu {
     BACK_POS = { X: 10, Y: 65 };
     constructor(game) {
         Object.assign(this, {game});
-
         this.priority = 1;
     };
 
@@ -14,7 +13,8 @@ class ControlsMenu {
 
         if (this.game.mouse != null) {
             if ((this.game.mouse.x >= 10 && this.game.mouse.x <= 225) && (this.game.mouse.y >= 20 && this.game.mouse.y <= 65)
-            && (this.game.click)) {
+                && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadStartMenu();
             }
         }

@@ -167,7 +167,7 @@ class Skeleton extends AbstractEnemy{
 	dropItem() {
 		let chance = Math.random();
 		if (chance <= this.dropchance) {
-			let itemCount = 3;
+			let itemCount = 4;
 			let itemType = Math.floor(Math.random() * (itemCount));
 			switch (itemType) {
 				case 0:
@@ -179,9 +179,13 @@ class Skeleton extends AbstractEnemy{
 				case 2:
 					this.game.addEntity(new HealthPack(this.game, this.x, this.y));
 					break;
-            }
-        }
-    }
+				case 3:
+					//Double coin chance
+					this.game.addEntity(new Coin(this.game, this.x, this.y));
+					break;
+			}
+		}
+	};
 
 	doAttack(entity) {
 
