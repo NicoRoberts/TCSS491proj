@@ -39,7 +39,7 @@ class ControlsMenu {
         ctx.fillText("D : move right", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 450, 800);
 
         ctx.fillText("Click : shoot/slash", this.ACTION_POS.X, this.ACTION_POS.Y, 800);
-        ctx.fillText("1-4 : switch wepons", this.ACTION_POS.X, this.ACTION_POS.Y + 150, 800);
+        ctx.fillText("1-4 : switch weapons", this.ACTION_POS.X, this.ACTION_POS.Y + 150, 800);
         ctx.fillText("R : reload weapon", this.ACTION_POS.X, this.ACTION_POS.Y + 300, 800);
         ctx.fillText("E : purchase item", this.ACTION_POS.X, this.ACTION_POS.Y + 450, 800);
 
