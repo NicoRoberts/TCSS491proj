@@ -131,7 +131,10 @@ class GameEngine {
                     that.E = true;
                     break;
                 case "KeyR":
-                    that.weapon.reload();
+                    if (!that.shift) {
+                        that.weapon.reload();
+                    }
+                    
                     break;
                 case "Digit1":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){
@@ -279,7 +282,7 @@ class GameEngine {
             if (this.stage == "survival") {
                 
                 //BOSS LEVEL
-                if (this.player.stageLevel == 5) {
+                if (this.player.stageLevel%5 == 0) {
 
                 }
                 else {

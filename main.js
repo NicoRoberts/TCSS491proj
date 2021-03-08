@@ -72,6 +72,8 @@ ASSET_MANAGER.queueDownload("./Sounds/heal.wav");
 ASSET_MANAGER.queueDownload("./Sounds/pickup.wav");
 ASSET_MANAGER.queueDownload("./Sounds/boat.wav");
 ASSET_MANAGER.queueDownload("./Sounds/buy.wav");
+ASSET_MANAGER.queueDownload("./Sounds/energyattack.wav");
+ASSET_MANAGER.queueDownload("./Sounds/summon.wav");
 
 
 ASSET_MANAGER.downloadAll(function () {

@@ -122,6 +122,7 @@ class SceneManager {
 			var music = "./Music/Arrival.wav";
 			if (music && this.game.interact) {
 				ASSET_MANAGER.pauseBackgroundMusic();
+				ASSET_MANAGER.playAsset("./Sounds/click.wav");
 				ASSET_MANAGER.playAsset(music);
 			}
 		}
@@ -161,7 +162,7 @@ class SceneManager {
 		this.grid.update();
 
 		this.map = new Map(this.game, -1350, -1645);
-		if (!(this.game.player.stageLevel == 5)) {
+		if (!(this.game.player.stageLevel%5 ==0)) {
 			for (var j = 0; j < this.terrainCount; j++) {
 				let open = this.grid.getOpenGrids();
 				if (open.length <= 0) {
@@ -248,7 +249,7 @@ class SceneManager {
 		}
 
 		// BOSS SPAWN
-		if (this.game.player.stageLevel == 5) {
+		if (this.game.player.stageLevel%5 == 0) {
 			//Spawn lich king in the center
 			this.game.addEntity(new LichKing(this.game,2000,2000));
 			var music = "./Music/BossBattleVersion1.wav";
@@ -318,7 +319,7 @@ class SceneManager {
 	loadControlsMenu() {
 		this.game.removeAll();
 		this.game.entities = [];
-
+		ASSET_MANAGER.playAsset("./Sounds/click.wav");
 		this.game.addEntity(new ControlsMenu(this.game));
 		this.update();
 	};
@@ -372,7 +373,7 @@ class SceneManager {
 			
 
 			// spawning shard
-			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel != 5) {
+			if (this.game.timeInSurvival >= this.shardSpawnTime && !this.shardSpawned && this.game.player.stageLevel%5 != 0) {
 				this.shardSpawned = true;
 
 				let openGrids = this.game.grid.getSpawnableGrids();

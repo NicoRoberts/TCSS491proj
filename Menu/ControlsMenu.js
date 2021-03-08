@@ -44,7 +44,6 @@ class ControlsMenu {
         ctx.fillText("E : purchase item", this.ACTION_POS.X, this.ACTION_POS.Y + 450, 800);
 
         if (this.game.mouse != null) {
-            ASSET_MANAGER.playAsset("./Sounds/click.wav");
             this.drawGoBack(ctx);
         }
 

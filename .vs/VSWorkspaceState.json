@@ -1,11 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Drops",
+    "\\Enemies",
     "\\Menu",
     "\\Projectiles",
-    "\\Sounds",
     "\\Weapons"
   ],
-  "SelectedNode": "\\Sounds\\Walking.wav",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }
