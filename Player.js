@@ -205,7 +205,7 @@ class Player{
 
 				
 				if (entity instanceof AmmoPack && that.hitbox.collide(entity.hitbox)) {
-					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves) {
+					if (that.game.weapon.reservesCount != that.game.weapon.maxReserves && (that.game.stage == "survival")) {
 						ASSET_MANAGER.playAsset("./Sounds/reload.wav");
 						that.game.weapon.fill();
 						entity.removeFromWorld = true;
