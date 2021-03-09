@@ -1,8 +1,9 @@
 class Pause {
 
     TITLE_POS = { X: 750, Y: 150 };
-    RESUME_POS = { X: 350, Y: 450 };
-    QUIT_POS = { X: 1150, Y: 450 };
+    RESUME_POS = { X: 1300, Y: 400 };
+    QUIT_POS = { X: 1362.5, Y: 650 };
+    CONTROLS_POS = { X: 50, Y: 300 };
     constructor(game) {
         Object.assign(this, {game});
         
@@ -14,12 +15,12 @@ class Pause {
 
         if ((this.game.mouse != null)) {
 
-            if ((this.game.mouse.x >= 350 && this.game.mouse.x <= 750) && (this.game.mouse.y >= 350 && this.game.mouse.y <= 450)
+            if ((this.game.mouse.x >= 1300 && this.game.mouse.x <= 1655) && (this.game.mouse.y >= 315 && this.game.mouse.y <= 400)
             && (this.game.click)) {
                 this.game.stage = this.previousStage;
                 this.removeFromWorld = true;
             }
-            if ((this.game.mouse.x >=1150 && this.game.mouse.x <= 1375) && (this.game.mouse.y >= 365 && this.game.mouse.y <= 450)
+            if ((this.game.mouse.x >=1362.5 && this.game.mouse.x <= 1587.5) && (this.game.mouse.y >= 565 && this.game.mouse.y <= 650)
             && (this.game.click)) {
                 this.game.camera.loadStartMenu();
             }
@@ -44,10 +45,12 @@ class Pause {
             this.drawResume(ctx);
             this.drawQuit(ctx);
         }
+        
+        this.drawControls(ctx);
     };
 
     drawResume(ctx) {
-        if ((this.game.mouse.x >= 350 && this.game.mouse.x <= 705) && (this.game.mouse.y >= 365 && this.game.mouse.y <= 450)) {
+        if ((this.game.mouse.x >= 1300 && this.game.mouse.x <= 1655) && (this.game.mouse.y >= 315 && this.game.mouse.y <= 400)) {
             ctx.fillStyle = "White";
             ctx.fillText("Resume", this.RESUME_POS.X, this.RESUME_POS.Y);
         }
@@ -58,7 +61,7 @@ class Pause {
     };
 
     drawQuit(ctx) {
-        if ((this.game.mouse.x >=1150 && this.game.mouse.x <= 1375) && (this.game.mouse.y >= 365 && this.game.mouse.y <= 450)) {
+        if ((this.game.mouse.x >=1362.5 && this.game.mouse.x <= 1587.5) && (this.game.mouse.y >= 565 && this.game.mouse.y <= 650)) {
             ctx.fillStyle = "White";
             ctx.fillText("Quit", this.QUIT_POS.X, this.QUIT_POS.Y);
         }
@@ -66,5 +69,23 @@ class Pause {
             ctx.fillStyle = "Gray";
             ctx.fillText("Quit", this.QUIT_POS.X, this.QUIT_POS.Y);
         }
+    };
+
+    drawControls(ctx) {
+        ctx.fillStyle = "White";
+        var fontsize = 75;
+        ctx.font = fontsize + 'px "VT323"';
+
+        ctx.fillText("W : move up", this.CONTROLS_POS.X, this.CONTROLS_POS.Y, 500);
+        ctx.fillText("A : move left", this.CONTROLS_POS.X, this.CONTROLS_POS.Y + 125, 500);
+        ctx.fillText("S : move down", this.CONTROLS_POS.X, this.CONTROLS_POS.Y + 250, 500);
+        ctx.fillText("D : move right", this.CONTROLS_POS.X, this.CONTROLS_POS.Y + 375, 500);
+        ctx.fillText("Shift : sprint", this.CONTROLS_POS.X, this.CONTROLS_POS.Y + 500, 500);
+
+        ctx.fillText("Click : shoot/slash", this.CONTROLS_POS.X + 500, this.CONTROLS_POS.Y, 500);
+        ctx.fillText("1-4 : switch weapons", this.CONTROLS_POS.X + 500, this.CONTROLS_POS.Y + 125, 500);
+        ctx.fillText("R : reload weapon", this.CONTROLS_POS.X + 500, this.CONTROLS_POS.Y + 250, 500);
+        ctx.fillText("E : purchase item", this.CONTROLS_POS.X + 500, this.CONTROLS_POS.Y + 375, 500);
+        ctx.fillText("Esc : pause game", this.CONTROLS_POS.X + 500, this.CONTROLS_POS.Y + 500, 500);
     };
 }
