@@ -134,7 +134,11 @@ class GameEngine {
                     if (!that.shift) {
                         that.weapon.reload();
                     }
-                    
+                    break;
+                case "Escape":
+                    if (!(that.stage == "pause") && !(that.stage == "menu")) {
+                        that.camera.loadPause();
+                    }
                     break;
                 case "Digit1":
                     if (!that.weapon.reloading && !that.weapon.firing && that.weapons[0].isAvailable){

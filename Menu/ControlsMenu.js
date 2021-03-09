@@ -34,14 +34,16 @@ class ControlsMenu {
         ctx.font = fontsize + 'px "VT323"';
 
         ctx.fillText("W : move up", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y, 800);
-        ctx.fillText("A : move left", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 150, 800);
-        ctx.fillText("S : move down", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 300, 800);
-        ctx.fillText("D : move right", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 450, 800);
+        ctx.fillText("A : move left", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 125, 800);
+        ctx.fillText("S : move down", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 250, 800);
+        ctx.fillText("D : move right", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 375, 800);
+        ctx.fillText("Shift : sprint", this.MOVEMENT_POS.X, this.MOVEMENT_POS.Y + 500, 800);
 
         ctx.fillText("Click : shoot/slash", this.ACTION_POS.X, this.ACTION_POS.Y, 800);
-        ctx.fillText("1-4 : switch weapons", this.ACTION_POS.X, this.ACTION_POS.Y + 150, 800);
-        ctx.fillText("R : reload weapon", this.ACTION_POS.X, this.ACTION_POS.Y + 300, 800);
-        ctx.fillText("E : purchase item", this.ACTION_POS.X, this.ACTION_POS.Y + 450, 800);
+        ctx.fillText("1-4 : switch weapons", this.ACTION_POS.X, this.ACTION_POS.Y + 125, 800);
+        ctx.fillText("R : reload weapon", this.ACTION_POS.X, this.ACTION_POS.Y + 250, 800);
+        ctx.fillText("E : purchase item", this.ACTION_POS.X, this.ACTION_POS.Y + 375, 800);
+        ctx.fillText("Esc : pause game", this.ACTION_POS.X, this.ACTION_POS.Y + 500, 800);
 
         if (this.game.mouse != null) {
             this.drawGoBack(ctx);
