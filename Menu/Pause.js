@@ -17,11 +17,13 @@ class Pause {
 
             if ((this.game.mouse.x >= 1300 && this.game.mouse.x <= 1655) && (this.game.mouse.y >= 315 && this.game.mouse.y <= 400)
             && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.stage = this.previousStage;
                 this.removeFromWorld = true;
             }
             if ((this.game.mouse.x >=1362.5 && this.game.mouse.x <= 1587.5) && (this.game.mouse.y >= 565 && this.game.mouse.y <= 650)
             && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadStartMenu();
             }
         }

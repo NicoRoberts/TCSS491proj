@@ -213,6 +213,7 @@ class Player{
 					else {  // buyable drop on yacht
 						if ((that.game.weapon.reservesCount != that.game.weapon.maxReserves) && (that.game.E)
 						&& (that.coins >= entity.cost)) {
+							ASSET_MANAGER.playAsset("./Sounds/reload.wav");
 							that.game.weapon.fill();
 							that.coins -= entity.cost;
 						}
@@ -236,6 +237,7 @@ class Player{
 					else {
 						if ((that.hpCurrent != that.hpMax) && (that.game.E)
 						&& (that.coins >= entity.cost)) {
+							ASSET_MANAGER.playAsset("./Sounds/heal.wav");
 							that.hpCurrent = that.hpMax;
 							that.coins -= entity.cost;
 						}
