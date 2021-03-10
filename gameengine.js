@@ -304,19 +304,6 @@ class GameEngine {
             }
 
         }
-        else {
-            this.spawnTimer += this.clockTick;
-            var randomEnemy = getRandomInt(0, Math.min(this.player.stageLevel, 3));
-            if (randomEnemy == 0) {
-                this.spawnSkeletons();
-            } else if (randomEnemy == 1) {
-                this.spawnBanshees();
-            } else {
-                this.spawnReapers();
-            } 
-            
-        }
-
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
