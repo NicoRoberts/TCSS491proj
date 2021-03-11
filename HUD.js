@@ -286,7 +286,7 @@ class HUD {
             var offsetx = 350;
             var fontsize = 50;
             ctx.font = fontsize + 'px "VT323"'
-            if ((this.shardTimer > 0) && (this.player.stageLevel != 5)) {
+            if ((this.shardTimer > 0) && (this.player.stageLevel % 5 != 0)) {
                 ctx.fillStyle = "darkred";
                 ctx.fillText(Math.ceil(this.shardTimer) + " seconds until the shard spawns.", ctx.canvas.width / 2 - offsetx, offsety);
             }

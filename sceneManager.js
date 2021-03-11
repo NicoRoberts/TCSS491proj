@@ -133,7 +133,9 @@ class SceneManager {
 			var music = "./Music/Arrival.wav";
 			if (music && this.game.interact) {
 				ASSET_MANAGER.pauseBackgroundMusic();
-				ASSET_MANAGER.playAsset("./Sounds/click.wav");
+				if (this.player.stageLevel == 1) { // prevents click sound from level progression, just clicks on start
+					ASSET_MANAGER.playAsset("./Sounds/click.wav");
+				}
 				ASSET_MANAGER.playAsset(music);
 			}
 		}

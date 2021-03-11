@@ -5,8 +5,8 @@ class Map{
     
     	this.width = 6684;
         this.height = 6360;
-        this.mapState = randomInt(3);
-        this.maps=["./Maps/CastToTheShadowsMapBIG.png","./Maps/CastToTheShadowsMapBIGFire.png","./Maps/CastToTheShadowsMapBIGSnow.png"];
+        this.mapState = randomInt(4);
+        this.maps=["./Maps/CastToTheShadowsMapBIG.png","./Maps/CastToTheShadowsMapBIGFire.png","./Maps/CastToTheShadowsMapBIGSnow.png","./Maps/SandMap.png"];
 		this.positionx = this.x - this.game.camera.x;
         this.positiony = this.y - this.game.camera.y;
         

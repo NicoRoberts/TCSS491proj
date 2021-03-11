@@ -20,11 +20,13 @@ class WinScreen {
 
             if ((this.game.mouse.x >= 1031.25 && this.game.mouse.x <= 1562.5) && (this.game.mouse.y >= 312.5 && this.game.mouse.y <= 550)
             && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.stage = "yacht";
                 this.removeFromWorld = true;
             }
             if ((this.game.mouse.x >= 1050 && this.game.mouse.x <= 1525) && (this.game.mouse.y >= 600 && this.game.mouse.y <= 700)
             && (this.game.click)) {
+                ASSET_MANAGER.playAsset("./Sounds/click.wav");
                 this.game.camera.loadStartMenu();
             }
         }

@@ -42,42 +42,105 @@ class SkeletonMovement {
             if (this.state == 0 && this.changeState) {
                 this.enemy.state = this.enemy.STATE.WALKING;
                 this.enemy.direction = this.enemy.DIRECTION.RIGHT;
-                this.enemy.velocity.x = this.walkSpeedSlow ;
-                this.enemy.velocity.y = -1 * this.walkSpeedNormal;
+                if(this.enemy.collideTop) {
+                    this.enemy.velocity.x = this.walkSpeedSlow ; //northeast
+                    this.enemy.velocity.y = this.walkSpeedNormal;
+
+                } else if (this.enemy.collideRight) {
+                    this.enemy.velocity.x = -1 * this.walkSpeedSlow ;
+                    this.enemy.velocity.y = -1 * this.walkSpeedNormal;
+                    
+                } else {
+                    this.enemy.velocity.x = this.walkSpeedSlow ; //northeast
+                    this.enemy.velocity.y = -1 * this.walkSpeedNormal;
+                }
                 this.state = 1;
                 this.changeState = false;
+                this.enemy.collideTop = false;
+                this.enemy.collideRight = false;
                 
             } else if (this.state == 1 && this.changeState) {
                 this.enemy.state = this.enemy.STATE.WALKING;
                 this.enemy.direction = this.enemy.DIRECTION.RIGHT;
-                this.enemy.velocity.x = this.walkSpeedSlow ;
-                this.enemy.velocity.y = this.walkSpeedNormal;
+                
+
+                if(this.enemy.collideRight) {
+                    this.enemy.velocity.x = -1 * this.walkSpeedSlow; //southeast
+                    this.enemy.velocity.y = this.walkSpeedNormal;
+                } else if (this.enemy.collideBottom) {
+                    this.enemy.velocity.x = this.walkSpeedSlow; //southeast
+                    this.enemy.velocity.y = -1 * this.walkSpeedNormal;
+                    
+                } else {
+                    this.enemy.velocity.x = this.walkSpeedSlow; //southeast
+                    this.enemy.velocity.y = this.walkSpeedNormal;
+                }
+
                 this.state = 2;
                 this.changeState = false;
+                this.enemy.collideRight = false;
+                this.enemy.collideBottom = false;
                 
             } else if (this.state == 2 && this.changeState) {
                 this.enemy.state = this.enemy.STATE.WALKING;
                 this.enemy.direction = this.enemy.DIRECTION.LEFT;
-                this.enemy.velocity.x = -1 * this.walkSpeedNormal;
-                this.enemy.velocity.y = -1 * this.walkSpeedSlow;
+                
+
+                if(this.enemy.collideTop) {
+                    this.enemy.velocity.x = -1 * this.walkSpeedNormal; //northwest
+                    this.enemy.velocity.y = this.walkSpeedSlow;
+                } else if (this.enemy.collideLeft) {
+                    this.enemy.velocity.x = this.walkSpeedNormal; //northwest
+                    this.enemy.velocity.y = -1 * this.walkSpeedSlow;
+                    
+                } else {
+                    this.enemy.velocity.x = -1 * this.walkSpeedNormal; //northwest
+                    this.enemy.velocity.y = -1 * this.walkSpeedSlow;
+                }
                 this.state = 3;
                 this.changeState = false;
+                this.enemy.collideTop = false;
+                this.enemy.collideLeft = false;
                 
             } else if (this.state == 3 && this.changeState) {
                 this.enemy.state = this.enemy.STATE.WALKING;
                 this.enemy.direction = this.enemy.DIRECTION.RIGHT;
-                this.enemy.velocity.x = this.walkSpeedNormal;
-                this.enemy.velocity.y = 0;
+                
+
+                if (this.enemy.collideRight) {
+                    this.enemy.velocity.x = -1 * this.walkSpeedNormal;
+                    this.enemy.velocity.y = 0;
+                    
+                } else {
+                    this.enemy.velocity.x = this.walkSpeedNormal; //east
+                    this.enemy.velocity.y = 0;
+                }
                 this.state = 4;
                 this.changeState = false;
+                this.enemy.collideRight = false;
                 
             } else if (this.state == 4 && this.changeState) {
                 this.enemy.state = this.enemy.STATE.WALKING;
                 this.enemy.direction = this.enemy.DIRECTION.LEFT;
-                this.enemy.velocity.x = -1 * this.walkSpeedNormal;
-                this.enemy.velocity.y = this.walkSpeedSlow;
+
+                
+
+                if (this.enemy.collideLeft) {
+                    this.enemy.velocity.x = this.walkSpeedNormal;
+                    this.enemy.velocity.y = this.walkSpeedSlow;
+
+                } else if (this.enemy.collideBottom) {
+                    this.enemy.velocity.x = -1 * this.walkSpeedNormal; //southwest
+                    this.enemy.velocity.y = -1 * this.walkSpeedSlow;
+                    
+                } else {
+                    this.enemy.velocity.x = -1 * this.walkSpeedNormal; //southwest
+                    this.enemy.velocity.y = this.walkSpeedSlow;
+                }
                 this.changeState = false;
                 this.state = 0;
+                this.enemy.collideLeft = false;
+                this.enemy.collideBottom = false;
             }
 
         } else if (!this.first && this.timer > this.movePeriod && this.timer <= (this.movePeriod + this.restPeriod)) { //rest
