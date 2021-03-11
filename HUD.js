@@ -258,16 +258,20 @@ class HUD {
         var offsetx = 150;
         var titleOffsetX = 160;
         ctx.fillText("Round " + this.game.player.stageLevel + " Difficulty", ctx.canvas.width / 2 - titleOffsetX, offsety);
-        
-        if (this.currentDifficulty < this.maxDifficulty) {
+        //startColor = rgb(0, 255, 0);
+        //endColor = rgb(255, 0, 0);
+        let red = ((255 - 0) / (this.maxDifficulty)) * (this.currentDifficulty - 0) + 0;
+        let green = ((0 - 255) / (this.maxDifficulty)) * (this.currentDifficulty - 0) + 255;
+        let blue = ((0 - 0) / (this.maxDifficulty)) * (this.currentDifficulty - 0) + 0;   
+        ctx.fillStyle = rgb(red,green,blue);
 
-            ctx.fillStyle = rgb(218, 165, 32); // gold
+        if (this.currentDifficulty < this.maxDifficulty) {
+            
             var ratio = this.currentDifficulty / this.maxDifficulty;
             offsety = 50;
             ctx.fillRect(ctx.canvas.width / 2 - offsetx, offsety, 300 * ratio, 15);
         } else {
             offsety = 50;
-            ctx.fillStyle = rgb(218, 165, 32); // gol
             ctx.fillRect(ctx.canvas.width / 2 - offsetx, offsety, 300, 15);
         }
 
