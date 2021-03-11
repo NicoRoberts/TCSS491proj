@@ -343,6 +343,7 @@ class Banshee extends AbstractEnemy {
 			this.game.enemiesCount--;
 			this.removeFromWorld = true;
 			this.game.player.killCount++;
+			this.dropItem();
 		}
 
 
