@@ -43,6 +43,12 @@ class Skeleton extends AbstractEnemy{
 		this.attack = false;
 		this.finishedAttack = true;
 
+		//collide with boundary variables
+		this.collideLeft = false;
+		this.collideRight = false;
+		this.collideTop = false;
+		this.collideBottom = false;
+
 
 		var chance = getRandomInt(0, 10);
 		if (chance == 1) {
@@ -292,6 +298,27 @@ class Skeleton extends AbstractEnemy{
 					that.direction = that.DIRECTION.LEFT;
 				}
 			}
+
+			if (entity != that && entity.hitbox &&
+				((entity instanceof VBoundary) && entity.type == "right")
+				 && that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideRight = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof VBoundary) && entity.type == "left")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideLeft = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "top")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideTop = true;
+		   	} 
+		   	if (entity != that && entity.hitbox &&
+			   ((entity instanceof HBoundary) && entity.type == "bottom")
+				&& that.hitbox.willCollide(entity.hitbox)) {
+			   that.collideBottom = true;
+		   	}	
 			// 	that.collideTerrain = true;
 			// 	var dist = distance(that, entity);
 			// 	//that.hitbox.collide(entity.hitbox);
